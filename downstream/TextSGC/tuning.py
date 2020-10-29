@@ -15,7 +15,7 @@ args = get_text_args()
 print(args)
 set_seed(args.seed, args.cuda)
 
-adj_dense = sparse_to_torch_dense(sp_adj, device='cpu')
+adj_dense = sparse_to_torch_dense(sp_adj, device='cuda')
 feat_dict, precompute_time = sgc_precompute(adj, adj_dense, args.degree-1, index_dict)
 if args.dataset == "mr": nclass = 1
 else: nclass = label_dict["train"].max().item()+1
