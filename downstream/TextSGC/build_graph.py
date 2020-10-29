@@ -17,7 +17,7 @@ import itertools
 
 parser = argparse.ArgumentParser(description='Build Document Graph')
 parser.add_argument('--dataset', type=str, default='20ng',
-                    choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr', 'yelp', 'ag_news'],
+                    choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr', 'yelp', 'ag_news', 'covid_19_production'],
                     help='dataset name')
 parser.add_argument('--embedding_dim', type=int, default=300,
                     help='word and document embedding size.')
