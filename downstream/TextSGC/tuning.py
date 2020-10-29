@@ -1,7 +1,6 @@
 import time
 import argparse
 import numpy as np
-from train import train
 import pickle as pkl
 from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
 from args import get_text_args
