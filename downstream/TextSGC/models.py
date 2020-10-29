@@ -13,3 +13,18 @@ class SGC(nn.Module):
     def forward(self, x):
         out = self.W(x)
         return out
+
+def get_model(model_opt, nfeat, nclass, nhid=0, dropout=0, cuda=True):
+    if model_opt == "GCN":
+        model = GCN(nfeat=nfeat,
+                    nhid=nhid,
+                    nclass=nclass,
+                    dropout=dropout)
+    elif model_opt == "SGC":
+        model = SGC(nfeat=nfeat,
+                    nclass=nclass)
+    else:
+        raise NotImplementedError('model:{} is not implemented!'.format(model_opt))
+
+    if cuda: model.cuda()
+    return model
