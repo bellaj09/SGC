@@ -6,9 +6,12 @@ from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
 from args import get_text_args
 from utils import *
 from train import train_linear, adj, sp_adj, label_dict, index_dict
+import torch
 import torch.nn.functional as F
 from models import get_model
 from math import log
+
+torch.cuda.set_device(1)
 
 args = get_text_args()
 set_seed(args.seed, args.cuda)
