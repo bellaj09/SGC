@@ -11,8 +11,6 @@ import torch
 from models import get_model
 from math import log
 
-torch.cuda.set_device(1)
-
 args = get_text_args()
 print(args)
 set_seed(args.seed, args.cuda)
