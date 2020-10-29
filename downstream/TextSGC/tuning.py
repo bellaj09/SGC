@@ -7,7 +7,7 @@ from args import get_text_args
 from utils import *
 from train import train_linear, adj, sp_adj, label_dict, index_dict
 import torch
-import torch.nn.functional as F
+#import torch.nn.functional as F
 from models import get_model
 from math import log
 
