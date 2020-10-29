@@ -75,7 +75,7 @@ def train_linear(model, feat_dict, weight_decay, binary=False):
         optimizer.step(closure)
 
     train_time = time.perf_counter()-start
-    val_res = eval_linear(model, feat_dict["val"].cuda(),
+    val_res, val_matrix = eval_linear(model, feat_dict["val"].cuda(),
                           label_dict["val"].cuda(), binary)
     return val_res['accuracy'], model, train_time
 
