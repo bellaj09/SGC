@@ -14,6 +14,7 @@ from math import log
 torch.cuda.set_device(1)
 
 args = get_text_args()
+print(args)
 set_seed(args.seed, args.cuda)
 
 adj_dense = sparse_to_torch_dense(sp_adj, device='cpu')
