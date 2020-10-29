@@ -101,8 +101,7 @@ def eval_linear(model, features, label, binary=False):
     return {
         'loss': loss.item(),
         'accuracy': acc
-        'printing': print_matrix
-    }
+    }, print_matrix
 
 if __name__ == '__main__':
     if args.dataset == "mr": nclass = 1
@@ -121,12 +120,11 @@ if __name__ == '__main__':
                 nclass=nclass)
     if args.cuda: model.cuda()
     val_acc, best_model, train_time = train_linear(model, feat_dict, args.weight_decay, args.dataset=="mr")
-    test_res = eval_linear(best_model, feat_dict["test"].cuda(),
+    test_res, test_matrix = eval_linear(best_model, feat_dict["test"].cuda(),
                            label_dict["test"].cuda(), args.dataset=="mr")
-    train_res = eval_linear(best_model, feat_dict["train"].cuda(),
+    train_res, train_matrix = eval_linear(best_model, feat_dict["train"].cuda(),
                             label_dict["train"].cuda(), args.dataset=="mr")
     print("Total Time: {:2f}s, Train acc: {:.4f}, Val acc: {:.4f}, Test acc: {:.4f}".format(precompute_time+train_time, train_res["accuracy"], val_acc, test_res["accuracy"]))
-    printing = test_res["print_matrix"]
     your_file = open('print_results_covid19.txt', 'w')
-    np.savetxt(printing.numpy())
+    np.savetxt(test_matrix.numpy())
     your_file.close()
