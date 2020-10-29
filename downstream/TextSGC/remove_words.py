@@ -14,7 +14,7 @@ print(stop_words)
 
 parser = argparse.ArgumentParser(description='Build Document Graph')
 parser.add_argument('--dataset', type=str, default='20ng',
-                    choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr'],
+                    choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr','covid_19_production'],
                     help='dataset name')
 args = parser.parse_args()
 

@@ -1,0 +1,1 @@
+a combination of 'pooling' with a prediction model can reduce by 73% the number of covid-19 (corona-virus) tests. We show that combining a prediction model (based on neural networks), with a new method of test pooling (better than the original Dorfman method, and better than double-pooling) called 'Grid', we can reduce the number of Covid-19 tests by 73%.
