@@ -126,5 +126,6 @@ if __name__ == '__main__':
                             label_dict["train"].cuda(), args.dataset=="mr")
     print("Total Time: {:2f}s, Train acc: {:.4f}, Val acc: {:.4f}, Test acc: {:.4f}".format(precompute_time+train_time, train_res["accuracy"], val_acc, test_res["accuracy"]))
     your_file = open('print_results_covid19.txt', 'w')
-    np.savetxt(test_matrix.numpy())
+    printing = test_matrix.cpu().numpy()
+    np.savetxt(printing)
     your_file.close()
