@@ -95,7 +95,7 @@ def eval_linear(model, features, label, binary=False):
         else: predict_class = act(output).gt(0.5).float()
         correct = torch.eq(predict_class, label).long().sum().item()
         acc = correct/predict_class.size(0)
-        print_matrix = torch.cat([predict_class, label],0)
+        print_matrix = torch.cat([predict_class, label],1)
 
 
     return {
@@ -125,7 +125,11 @@ if __name__ == '__main__':
     train_res, train_matrix = eval_linear(best_model, feat_dict["train"].cuda(),
                             label_dict["train"].cuda(), args.dataset=="mr")
     print("Total Time: {:2f}s, Train acc: {:.4f}, Val acc: {:.4f}, Test acc: {:.4f}".format(precompute_time+train_time, train_res["accuracy"], val_acc, test_res["accuracy"]))
-    your_file = open('print_results_covid19.txt', 'w')
+    test_res_file = open('print_results_covid19.txt', 'w')
     printing = test_matrix.cpu().numpy()
     np.savetxt('print_results_covid19.txt',printing)
-    your_file.close()
+    train_res_file.close()
+
+    label_dict_file = open('label_dict_covid19.txt','w')
+    np.savetxt('label_dict_covid19.txt',label_dict)
+    label_dict_file.close()
