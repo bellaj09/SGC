@@ -129,5 +129,5 @@ if __name__ == '__main__':
     test_res_file.close()
 
     label_dict_file = open('label_dict_covid19.txt','w')
-    np.savetxt('label_dict_covid19.txt',label_dict["test"])
+    np.savetxt('label_dict_covid19.txt',label_dict["test"].cpu().numpy())
     label_dict_file.close()
