@@ -126,7 +126,7 @@ if __name__ == '__main__':
     test_res_file = open('print_results_covid19.txt', 'w')
     printing = test_matrix.cpu().numpy()
     np.savetxt('print_results_covid19.txt',printing)
-    train_res_file.close()
+    test_res_file.close()
 
     label_dict_file = open('label_dict_covid19.txt','w')
     np.savetxt('label_dict_covid19.txt',label_dict)
