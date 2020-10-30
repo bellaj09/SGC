@@ -12,8 +12,6 @@ from functools import partial
 from utils import *
 from models import SGC
 
-torch.cuda.set_device(1)
-
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='20ng', help='Dataset string.')
 parser.add_argument('--no-cuda', action='store_true', default=False,
@@ -95,7 +93,7 @@ def eval_linear(model, features, label, binary=False):
         else: predict_class = act(output).gt(0.5).float()
         correct = torch.eq(predict_class, label).long().sum().item()
         acc = correct/predict_class.size(0)
-        print_matrix = torch.cat([predict_class, label],1)
+        print_matrix = torch.cat([predict_class, label],0)
 
 
     return {
