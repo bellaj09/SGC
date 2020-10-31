@@ -7,12 +7,14 @@ from copy import deepcopy
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
+from torch.utils.tensorboard import SummaryWriter # visualisation tool
 import tabulate
 from functools import partial
 from utils import *
 from models import SGC
 
-torch.cuda.set_device(1)
+torch.cuda.set_device(1) # When GPU 0 is out of memory
+writer = SummaryWriter()
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='20ng', help='Dataset string.')
@@ -69,11 +71,13 @@ def train_linear(model, feat_dict, weight_decay, binary=False):
             output = model(feat_dict["train"].cuda()).squeeze()
             l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
             loss = criterion(act(output), label_dict["train"].cuda())+l2_reg
+            writer.add_scalar("Loss/train", loss, epoch)
             loss.backward()
             return loss
-
         optimizer.step(closure)
 
+    writer.flush()
+    writer.close()
     train_time = time.perf_counter()-start
     val_res, val_matrix = eval_linear(model, feat_dict["val"].cuda(),
                           label_dict["val"].cuda(), binary)
