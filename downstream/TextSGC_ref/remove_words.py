@@ -2,6 +2,7 @@ from nltk.corpus import stopwords
 import nltk
 from nltk.wsd import lesk
 from nltk.corpus import wordnet as wn
+from nltk.stem import WordNetLemmatizer 
 from utils import clean_str, loadWord2Vec
 import sys
 import argparse
@@ -62,13 +63,18 @@ with open('data/ind.test.ids', "w") as f:
 
 def get_clean_words(docs):
     clean_words = []
+    lemmatizer = WordNetLemmatizer() 
     for doc in docs:
         if args.dataset != "mr":
             temp = clean_str(doc).split()
             temp = list(filter(lambda x : x not in stop_words, temp))
         else:
             temp = clean_str(doc).split() # A list of all words extracted by splitting whitespace 
-        clean_words.append(temp)
+
+        # Lemmatisation of all words in temp. 
+        for i in range(len(temp)):
+            current_word = temp[i]
+            temp[i] = lemmatizer.lemmatize(current_word)
     return clean_words
 clean_words = get_clean_words(doc_content_list) 
 
@@ -86,14 +92,13 @@ vocab, count = zip(*word_freq.most_common()) # counting frequency of all the wor
 if dataset == "mr":
     cutoff = -1
 else:
-    cutoff = count.index(5)
+    cutoff = count.index(5) # sets cutoff to be the words that occur at least 5 times!!!!!!!
 
-vocab = set(vocab[:cutoff]) # makes a set of the top 6 words in the vocabulary?
-print(cutoff)
+vocab = set(vocab[:cutoff]) 
 
 clean_docs = []
 for words in clean_words: # Loops through every single abstract's cleaned words
-    closed_words = [w for w in words if w in vocab ] # an array of the words in each abstract, if they are in the vocab.
+    closed_words = [w for w in words if w in vocab ] # an array of the words in each abstract, if they are in the vocab of words that appear at least 5 times.
     doc_str = ' '.join(closed_words)
     clean_docs.append(doc_str)
 
