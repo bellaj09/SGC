@@ -14,7 +14,6 @@ from utils import *
 from models import SGC
 
 torch.cuda.set_device(1) # When GPU 0 is out of memory
-writer = SummaryWriter()
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='20ng', help='Dataset string.')
@@ -54,6 +53,7 @@ adj = sparse_to_torch_sparse(sp_adj, device=args.device)
 
 
 def train_linear(model, feat_dict, weight_decay, binary=False):
+    writer = SummaryWriter()
     if not binary:
         act = partial(F.log_softmax, dim=1)
         criterion = F.nll_loss
@@ -71,10 +71,10 @@ def train_linear(model, feat_dict, weight_decay, binary=False):
             output = model(feat_dict["train"].cuda()).squeeze()
             l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
             loss = criterion(act(output), label_dict["train"].cuda())+l2_reg
-            writer.add_scalar("Loss/train", loss, epoch)
             loss.backward()
             return loss
         optimizer.step(closure)
+        writer.add_scalar("Loss/train", loss, epoch)
 
     writer.flush()
     writer.close()
