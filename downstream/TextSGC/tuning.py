@@ -5,11 +5,14 @@ import pickle as pkl
 from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
 from args import get_text_args
 from utils import *
-from trainv2 import train_linear, adj, sp_adj, label_dict, index_dict
+from train import train_linear, adj, sp_adj, label_dict, index_dict
 import torch
+from torch.utils.tensorboard import SummaryWriter
 #import torch.nn.functional as F
 from models import get_model
 from math import log
+
+writer = SummaryWriter()
 
 args = get_text_args()
 set_seed(args.seed, args.cuda)
@@ -26,6 +29,8 @@ def linear_objective(space):
     val_acc, _, _ = train_linear(model, feat_dict, space['weight_decay'], args.dataset=="mr")
     print( 'weight decay ' + str(space['weight_decay']) + '\n' + \
           'overall accuracy: ' + str(val_acc))
+    writer.add_scalar("Weight decay/tuning", str(space['weight_decay']))
+    writer.add_scalar("Accuracy/tuning", str(val_acc))
     return {'loss': -val_acc, 'status': STATUS_OK}
 
 # Hyperparameter optimization
@@ -33,6 +38,8 @@ space = {'weight_decay' : hp.loguniform('weight_decay', log(1e-6), log(1e-0))}
 
 best = fmin(linear_objective, space=space, algo=tpe.suggest, max_evals=60)
 print(best)
+writer.flush()
+writer.close()
 
 with open('{}.SGC.tuning.txt'.format(args.dataset), 'w') as f:
     f.write(str(best['weight_decay']))
