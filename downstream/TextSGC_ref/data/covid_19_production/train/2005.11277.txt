@@ -1,0 +1,1 @@
+infections and identified cases of covid-19 from random testing data. There are many hard-to-reconcile numbers circulating concerning Covid-19. Using reports from random testing, the fatality ratio per infection is evaluated and used to extract further information on the actual fraction of infections and the success of their identification for different countries.

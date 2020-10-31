@@ -20,7 +20,7 @@ parser.add_argument('--dataset', type=str, default='20ng', help='Dataset string.
 parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=10,
+parser.add_argument('--epochs', type=int, default=3,
                     help='Number of epochs to train.')
 parser.add_argument('--batch_size', type=int, default=128,
                     help='training batch size.')
@@ -78,8 +78,8 @@ def train_linear(model, feat_dict, weight_decay, binary=False):
     train_time = time.perf_counter()-start
     val_res, val_matrix = eval_linear(model, feat_dict["val"].cuda(),
                           label_dict["val"].cuda(), binary)
-    writer.add_scalar("Accuracy/train", val_res['accuracy'])
-    writer.add_scalar("Time/train", train_time)       
+    # writer.add_scalar("Accuracy/train", val_res['accuracy'])
+    # writer.add_scalar("Time/train", train_time)       
     writer.flush()
     writer.close()
     return val_res['accuracy'], model, train_time
@@ -130,7 +130,7 @@ if __name__ == '__main__':
     train_res, train_matrix = eval_linear(best_model, feat_dict["train"].cuda(),
                             label_dict["train"].cuda(), args.dataset=="mr")
     print("Total Time: {:2f}s, Train acc: {:.4f}, Val acc: {:.4f}, Test acc: {:.4f}".format(precompute_time+train_time, train_res["accuracy"], val_acc, test_res["accuracy"]))
-    test_res_file = open("{}.SGC_original.results.txt".format(args.dataset), 'w')
+    test_res_file = open("results/{}.SGC_original.results.txt".format(args.dataset), 'w')
     printing = test_matrix.cpu().numpy()
-    np.savetxt("{}.SGC_original.results.txt".format(args.dataset),printing)
+    np.savetxt("results/{}.SGC_original.results.txt".format(args.dataset),printing)
     test_res_file.close()

@@ -41,5 +41,5 @@ print(best)
 writer.flush()
 writer.close()
 
-with open('{}.SGC.tuning.txt'.format(args.dataset), 'w') as f:
+with open('tuned_result/{}.SGC.tuning.txt'.format(args.dataset), 'w') as f:
     f.write(str(best['weight_decay']))
