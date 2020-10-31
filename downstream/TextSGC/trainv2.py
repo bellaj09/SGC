@@ -12,6 +12,8 @@ from functools import partial
 from utils import *
 from models import SGC
 
+torch.cuda.set_device(1)
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='20ng', help='Dataset string.')
 parser.add_argument('--no-cuda', action='store_true', default=False,
