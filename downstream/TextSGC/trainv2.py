@@ -123,11 +123,7 @@ if __name__ == '__main__':
     train_res, train_matrix = eval_linear(best_model, feat_dict["train"].cuda(),
                             label_dict["train"].cuda(), args.dataset=="mr")
     print("Total Time: {:2f}s, Train acc: {:.4f}, Val acc: {:.4f}, Test acc: {:.4f}".format(precompute_time+train_time, train_res["accuracy"], val_acc, test_res["accuracy"]))
-    test_res_file = open('print_results_covid19.txt', 'w')
+    test_res_file = open("{}.SGC_original.results.txt".format(args.dataset), 'w')
     printing = test_matrix.cpu().numpy()
-    np.savetxt('print_results_covid19.txt',printing)
+    np.savetxt("{}.SGC_original.results.txt".format(args.dataset),printing)
     test_res_file.close()
-
-    label_dict_file = open('label_dict_covid19.txt','w')
-    np.savetxt('label_dict_covid19.txt',label_dict["test"].cpu().numpy())
-    label_dict_file.close()
