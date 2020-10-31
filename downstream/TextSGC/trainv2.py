@@ -74,7 +74,7 @@ def train_linear(model, feat_dict, weight_decay, binary=False):
             writer.add_scalar("Loss/train", loss, epoch)
             loss.backward()
             return loss
-        optimizer.step(closure(epoch))
+        optimizer.step(closure)
 
     writer.flush()
     writer.close()
