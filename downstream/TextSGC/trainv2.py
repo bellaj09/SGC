@@ -66,7 +66,7 @@ def train_linear(model, feat_dict, weight_decay, binary=False):
     plateau = 0
     start = time.perf_counter()
     for epoch in range(args.epochs):
-        def closure():
+        def closure(epoch):
             optimizer.zero_grad()
             output = model(feat_dict["train"].cuda()).squeeze()
             l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
@@ -74,7 +74,7 @@ def train_linear(model, feat_dict, weight_decay, binary=False):
             writer.add_scalar("Loss/train", loss, epoch)
             loss.backward()
             return loss
-        optimizer.step(closure)
+        optimizer.step(closure(epoch))
 
     writer.flush()
     writer.close()
