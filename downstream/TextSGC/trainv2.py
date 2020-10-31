@@ -75,12 +75,13 @@ def train_linear(model, feat_dict, weight_decay, binary=False):
             loss.backward()
             return loss
         optimizer.step(closure)
-
-    writer.flush()
-    writer.close()
     train_time = time.perf_counter()-start
     val_res, val_matrix = eval_linear(model, feat_dict["val"].cuda(),
                           label_dict["val"].cuda(), binary)
+    writer.add_scalar("Accuracy/train", val_res['accuracy'])
+    writer.add_scalar("Time/train", train_time)       
+    writer.flush()
+    writer.close()
     return val_res['accuracy'], model, train_time
 
 def eval_linear(model, features, label, binary=False):
