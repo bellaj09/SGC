@@ -71,10 +71,10 @@ def train_linear(model, feat_dict, weight_decay, binary=False):
             output = model(feat_dict["train"].cuda()).squeeze()
             l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
             loss = criterion(act(output), label_dict["train"].cuda())+l2_reg
+            writer.add_scalar("Loss/train", loss, epoch)
             loss.backward()
             return loss
-        loss = optimizer.step(closure)
-        writer.add_scalar("Loss/train", loss, epoch)
+        optimizer.step(closure)
 
     writer.flush()
     writer.close()
