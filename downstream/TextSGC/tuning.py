@@ -29,8 +29,8 @@ def linear_objective(space):
     val_acc, _, _ = train_linear(model, feat_dict, space['weight_decay'], args.dataset=="mr")
     print( 'weight decay ' + str(space['weight_decay']) + '\n' + \
           'overall accuracy: ' + str(val_acc))
-    writer.add_scalar("Weight decay/tuning", str(space['weight_decay']))
-    writer.add_scalar("Accuracy/tuning", str(val_acc))
+    writer.add_scalar("Weight decay/tuning", space['weight_decay'])
+    writer.add_scalar("Accuracy/tuning", val_acc)
     return {'loss': -val_acc, 'status': STATUS_OK}
 
 # Hyperparameter optimization
