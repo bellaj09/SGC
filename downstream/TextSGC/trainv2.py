@@ -20,7 +20,7 @@ parser.add_argument('--dataset', type=str, default='20ng', help='Dataset string.
 parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=3,
+parser.add_argument('--epochs', type=int, default=10,
                     help='Number of epochs to train.')
 parser.add_argument('--batch_size', type=int, default=128,
                     help='training batch size.')
@@ -66,7 +66,7 @@ def train_linear(model, feat_dict, weight_decay, binary=False):
     plateau = 0
     start = time.perf_counter()
     for epoch in range(args.epochs):
-        def closure(epoch):
+        def closure():
             optimizer.zero_grad()
             output = model(feat_dict["train"].cuda()).squeeze()
             l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
