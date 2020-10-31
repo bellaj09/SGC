@@ -89,11 +89,11 @@ else:
     cutoff = count.index(5)
 
 vocab = set(vocab[:cutoff]) # makes a set of the top 6 words in the vocabulary?
-print(vocab)
+print(cutoff)
 
 clean_docs = []
 for words in clean_words: # Loops through every single abstract's cleaned words
-    closed_words = [w for w in words if w in vocab ] # an array of 
+    closed_words = [w for w in words if w in vocab ] # an array of the words in each abstract, if they are in the vocab.
     doc_str = ' '.join(closed_words)
     clean_docs.append(doc_str)
 
