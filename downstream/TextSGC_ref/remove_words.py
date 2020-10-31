@@ -75,6 +75,8 @@ def get_clean_words(docs):
         for i in range(len(temp)):
             current_word = temp[i]
             temp[i] = lemmatizer.lemmatize(current_word)
+
+        clean_words.append(temp)
     return clean_words
 clean_words = get_clean_words(doc_content_list) 
 
