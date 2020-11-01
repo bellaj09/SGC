@@ -1,0 +1,7 @@
+Bmp7	NN
+knockout	NN
+mice	NNS
+do	VBP
+not	RB
+show	VB
+any	DT
