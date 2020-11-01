@@ -2,7 +2,6 @@ from nltk.corpus import stopwords
 import nltk
 from nltk.wsd import lesk
 from nltk.corpus import wordnet as wn
-from nltk.stem import WordNetLemmatizer 
 from utils import clean_str, loadWord2Vec
 import sys
 import argparse
@@ -14,6 +13,7 @@ import pandas as pd
 import subprocess
 from nltk import pos_tag
 nltk.download('averaged_perceptron_tagger')
+from progress.bar import ChargingBar
 
 # nltk.download()
 stop_words = set(stopwords.words('english'))
@@ -69,19 +69,22 @@ with open('data/ind.test.ids', "w") as f:
 
 def get_clean_words(docs):
     clean_words = []
-    lemmatizer = WordNetLemmatizer() 
+    bar = ChargingBar('Cleaning', max = len(docs))
     for doc in docs:
         if args.dataset != "mr":
             temp = clean_str(doc).split()
             temp = list(filter(lambda x : x not in stop_words, temp)) # stopword removal and unique tokens only
         else:
             temp = clean_str(doc).split() # A list of all words extracted by splitting whitespace 
+
         tagged_df = pd.DataFrame(pos_tag(temp))
         tagged_df.to_csv('tagged_string.txt',sep = '\t',header = False, index = False)
         subprocess.run(["java -Xmx1G -jar biolemmatizer-core-1.2-jar-with-dependencies.jar -l -i 'tagged_string.txt' -o 'biolemmatizer_output.txt'"], shell=True)
         df = pd.read_csv('biolemmatizer_output.txt', header=None, sep='\t')
         temp = df[2].to_numpy()
         clean_words.append(temp)
+        bar.next()
+    bar.finish()
     return clean_words
 clean_words = get_clean_words(doc_content_list) 
 
@@ -106,11 +109,11 @@ vocab = set(vocab[:cutoff])
 
 clean_docs = []
 for words in clean_words: # Loops through every single abstract's cleaned words
-    closed_words = [w for w in words if w in vocab ] # an array of the words in each abstract, if they are in the vocab of words that appear at least 5 times.
+    closed_words = [str(w) for w in words if w in vocab ] # an array of the words in each abstract, if they are in the vocab of words that appear at least 5 times.
     doc_str = ' '.join(closed_words)
     clean_docs.append(doc_str)
 
-clean_corpus_str = '\n'.join(clean_docs) # each abstract, cleaned, stopwords removed, tokenised by whitespace. 
+clean_corpus_str = '\n'.join(clean_docs) # each abstract, cleaned, stopwords removed, biolemmatised, tokenised by whitespace. 
 
 f = open('data/corpus/' + dataset + '.clean.txt', 'w') 
 f.write(clean_corpus_str)
