@@ -8,6 +8,7 @@ import sys
 import argparse
 import random
 from collections import Counter
+import pandas as import pd
 # For BioLemmatizer
 import subprocess
 from nltk import pos_tag
