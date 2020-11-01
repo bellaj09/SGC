@@ -9,6 +9,7 @@ import argparse
 import random
 from collections import Counter
 import pandas as pd
+
 # For BioLemmatizer
 import subprocess
 from nltk import pos_tag
@@ -79,8 +80,7 @@ def get_clean_words(docs):
         tagged_df.to_csv('tagged_string.txt',sep = '\t',header = False, index = False)
         subprocess.run(["java -Xmx1G -jar biolemmatizer-core-1.2-jar-with-dependencies.jar -l -i 'tagged_string.txt' -o 'biolemmatizer_output.txt'"], shell=True)
         df = pd.read_csv('biolemmatizer_output.txt', header=None, sep='\t')
-        temp = df[2]
-        temp = ' '.join(temp)        
+        temp = df[2].to_numpy()
         clean_words.append(temp)
     return clean_words
 clean_words = get_clean_words(doc_content_list) 
