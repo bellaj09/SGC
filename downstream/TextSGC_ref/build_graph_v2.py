@@ -14,6 +14,8 @@ from scipy.spatial.distance import cosine
 from tqdm import tqdm
 from collections import Counter
 import itertools
+import h5py 
+import pandas as pd
 
 parser = argparse.ArgumentParser(description='Build Document Graph')
 parser.add_argument('--dataset', type=str, default='20ng',
@@ -21,13 +23,15 @@ parser.add_argument('--dataset', type=str, default='20ng',
                     help='dataset name')
 parser.add_argument('--embedding_dim', type=int, default=300,
                     help='word and document embedding size.')
+parser.add_argument('--embedding_path', type=str, default='data/corpus/ohsumed_biobert-base-embeddings.h5',
+                    help='path to biobert embedding output.')                    
 args = parser.parse_args()
 
 # build corpus
 dataset = args.dataset
 
 word_embeddings_dim = args.embedding_dim
-word_vector_map = {} # TODO: modify this to use embedding
+word_vector_map = h5py.File(args.embedding_path, 'r') # TODO: modify this to use embedding
 
 doc_name_list = []
 train_val_ids = []
@@ -109,7 +113,7 @@ def average_word_vec(doc_id, doc_content_list, word_to_vector):
     words = doc_words.split()
     for word in words:
         if word in word_vector_map:
-            word_vector = word_vector_map[word]
+            word_vector = word_vector_map['patient']['embedding'][:]
             doc_vec = doc_vec + np.array(word_vector)
     doc_vec /= len(words)
     return doc_vec
