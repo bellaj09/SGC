@@ -1,0 +1,3 @@
+[submodule "downstream/TextSGC_Bio/biobert-pytorch"]
+	path = downstream/TextSGC_Bio/biobert-pytorch
+	url = https://github.com/bellaj09/biobert-pytorch.git
