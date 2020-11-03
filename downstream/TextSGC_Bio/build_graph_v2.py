@@ -276,33 +276,33 @@ def calc_doc_word_freq(ids, doc_content_list):
 #     return row, col, weight
 
     # To avoid overfitting, only adds the TFIDF weight if it's large enough.
-    def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phase='B'):
-        row = []
-        col = []
-        weight = []
-        for i, doc_id in enumerate(ids):
-            doc_words = doc_words_list[doc_id]
-            words = set(doc_words.split())
-            doc_word_set = set()
-            for word in words: # gives each word in each document a normalised TFIDF score
-                word_id = word_id_map[word]
-                key = (doc_id, word_id)
-                freq = doc_word_freq[key]
-                idf = log(1.0 * len(ids) /
-                        word_doc_freq[word])
-                if freq*idf <= 4.0: 
-                    continue 
-                w = freq*idf
-                if phase == "B":
-                    row.append(doc_id)
-                    col.append(word_id)
-                    weight.append(w)
-                elif phase == "C":
-                    row.append(word_id)
-                    col.append(doc_id)
-                    weight.append(w)
-                else: raise ValueError("wrong phase")
-        return row, col, weight
+def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phase='B'):
+    row = []
+    col = []
+    weight = []
+    for i, doc_id in enumerate(ids):
+        doc_words = doc_words_list[doc_id]
+        words = set(doc_words.split())
+        doc_word_set = set()
+        for word in words: # gives each word in each document a normalised TFIDF score
+            word_id = word_id_map[word]
+            key = (doc_id, word_id)
+            freq = doc_word_freq[key]
+            idf = log(1.0 * len(ids) /
+                    word_doc_freq[word])
+            if freq*idf <= 4.0: 
+                continue 
+            w = freq*idf
+            if phase == "B":
+                row.append(doc_id)
+                col.append(word_id)
+                weight.append(w)
+            elif phase == "C":
+                row.append(word_id)
+                col.append(doc_id)
+                weight.append(w)
+            else: raise ValueError("wrong phase")
+    return row, col, weight
 
 def concat_graph(*args):
     rows, cols, weights = zip(*args)
