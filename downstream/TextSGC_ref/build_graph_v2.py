@@ -113,7 +113,7 @@ def average_word_vec(doc_id, doc_content_list, word_to_vector):
     words = doc_words.split()
     for word in words:
         if word in word_vector_map:
-            word_vector = word_vector_map[word]['embedding'][:]
+            word_vector = word_vector_map['patient']['embedding'][:]
             doc_vec = doc_vec + np.array(word_vector)
     doc_vec /= len(words)
     return doc_vec
@@ -193,35 +193,17 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
     col = []
     weight = []
     # pmi as weights
-    # for pair, count in word_pair_count.items():
-    #     i, j = pair
-    #     word_freq_i = word_window_freq[i]
-    #     word_freq_j = word_window_freq[j]
-    #     pmi = log((1.0 * count / num_window) /
-    #               (1.0 * word_freq_i * word_freq_j/(num_window * num_window)))
-    #     if pmi <= 0: 
-    #         continue
-    #     row.append(word_id_map[i])
-    #     col.append(word_id_map[j])
-    #     weight.append(pmi) # pmi values would be between 0 - 1
-
-    # cosine similarity between word vectors as weights
-    # for i in range(vocab_size):
-    #     for j in range(vocab_size):
     for pair, count in word_pair_count.items():
         i, j = pair
-        if i in word_vector_map and j in word_vector_map:
-            vector_i = np.array(word_vector_map[i]['embedding'][:])
-            vector_j = np.array(word_vector_map[j]['embedding'][:])
-            similarity = 1.0 - cosine(vector_i, vector_j)
-            if similarity < 0.9:
-                print(i, j, similarity)
-                row.append(word_id_map[i])
-                col.append(word_id_map[j])
-                weight.append(similarity) # similarity values between 0 - 0.9
-                # row.append(train_size + i)
-                # col.append(train_size + j)
-                # weight.append(similarity)
+        word_freq_i = word_window_freq[i]
+        word_freq_j = word_window_freq[j]
+        pmi = log((1.0 * count / num_window) /
+                  (1.0 * word_freq_i * word_freq_j/(num_window * num_window)))
+        if pmi <= 0:
+            continue
+        row.append(word_id_map[i])
+        col.append(word_id_map[j])
+        weight.append(pmi)
     return row, col, weight
 
 def calc_word_doc_freq(ids, doc_content_list):
@@ -252,7 +234,7 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
         doc_words = doc_words_list[doc_id]
         words = set(doc_words.split())
         doc_word_set = set()
-        for word in words: # gives each word in each document a normalised TFIDF score
+        for word in words:
             word_id = word_id_map[word]
             key = (doc_id, word_id)
             freq = doc_word_freq[key]
