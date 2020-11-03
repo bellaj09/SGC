@@ -213,15 +213,18 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
         if i in word_vector_map and j in word_vector_map:
             vector_i = np.array(word_vector_map[i]['embedding'][:])
             vector_j = np.array(word_vector_map[j]['embedding'][:])
-            similarity = 1.0 - cosine(vector_i, vector_j)
-            if similarity < 0.9:
-                print(i, j, similarity)
-                row.append(word_id_map[i])
-                col.append(word_id_map[j])
-                weight.append(similarity) # similarity values between 0 - 0.9
-                # row.append(train_size + i)
-                # col.append(train_size + j)
-                # weight.append(similarity)
+            # similarity = 1.0 - cosine(vector_i, vector_j)
+            # if similarity < 0.9:
+            #     print(i, j, similarity)
+            #     row.append(word_id_map[i])
+            #     col.append(word_id_map[j])
+            #     weight.append(similarity) # similarity values between 0 - 0.9
+            similarity = cosine(vector_i, vector_j)
+            if similarity <= 0: # don't add weights if the words are too different or opposite.
+                continue 
+            row.append(word_id_map[i])
+            col.append(word_id_map[j])
+            weight.append(similarity) # similarity values between 0 - 1, greater similarity means similar word embeddings
     return row, col, weight
 
 def calc_word_doc_freq(ids, doc_content_list):
