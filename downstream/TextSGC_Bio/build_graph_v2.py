@@ -208,10 +208,9 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
     # cosine similarity between word vectors as weights
     # for i in range(vocab_size):
     #     for j in range(vocab_size):
-    pairs, count = word_pair_count.items()
-    progress_bar = tqdm(pairs)
+    progress_bar = tqdm(word_pair_count.items())
     progress_bar.set_postfix_str("calculating word pair cosine similarity")
-    for pair in progress_bar:
+    for pair, count in progress_bar:
         i, j = pair
         if i in word_vector_map and j in word_vector_map:
             vector_i = np.array(word_vector_map[i]['embedding'][:])
@@ -222,9 +221,9 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
             #     row.append(word_id_map[i])
             #     col.append(word_id_map[j])
             #     weight.append(similarity) # similarity values between 0 - 0.9
-            similarity = cosine(vector_i, vector_j)
-            # if similarity <= 0: # don't add weights if the words are too different or opposite.
-            #     continue 
+            similarity = 1.0 - cosine(vector_i, vector_j)
+            if similarity <= 0: # don't add weights if the words are too different or opposite.
+                continue 
             row.append(word_id_map[i])
             col.append(word_id_map[j])
             weight.append(similarity) # similarity values between 0 - 1, greater similarity means similar word embeddings
