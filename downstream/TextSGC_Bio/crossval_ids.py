@@ -36,6 +36,7 @@ for i in range(5):
     train_val_ids = []
     test_ids = []
     doc_name_list = []
+    label_names = []
 
     with open('data/' + dataset + str(i) + '.txt', 'r') as f:
         lines = f.readlines()
