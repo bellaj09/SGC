@@ -15,6 +15,7 @@ from math import log
 writer = SummaryWriter()
 
 args = get_text_args()
+args.device = 'cuda' if args.cuda else 'cpu'
 set_seed(args.seed, args.cuda)
 
 best_weight_decays = []
