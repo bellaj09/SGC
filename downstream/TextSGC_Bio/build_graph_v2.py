@@ -291,7 +291,7 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
             freq = doc_word_freq[key]
             idf = log(1.0 * len(ids) /
                     word_doc_freq[word])
-            if freq*idf <= 5.0: 
+            if freq*idf <= 1.0: 
                 continue 
             w = freq*idf
             if phase == "B":
