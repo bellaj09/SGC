@@ -8,12 +8,13 @@ import torch
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.tensorboard import SummaryWriter # visualisation tool
+import torch.utils.data as data_utils
 import tabulate
 from functools import partial
 from utils import *
 from models import SGC
 
-torch.cuda.set_device(1) # When GPU 0 is out of memory
+# torch.cuda.set_device(1) # When GPU 0 is out of memory
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='20ng', help='Dataset string.')
@@ -66,15 +67,20 @@ def train_linear(model, feat_dict, weight_decay, binary=False):
     plateau = 0
     start = time.perf_counter()
     for epoch in range(args.epochs):
-        def closure():
-            optimizer.zero_grad()
-            output = model(feat_dict["train"].cuda()).squeeze()
-            l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
-            loss = criterion(act(output), label_dict["train"].cuda())+l2_reg
-            writer.add_scalar("Loss/train", loss, epoch)
-            loss.backward()
-            return loss
-        optimizer.step(closure)
+        train_data = data_utils.TensorDataset(feat_dict["train"].cuda(), label_dict["train"].cuda())
+        train_loader = data_utils.DataLoader(train_data, batch_size=args.batch_size, shuffle=True)
+
+        for n, (batch_feat, batch_label) in enumerate(train_loader): # make predictions in batches
+            def closure():
+                optimizer.zero_grad()
+                output = model(batch_feat).squeeze()
+                l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
+                loss = criterion(act(output), batch_label)+l2_reg
+                writer.add_scalar("Loss/train", loss, n)
+                loss.backward()
+                return loss
+            optimizer.step(closure)
+        
     train_time = time.perf_counter()-start
     val_res, val_matrix = eval_linear(model, feat_dict["val"].cuda(),
                           label_dict["val"].cuda(), binary)     

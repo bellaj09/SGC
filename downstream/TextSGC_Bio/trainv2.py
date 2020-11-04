@@ -69,11 +69,13 @@ for i in range(5):
         plateau = 0
         start = time.perf_counter()
         for epoch in range(args.epochs):
+            # DataLoader - split feat_dict into batches. 
+            # for each batch: 
             def closure():
                 optimizer.zero_grad()
                 output = model(feat_dict["train"].cuda()).squeeze()
                 l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
-                loss = criterion(act(output), label_dict["train"].cuda())+l2_reg
+                loss = criterion(act(output), label_dict["train"].cuda())+l2_reg # sigmoid activation function
                 writer.add_scalar("Loss/train", loss, epoch)
                 loss.backward()
                 return loss

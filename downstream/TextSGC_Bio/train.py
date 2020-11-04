@@ -38,7 +38,8 @@ if args.tuned:
 torch.backends.cudnn.benchmark = True
 set_seed(args.seed, args.cuda)
 
-sp_adj, index_dict, label_dict = load_corpus(args.dataset)
+#sp_adj, index_dict, label_dict = load_corpus(args.dataset) 
+sp_adj, index_dict, label_dict = load_corpus_crossval(args.dataset,0) # changing to crossval version for use in tuning
 for k, v in label_dict.items():
     if args.dataset == "mr":
         label_dict[k] = torch.Tensor(v).to(args.device)
