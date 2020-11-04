@@ -50,7 +50,7 @@ set_seed(args.seed, args.cuda)
 # adj = sparse_to_torch_sparse(sp_adj, device=args.device)
 
 
-def train_linear(model, feat_dict, weight_decay, binary=False,i):
+def train_linear(model, feat_dict, weight_decay, binary=False, i=0):
     sp_adj, index_dict, label_dict = load_corpus_crossval(args.dataset,i) # changing to crossval version for use in tuning
     for k, v in label_dict.items():
         if args.dataset == "mr":
