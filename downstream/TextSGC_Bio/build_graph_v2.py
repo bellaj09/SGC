@@ -21,7 +21,7 @@ parser = argparse.ArgumentParser(description='Build Document Graph')
 parser.add_argument('--dataset', type=str, default='20ng',
                     choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr', 'yelp', 'ag_news', 'covid_19_production'],
                     help='dataset name')
-parser.add_argument('--embedding_dim', type=int, default=300,
+parser.add_argument('--embedding_dim', type=int, default=768,
                     help='word and document embedding size.')
 parser.add_argument('--embedding_path', type=str, default='data/corpus/ohsumed_biobert-large_embeddings.h5',
                     help='path to biobert embedding output.')                    
@@ -40,7 +40,7 @@ label_names = set()
 train_val_labels = []
 test_labels = []
 
-with open('data/' + dataset + '.txt', 'r') as f:
+with open('data/' + dataset + '0.txt', 'r') as f:
     lines = f.readlines()
     for id, line in enumerate(lines):
         doc_name_list.append(line.strip())
@@ -107,6 +107,7 @@ train_ids, val_ids = train_val_ids[:train_size], train_val_ids[train_size:]
 train_labels, val_labels = train_val_labels[:train_size], train_val_labels[train_size:]
 
 # Construct feature vectors
+# represent each document as the average of its words' embeddings
 def average_word_vec(doc_id, doc_content_list, word_to_vector):
     doc_vec = np.array([0.0 for k in range(word_embeddings_dim)])
     doc_words = doc_content_list[doc_id]
@@ -223,10 +224,13 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
             #     weight.append(similarity) # similarity values between 0 - 0.9
             similarity = 1.0 - cosine(vector_i, vector_j)
             if similarity < 0.5: # don't add weights if the words are too different or opposite.
-                continue 
+                continue
             row.append(word_id_map[i])
             col.append(word_id_map[j])
             weight.append(similarity) # similarity values between 0 - 1, greater similarity means similar word embeddings
+    with open('data/' + dataset + '_cosinesim.txt', 'w') as f:
+        weight_str = '\n'.join(weight)
+        f.write(weight_str) 
     return row, col, weight
 
 def calc_word_doc_freq(ids, doc_content_list):
@@ -275,7 +279,7 @@ def calc_doc_word_freq(ids, doc_content_list):
 #             else: raise ValueError("wrong phase")
 #     return row, col, weight
 
-    # To avoid overfitting, only adds the TFIDF weight if it's large enough.
+# To avoid overfitting, only adds the TFIDF weight if it's large enough.
 def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phase='B'):
     row = []
     col = []
@@ -302,6 +306,9 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
                 col.append(doc_id)
                 weight.append(w)
             else: raise ValueError("wrong phase")
+    with open('data/' + dataset + '_tfidf.txt', 'w') as f:
+        weight_str = '\n'.join(weight)
+        f.write(weight_str) 
     return row, col, weight
 
 def concat_graph(*args):
