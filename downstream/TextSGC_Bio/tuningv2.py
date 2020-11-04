@@ -28,7 +28,7 @@ for i in range(5):
     adj_dense = sparse_to_torch_dense(sp_adj, device='cuda')
     feat_dict, precompute_time = sgc_precompute(adj, adj_dense, args.degree-1, index_dict)
     if args.dataset == "mr": nclass = 1
-    else: nclass = label_dict["train"].max().item()+1
+    else: nclass = max(label_dict["train"])+1
 
     def linear_objective(space):
         model = get_model(args.model, nfeat=feat_dict["train"].size(1),

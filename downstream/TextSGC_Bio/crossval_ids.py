@@ -28,7 +28,7 @@ for i, arrays in enumerate(skf.split(X, Y)):
     test_index = arrays[1]
     df.iloc[[train_index],1] = 'train'
     df.iloc[[test_index],1] = 'test'
-    filename = '{}{}.txt'.format(dataset,i)
+    filename = 'data/{}{}.txt'.format(dataset,i)
     print(filename)
     df.to_csv(filename,sep='\t', header=False,index=False)
 
