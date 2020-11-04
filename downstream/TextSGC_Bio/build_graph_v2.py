@@ -229,8 +229,7 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
             col.append(word_id_map[j])
             weight.append(similarity) # similarity values between 0 - 1, greater similarity means similar word embeddings
     with open('data/' + dataset + '_cosinesim.txt', 'w') as f:
-        weight_str = '\n'.join(weight)
-        f.write(weight_str) 
+        np.savetxt(f,weight)
     return row, col, weight
 
 def calc_word_doc_freq(ids, doc_content_list):
@@ -307,8 +306,7 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
                 weight.append(w)
             else: raise ValueError("wrong phase")
     with open('data/' + dataset + '_tfidf.txt', 'w') as f:
-        weight_str = '\n'.join(weight)
-        f.write(weight_str) 
+        np.savetxt(f,weight) 
     return row, col, weight
 
 def concat_graph(*args):
