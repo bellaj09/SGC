@@ -34,7 +34,7 @@ for i in range(5):
         model = get_model(args.model, nfeat=feat_dict["train"].size(1),
                         nclass=nclass,
                         nhid=0, dropout=0, cuda=args.cuda)
-        val_acc, _, _ = train_linear(model, feat_dict, space['weight_decay'], args.dataset=="mr")
+        val_acc, _, _ = train_linear(model, feat_dict, space['weight_decay'], args.dataset=="mr",i)
         print( 'weight decay ' + str(space['weight_decay']) + '\n' + \
             'overall accuracy: ' + str(val_acc))
         writer.add_scalar("Weight decay/tuning", space['weight_decay'])
@@ -56,6 +56,6 @@ for i in range(5):
         f.write(str(best['weight_decay']))
 
 # then show mean?
-print('Mean weight decay:' , np.mean(best_weight_decays))
+print(best_weight_decays)
 
 
