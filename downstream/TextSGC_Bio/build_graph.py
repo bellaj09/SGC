@@ -189,6 +189,8 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
     row = []
     col = []
     weight = []
+    row_word = []
+    col_word = []
     # pmi as weights
     for pair, count in word_pair_count.items():
         i, j = pair
@@ -200,8 +202,10 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
             continue
         row.append(word_id_map[i])
         col.append(word_id_map[j])
+        row.append(i)
+        col.append(j)
         weight.append(pmi)
-    wwdf = pd.DataFrame({'row':row,'col':col, 'weight':weight},columns=['row','col','weight'])
+    wwdf = pd.DataFrame({'row':row_word,'col':col_word, 'weight':weight},columns=['row','col','weight'])
     wwdf.to_csv('pmi_weights.csv', header=False, index=False)
     return row, col, weight
 # add in printing of word-word pmi matrix.     
