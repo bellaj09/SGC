@@ -2,6 +2,7 @@ import argparse
 import os
 import random
 import numpy as np
+import pandas as pd
 import pickle as pkl
 import networkx as nx
 import scipy.sparse as sp
@@ -200,7 +201,10 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
         row.append(word_id_map[i])
         col.append(word_id_map[j])
         weight.append(pmi)
+    wwdf = pd.DataFrame({'row':row,'col':col, 'weight':weight},columns=['row','col','weight'])
+    wwdf.to_csv('pmi_weights.csv', header=False, index=False)
     return row, col, weight
+# add in printing of word-word pmi matrix.     
 
 def calc_word_doc_freq(ids, doc_content_list):
     # Count number of documents that contain a word
@@ -246,6 +250,7 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
                 col.append(doc_id)
                 weight.append(w)
             else: raise ValueError("wrong phase")
+    # print tfidf scores
     return row, col, weight
 
 def concat_graph(*args):
