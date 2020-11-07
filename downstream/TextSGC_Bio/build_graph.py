@@ -205,6 +205,9 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
         row.append(str(i))
         col.append(str(j))
         weight.append(pmi)
+    print(len(row_word), len(row_col), len(weight))
+    print(row_word[:6])
+    print(col_word[:6])
     wwdf = pd.DataFrame({'row':row_word,'col':col_word, 'weight':weight},columns=['row','col','weight'])
     wwdf.to_csv('pmi_weights.csv', header=False, index=False)
     return row, col, weight
