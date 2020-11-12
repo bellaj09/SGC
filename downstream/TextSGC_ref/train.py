@@ -38,19 +38,19 @@ if args.tuned:
 torch.backends.cudnn.benchmark = True
 set_seed(args.seed, args.cuda)
 
-sp_adj, index_dict, label_dict = load_corpus(args.dataset)
-for k, v in label_dict.items():
-    if args.dataset == "mr":
-        label_dict[k] = torch.Tensor(v).to(args.device)
-    else:
-        label_dict[k] = torch.LongTensor(v).to(args.device)
-features = torch.arange(sp_adj.shape[0]).to(args.device)
-
-adj = sparse_to_torch_sparse(sp_adj, device=args.device)
+#sp_adj, index_dict, label_dict = load_corpus(args.dataset)
 
 
 def train_linear(model, feat_dict, weight_decay, binary=False,i=0):
     sp_adj, index_dict, label_dict = load_corpus_crossval(args.dataset,i)
+    for k, v in label_dict.items():
+    if args.dataset == "mr":
+        label_dict[k] = torch.Tensor(v).to(args.device)
+    else:
+        label_dict[k] = torch.LongTensor(v).to(args.device)
+    features = torch.arange(sp_adj.shape[0]).to(args.device)
+
+    adj = sparse_to_torch_sparse(sp_adj, device=args.device)
     if not binary:
         act = partial(F.log_softmax, dim=1)
         criterion = F.nll_loss
