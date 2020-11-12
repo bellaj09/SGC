@@ -56,6 +56,46 @@ def load_corpus(dataset_str):
 
     return adj, index_dict, label_dict
 
+def load_corpus_crossval(dataset_str, i):
+    """
+    Loads input corpus from gcn/data directory
+
+    ind.dataset_str.x => the feature vectors of the training docs as scipy.sparse.csr.csr_matrix object;
+    ind.dataset_str.tx => the feature vectors of the test docs as scipy.sparse.csr.csr_matrix object;
+    ind.dataset_str.allx => the feature vectors of both labeled and unlabeled training docs/words
+        (a superset of ind.dataset_str.x) as scipy.sparse.csr.csr_matrix object;
+    ind.dataset_str.y => the one-hot labels of the labeled training docs as numpy.ndarray object;
+    ind.dataset_str.ty => the one-hot labels of the test docs as numpy.ndarray object;
+    ind.dataset_str.ally => the labels for instances in ind.dataset_str.allx as numpy.ndarray object;
+    ind.dataset_str.adj => adjacency matrix of word/doc nodes as scipy.sparse.csr.csr_matrix object;
+    ind.dataset_str.train.index => the indices of training docs in original doc list.
+
+    All objects above must be saved using python pickle module.
+
+    :param dataset_str: Dataset name
+    :return: All data input files loaded (as well the training/test data).
+    """
+    index_dict = {}
+    label_dict = {}
+    phases = ["train", "val", "test"]
+    objects = []
+    def load_pkl(path):
+        with open(path.format(dataset_str, i, p), 'rb') as f:
+            if sys.version_info > (3, 0):
+                return pkl.load(f, encoding='latin1')
+            else:
+                return pkl.load(f)
+
+    for p in phases:
+        index_dict[p] = load_pkl("data/ind.{}.{}.{}.x".format(dataset_str, i, p))
+        label_dict[p] = load_pkl("data/ind.{}.{}.{}.y".format(dataset_str, i, p))
+
+    adj = load_pkl("data/ind.{}.BCD.adj".format(dataset_str))
+    adj = adj.astype(np.float32)
+    adj = preprocess_adj(adj)
+
+    return adj, index_dict, label_dict
+
 def normalize_adj(adj):
     """Symmetrically normalize adjacency matrix."""
     adj = sp.coo_matrix(adj)

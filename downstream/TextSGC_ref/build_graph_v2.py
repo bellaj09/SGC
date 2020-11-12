@@ -40,7 +40,7 @@ label_names = set()
 train_val_labels = []
 test_labels = []
 
-with open('data/' + dataset + '.txt', 'r') as f:
+with open('data/' + dataset + '0.txt', 'r') as f:
     lines = f.readlines()
     for id, line in enumerate(lines):
         doc_name_list.append(line.strip())
@@ -113,7 +113,7 @@ def average_word_vec(doc_id, doc_content_list, word_to_vector):
     words = doc_words.split()
     for word in words:
         if word in word_vector_map:
-            word_vector = word_vector_map['patient']['embedding'][:]
+            word_vector = word_vector_map[word]['embedding'][:]
             doc_vec = doc_vec + np.array(word_vector)
     doc_vec /= len(words)
     return doc_vec
