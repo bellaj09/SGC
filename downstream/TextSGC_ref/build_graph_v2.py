@@ -31,7 +31,7 @@ args = parser.parse_args()
 dataset = args.dataset
 
 word_embeddings_dim = args.embedding_dim
-word_vector_map = h5py.File(args.embedding_path, 'r') # TODO: modify this to use embedding
+word_vector_map = {} # TODO: modify this to use embedding
 
 doc_name_list = []
 train_val_ids = []
@@ -107,37 +107,37 @@ train_ids, val_ids = train_val_ids[:train_size], train_val_ids[train_size:]
 train_labels, val_labels = train_val_labels[:train_size], train_val_labels[train_size:]
 
 # Construct feature vectors
-def average_word_vec(doc_id, doc_content_list, word_to_vector):
-    doc_vec = np.array([0.0 for k in range(word_embeddings_dim)])
-    doc_words = doc_content_list[doc_id]
-    words = doc_words.split()
-    for word in words:
-        if word in word_vector_map:
-            word_vector = word_vector_map[word]['embedding'][:]
-            doc_vec = doc_vec + np.array(word_vector)
-    doc_vec /= len(words)
-    return doc_vec
+# def average_word_vec(doc_id, doc_content_list, word_to_vector):
+#     doc_vec = np.array([0.0 for k in range(word_embeddings_dim)])
+#     doc_words = doc_content_list[doc_id]
+#     words = doc_words.split()
+#     for word in words:
+#         if word in word_vector_map:
+#             word_vector = word_vector_map[word]['embedding'][:]
+#             doc_vec = doc_vec + np.array(word_vector)
+#     doc_vec /= len(words)
+#     return doc_vec
 
-def construct_feature_label_matrix(doc_ids, doc_content_list, word_vector_map):
-    row_x = []
-    col_x = []
-    data_x = []
-    for i, doc_id in enumerate(doc_ids):
-        doc_vec = average_word_vec(doc_id, doc_content_list, word_vector_map)
-        for j in range(word_embeddings_dim):
-            row_x.append(i)
-            col_x.append(j)
-            data_x.append(doc_vec[j])
-    x = sp.csr_matrix((data_x, (row_x, col_x)), shape=(
-        real_train_size, word_embeddings_dim))
+# def construct_feature_label_matrix(doc_ids, doc_content_list, word_vector_map):
+#     row_x = []
+#     col_x = []
+#     data_x = []
+#     for i, doc_id in enumerate(doc_ids):
+#         doc_vec = average_word_vec(doc_id, doc_content_list, word_vector_map)
+#         for j in range(word_embeddings_dim):
+#             row_x.append(i)
+#             col_x.append(j)
+#             data_x.append(doc_vec[j])
+#     x = sp.csr_matrix((data_x, (row_x, col_x)), shape=(
+#         real_train_size, word_embeddings_dim))
 
-    y = []
-    for label in train_labels:
-        one_hot = [0 for l in range(len(label_list))]
-        one_hot[label] = 1
-        y.append(one_hot)
-    y = np.array(y)
-    return x, y
+#     y = []
+#     for label in train_labels:
+#         one_hot = [0 for l in range(len(label_list))]
+#         one_hot[label] = 1
+#         y.append(one_hot)
+#     y = np.array(y)
+#     return x, y
 
 # not used
 # train_x, train_y = construct_feature_label_matrix(train_ids, doc_content_list, word_vector_map)
