@@ -38,6 +38,8 @@ args.device = 'cuda' if args.cuda else 'cpu'
 torch.backends.cudnn.benchmark = True
 set_seed(args.seed, args.cuda)
 
+test_acc = np.zeros(5)
+
 for i in range(5): 
 
     if args.tuned:
@@ -137,3 +139,7 @@ for i in range(5):
         printing = test_matrix.cpu().numpy()
         np.savetxt("results/{}.{}.SGC_bio.results.txt".format(args.dataset,i),printing)
         test_res_file.close()
+
+if __name__ == '__main__':
+    print("Mean test accuracy: {:4f}".format(np.mean(test_acc)))
+    print("Std dev test accuracy: {:4f}".format(np.std(test_acc)))
