@@ -50,6 +50,7 @@ adj = sparse_to_torch_sparse(sp_adj, device=args.device)
 
 
 def train_linear(model, feat_dict, weight_decay, binary=False,i=0):
+    sp_adj, index_dict, label_dict = load_corpus_crossval(args.dataset,i)
     if not binary:
         act = partial(F.log_softmax, dim=1)
         criterion = F.nll_loss
