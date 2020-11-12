@@ -223,8 +223,8 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
             #     col.append(word_id_map[j])
             #     weight.append(similarity) # similarity values between 0 - 0.9
             similarity = 1.0 - cosine(vector_i, vector_j)
-            if similarity < 0.5: # don't add weights if the words are too different or opposite.
-                continue
+            # if similarity < 0.5: # don't add weights if the words are too different or opposite.
+            #     continue
             row.append(word_id_map[i])
             col.append(word_id_map[j])
             weight.append(similarity) # similarity values between 0 - 1, greater similarity means similar word embeddings
