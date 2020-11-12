@@ -49,7 +49,7 @@ features = torch.arange(sp_adj.shape[0]).to(args.device)
 adj = sparse_to_torch_sparse(sp_adj, device=args.device)
 
 
-def train_linear(model, feat_dict, weight_decay, binary=False):
+def train_linear(model, feat_dict, weight_decay, binary=False,i=0):
     if not binary:
         act = partial(F.log_softmax, dim=1)
         criterion = F.nll_loss
