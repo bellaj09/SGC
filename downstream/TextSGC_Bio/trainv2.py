@@ -135,6 +135,7 @@ for i in range(5):
         train_res, train_matrix = eval_linear(best_model, feat_dict["train"].cuda(),
                                 label_dict["train"].cuda(), args.dataset=="mr")
         print("Total Time: {:2f}s, Train acc: {:.4f}, Val acc: {:.4f}, Test acc: {:.4f}".format(precompute_time+train_time, train_res["accuracy"], val_acc, test_res["accuracy"]))
+        test_acc[i] = test_res["accuracy"]
         test_res_file = open("results/{}.{}.SGC_bio.results.txt".format(args.dataset,i), 'w')
         printing = test_matrix.cpu().numpy()
         np.savetxt("results/{}.{}.SGC_bio.results.txt".format(args.dataset,i),printing)
