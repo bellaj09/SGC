@@ -225,6 +225,13 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
             similarity = 1.0 - cosine(vector_i, vector_j)
             # if similarity < 0.5: # don't add weights if the words are too different or opposite.
             #     continue
+            word_freq_i = word_window_freq[i]
+            word_freq_j = word_window_freq[j]
+            pmi = log((1.0 * count / num_window) /
+                    (1.0 * word_freq_i * word_freq_j/(num_window * num_window)))
+            # add pmi to cosine similarity if big enough
+            if pmi >= 0:
+                similarity = similarity + pmi 
             row.append(word_id_map[i])
             col.append(word_id_map[j])
             weight.append(similarity) # similarity values between 0 - 1, greater similarity means similar word embeddings
