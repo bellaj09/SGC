@@ -69,6 +69,10 @@ doc_content_list = []
 with open('data/corpus/' + dataset + '.clean.txt', 'r') as f:
     lines = f.readlines()
     doc_content_list = [l.strip() for l in lines]
+    # REMOVING NUMBER CHARACTERS
+    for j in range(len(doc_content_list)):
+        doc_content_list[j] = ''.join([i for i in doc_content_list[j] if not i.isdigit()])
+        doc_content_list[j] = doc_content_list[j].strip()
 
 print("Loaded document content")
 # Build vocab
