@@ -13,7 +13,7 @@ from sklearn.model_selection import StratifiedKFold
 
 parser = argparse.ArgumentParser(description='Get train/test ids for each fold, save into ind.dataset.phase.x/y')
 parser.add_argument('--dataset', type=str, default='20ng',
-                    choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr','covid_19_production'],
+                    choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr','covid_19_production','pubmed'],
                     help='dataset name')
 args = parser.parse_args()
 
