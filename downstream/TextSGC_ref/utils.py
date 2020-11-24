@@ -175,7 +175,6 @@ def sgc_precompute(adj, features, degree, index_dict):
     feat_dict = {}
     start = perf_counter()
     train_feats = features[:, index_dict["train"]].cuda()
-    #adj = adj.type(torch.HalfTensor)
     train_feats = torch.spmm(adj, train_feats).t()
     train_feats_max, _ = train_feats.max(dim=0, keepdim=True)
     train_feats_min, _ = train_feats.min(dim=0, keepdim=True)
