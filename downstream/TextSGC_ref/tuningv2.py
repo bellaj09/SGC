@@ -12,6 +12,7 @@ from torch.utils.tensorboard import SummaryWriter
 from models import get_model
 from math import log
 
+torch.cuda.set_device(1)
 writer = SummaryWriter()
 
 args = get_text_args()
