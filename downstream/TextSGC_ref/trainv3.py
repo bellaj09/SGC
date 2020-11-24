@@ -152,7 +152,7 @@ for i in range(5):
         del feat_dict 
         del precompute_time
         del index_dict
-        del feat_dict
+        del label_dict
         del features
         torch.cuda.empty_cache()
 
