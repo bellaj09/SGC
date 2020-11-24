@@ -71,17 +71,24 @@ for i in range(5):
         plateau = 0
         start = time.perf_counter()
         for epoch in range(args.epochs):
-            # DataLoader - split feat_dict into batches. 
-            # for each batch: 
-            def closure():
-                optimizer.zero_grad()
-                output = model(feat_dict["train"].cuda()).squeeze()
-                l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
-                loss = criterion(act(output), label_dict["train"].cuda())+l2_reg # sigmoid activation function
-                writer.add_scalar("Loss/train", loss, epoch)
-                loss.backward()
-                return loss
-            optimizer.step(closure)
+
+            permutation = torch.randperm(feat_dict["train"].size()[0])
+            for i in range(0,feat_dict["train"].size()[0], args.batch_size):
+
+                # DataLoader - split feat_dict into batches. 
+                # for each batch: 
+                def closure():
+                    optimizer.zero_grad()
+                    indices = permutation[i:i+args.batch_size]
+                    batch_x = feat_dict["train"][indices]
+                    batch_y = label_dict["train"][indices]
+                    output = model(batch_x.cuda()).squeeze()
+                    l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
+                    loss = criterion(act(output), batch_y.cuda())+l2_reg # sigmoid activation function
+                    writer.add_scalar("Loss/train", loss, epoch)
+                    loss.backward()
+                    return loss
+                optimizer.step(closure)
         train_time = time.perf_counter()-start
         val_res, val_matrix = eval_linear(model, feat_dict["val"].cuda(),
                             label_dict["val"].cuda(), binary)     
@@ -119,8 +126,6 @@ for i in range(5):
         if not args.preprocessed:
             adj_dense = sparse_to_torch_dense(sp_adj, device='cpu')
             feat_dict, precompute_time = sgc_precompute(adj, adj_dense, args.degree-1, index_dict)
-            print('shape of feat dict =', feat_dict["train"].size())
-            print('shape of label dict =', label_dict["train"].size())
 
         else:
             # load the relased degree 2 features
