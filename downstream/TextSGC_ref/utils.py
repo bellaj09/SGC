@@ -133,7 +133,7 @@ def loadWord2Vec(filename):
 
 def clean_str(string):
     string = re.sub(r'[?|$|.|!]',r'',string)
-    string = re.sub(r'[-]'," ",string)
+    #string = re.sub(r'[-]'," ",string)
     string = re.sub(r'[^a-zA-Z0-9 ]',r'',string)
     string = re.sub(r"\'s", " \'s", string)
     string = re.sub(r"\'ve", " \'ve", string)
