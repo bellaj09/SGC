@@ -132,6 +132,7 @@ def loadWord2Vec(filename):
 
 def clean_str(string):
     string = re.sub(r'[?|$|.|!]',r'',string)
+    string = re.sub(r'[-]'," ",string) # replace hyphen with space to separate hyphenated words
     string = re.sub(r'[^a-zA-Z0-9 ]',r'',string)
     string = re.sub(r"\'s", " \'s", string)
     string = re.sub(r"\'ve", " \'ve", string)
@@ -144,7 +145,7 @@ def clean_str(string):
     string = re.sub(r"\(", " \( ", string)
     string = re.sub(r"\)", " \) ", string)
     string = re.sub(r"\?", " \? ", string)
-    string = re.sub(r"\s{2,}", " ", string)
+    string = re.sub(r"\s{2,}", " ", string) # replacing consecutive whitespaces with just one space
     return string.strip().lower()
 
 def sparse_to_torch_sparse(sparse_mx, device='cuda'):
