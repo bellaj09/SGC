@@ -108,6 +108,7 @@ def normalize_adj(adj):
 def preprocess_adj(adj):
     """Preprocessing of adjacency matrix for simple GCN model and conversion to tuple representation."""
     adj_normalized = normalize_adj(adj + sp.eye(adj.shape[0]))
+    adj_normalized =  adj_normalized.astype(np.float32)
     return adj_normalized
 
 def loadWord2Vec(filename):
