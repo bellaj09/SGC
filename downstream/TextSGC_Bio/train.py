@@ -86,12 +86,11 @@ def train_linear(model, feat_dict, weight_decay, binary=False, i=0):
                 output = model(batch_x.cuda()).squeeze()
                 l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
                 loss = criterion(act(output), batch_y.cuda())+l2_reg # sigmoid activation function
-                writer.add_scalar("Loss/train", loss, epoch)
                 loss.backward()
                 return loss
 
             optimizer.step(closure)
-            
+
     train_time = time.perf_counter()-start
     val_res = eval_linear(model, feat_dict["val"].cuda(),
                           label_dict["val"].cuda(), binary)
