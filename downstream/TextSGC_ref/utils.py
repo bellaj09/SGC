@@ -91,8 +91,8 @@ def load_corpus_crossval(dataset_str, i):
         label_dict[p] = load_pkl("data/ind.{}.{}.{}.y".format(dataset_str, i, p))
 
     adj = load_pkl("data/ind.{}.BCD.adj".format(dataset_str))
-    adj = adj.astype(np.float16)
     adj = preprocess_adj(adj)
+    adj = adj.astype(np.float16)
 
     return adj, index_dict, label_dict
 
@@ -165,7 +165,7 @@ def sparse_to_torch_sparse(sparse_mx, device='cuda'):
     return adj
 
 def sparse_to_torch_dense(sparse, device='cuda'):
-    dense = sparse.todense().astype(np.float32)
+    dense = sparse.todense().astype(np.float16)
     torch_dense = torch.from_numpy(dense).to(device=device)
     return torch_dense
 
