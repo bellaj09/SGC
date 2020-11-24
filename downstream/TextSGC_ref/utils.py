@@ -165,7 +165,7 @@ def sparse_to_torch_sparse(sparse_mx, device='cuda'):
     return adj
 
 def sparse_to_torch_dense(sparse, device='cuda'):
-    dense = sparse.todense().astype(np.float16)
+    dense = sparse.todense().astype(np.float32)
     torch_dense = torch.from_numpy(dense).to(device=device)
     return torch_dense
 
