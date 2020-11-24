@@ -51,7 +51,7 @@ def load_corpus(dataset_str):
         label_dict[p] = load_pkl("data/ind.{}.{}.y".format(dataset_str, p))
 
     adj = load_pkl("data/ind.{}.BCD.adj".format(dataset_str))
-    adj = adj.astype(np.float16)
+    adj = adj.astype(np.float32)
     adj = preprocess_adj(adj)
 
     return adj, index_dict, label_dict
@@ -92,7 +92,7 @@ def load_corpus_crossval(dataset_str, i):
 
     adj = load_pkl("data/ind.{}.BCD.adj".format(dataset_str))
     adj = preprocess_adj(adj)
-    adj = adj.astype(np.float16)
+    adj = adj.astype(np.float32)
 
     return adj, index_dict, label_dict
 
@@ -108,7 +108,7 @@ def normalize_adj(adj):
 def preprocess_adj(adj):
     """Preprocessing of adjacency matrix for simple GCN model and conversion to tuple representation."""
     adj_normalized = normalize_adj(adj + sp.eye(adj.shape[0]))
-    adj_normalized =  adj_normalized.astype(np.float16)
+    adj_normalized =  adj_normalized.astype(np.float32)
     return adj_normalized
 
 def loadWord2Vec(filename):
@@ -133,6 +133,7 @@ def loadWord2Vec(filename):
 
 def clean_str(string):
     string = re.sub(r'[?|$|.|!]',r'',string)
+    string = re.sub(r'[-]'," ",string)
     string = re.sub(r'[^a-zA-Z0-9 ]',r'',string)
     string = re.sub(r"\'s", " \'s", string)
     string = re.sub(r"\'ve", " \'ve", string)
@@ -150,7 +151,7 @@ def clean_str(string):
 
 def sparse_to_torch_sparse(sparse_mx, device='cuda'):
     """Convert a scipy sparse matrix to a torch sparse tensor."""
-    sparse_mx = sparse_mx.tocoo().astype(np.float16)
+    sparse_mx = sparse_mx.tocoo().astype(np.float32)
     indices = torch.from_numpy(
         np.vstack((sparse_mx.row, sparse_mx.col)).astype(np.int64))
     if device == 'cuda':
@@ -165,7 +166,7 @@ def sparse_to_torch_sparse(sparse_mx, device='cuda'):
     return adj
 
 def sparse_to_torch_dense(sparse, device='cuda'):
-    dense = sparse.todense().astype(np.float16)
+    dense = sparse.todense().astype(np.float32)
     torch_dense = torch.from_numpy(dense).to(device=device)
     return torch_dense
 
