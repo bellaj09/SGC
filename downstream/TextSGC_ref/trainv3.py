@@ -37,6 +37,7 @@ args.device = 'cuda' if args.cuda else 'cpu'
 
 torch.backends.cudnn.benchmark = True
 set_seed(args.seed, args.cuda)
+torch.cuda.set_device(1)
 
 test_acc = np.zeros(5)
 
