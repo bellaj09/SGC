@@ -4,14 +4,16 @@ from torch.nn.parameter import Parameter
 import torch.nn.functional as F
 
 class SGC(nn.Module):
-    def __init__(self, nfeat, nclass, bias=False):
+    def __init__(self, nfeat, nclass, bias=False,dropout=0):
         super(SGC, self).__init__()
 
         self.W = nn.Linear(nfeat, nclass, bias=bias)
         torch.nn.init.xavier_normal_(self.W.weight)
+        self.dropout = nn.Dropout(dropout)
 
     def forward(self, x):
         out = self.W(x)
+        out = self.dropout(out)
         return out
 
 def get_model(model_opt, nfeat, nclass, nhid=0, dropout=0, cuda=True):

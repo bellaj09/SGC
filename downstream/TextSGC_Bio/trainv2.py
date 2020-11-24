@@ -28,6 +28,7 @@ parser.add_argument('--weight_decay', type=float, default=0,
                     help='Weight for L2 loss on embedding matrix.')
 parser.add_argument('--degree', type=int, default=2,
                     help='degree of the approximation.')
+parser.add_argument('--dropout',type=float,default=0)
 parser.add_argument('--tuned', action='store_true', help='use tuned hyperparams')
 parser.add_argument('--preprocessed', action='store_true',
                     help='use preprocessed data')
@@ -72,23 +73,34 @@ for i in range(5):
         start = time.perf_counter()
         for epoch in range(args.epochs):
 
-            permutation = torch.randperm(feat_dict["train"].size()[0])
-            for i in range(0,feat_dict["train"].size()[0], args.batch_size):
+            # No batching 
+            def closure():
+                optimizer.zero_grad()
+                output = model(feat_dict["train"].cuda()).squeeze()
+                l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
+                loss = criterion(act(output), label_dict["train"].cuda())+l2_reg # sigmoid activation function
+                writer.add_scalar("Loss/train", loss, epoch)
+                loss.backward()
+                return loss
+            optimizer.step(closure)
+            
+            # Batching
 
-                # DataLoader - split feat_dict into batches. 
-                # for each batch: 
-                def closure():
-                    optimizer.zero_grad()
-                    indices = permutation[i:i+args.batch_size]
-                    batch_x = feat_dict["train"][indices]
-                    batch_y = label_dict["train"][indices]
-                    output = model(batch_x.cuda()).squeeze()
-                    l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
-                    loss = criterion(act(output), batch_y.cuda())+l2_reg # sigmoid activation function
-                    writer.add_scalar("Loss/train", loss, epoch)
-                    loss.backward()
-                    return loss
-                optimizer.step(closure)
+            # permutation = torch.randperm(feat_dict["train"].size()[0])
+            # for i in range(0,feat_dict["train"].size()[0], args.batch_size):
+
+            #     def closure():
+            #         optimizer.zero_grad()
+            #         indices = permutation[i:i+args.batch_size]
+            #         batch_x = feat_dict["train"][indices]
+            #         batch_y = label_dict["train"][indices]
+            #         output = model(batch_x.cuda()).squeeze()
+            #         l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
+            #         loss = criterion(act(output), batch_y.cuda())+l2_reg # sigmoid activation function
+            #         writer.add_scalar("Loss/train", loss, epoch)
+            #         loss.backward()
+            #         return loss
+            #     optimizer.step(closure)
         train_time = time.perf_counter()-start
         val_res, val_matrix = eval_linear(model, feat_dict["val"].cuda(),
                             label_dict["val"].cuda(), binary)     
@@ -135,7 +147,7 @@ for i in range(5):
             precompute_time = 0
 
         model = SGC(nfeat=feat_dict["train"].size(1),
-                    nclass=nclass)
+                    nclass=nclass,dropout=args.dropout)
         if args.cuda: model.cuda()
         val_acc, best_model, train_time = train_linear(model, feat_dict, args.weight_decay, args.dataset=="mr")
         test_res, test_matrix = eval_linear(best_model, feat_dict["test"].cuda(),
