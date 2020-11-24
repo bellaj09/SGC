@@ -57,7 +57,7 @@ def train_linear(model, feat_dict, weight_decay, binary=False, i=0):
             label_dict[k] = torch.Tensor(v).to(args.device)
         else:
             label_dict[k] = torch.LongTensor(v).to(args.device)
-    features = torch.arange(sp_adj.shape[0]).to(args.device)
+    #features = torch.arange(sp_adj.shape[0]).to(args.device)
 
     adj = sparse_to_torch_sparse(sp_adj, device=args.device)
     if not binary:
@@ -71,17 +71,27 @@ def train_linear(model, feat_dict, weight_decay, binary=False, i=0):
     best_val_acc = 0
     plateau = 0
     start = time.perf_counter()
+
     for epoch in range(args.epochs):
-        def closure():
-            optimizer.zero_grad()
-            output = model(feat_dict["train"].cuda()).squeeze()
-            l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
-            loss = criterion(act(output), label_dict["train"].cuda())+l2_reg
-            loss.backward()
-            return loss
 
-        optimizer.step(closure)
+        permutation = torch.randperm(feat_dict["train"].size()[0])
 
+        for i in range(0,feat_dict["train"].size()[0], args.batch_size):
+
+            def closure():
+                optimizer.zero_grad()
+                indices = permutation[i:i+args.batch_size]
+                batch_x = feat_dict["train"][indices]
+                batch_y = label_dict["train"][indices]
+                output = model(batch_x.cuda()).squeeze()
+                l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
+                loss = criterion(act(output), batch_y.cuda())+l2_reg # sigmoid activation function
+                writer.add_scalar("Loss/train", loss, epoch)
+                loss.backward()
+                return loss
+
+            optimizer.step(closure)
+            
     train_time = time.perf_counter()-start
     val_res = eval_linear(model, feat_dict["val"].cuda(),
                           label_dict["val"].cuda(), binary)
