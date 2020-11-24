@@ -144,6 +144,7 @@ for i in range(5):
         printing = test_matrix.cpu().numpy()
         np.savetxt("results/{}.{}.SGC_ref.results.txt".format(args.dataset,i),printing)
         test_res_file.close()
+        torch.cuda.empty_cache()
 
 if __name__ == '__main__':
     print("Mean test accuracy: {:4f}".format(np.mean(test_acc)))
