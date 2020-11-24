@@ -122,6 +122,7 @@ for i in range(5):
         else: nclass = label_dict["train"].max().item()+1
         if not args.preprocessed:
             adj_dense = sparse_to_torch_dense(sp_adj, device='cpu')
+            torch.cuda.empty_cache()
             feat_dict, precompute_time = sgc_precompute(adj, adj_dense, args.degree-1, index_dict)
         else:
             # load the relased degree 2 features
