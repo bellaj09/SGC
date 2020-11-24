@@ -119,7 +119,9 @@ for i in range(5):
         if not args.preprocessed:
             adj_dense = sparse_to_torch_dense(sp_adj, device='cpu')
             feat_dict, precompute_time = sgc_precompute(adj, adj_dense, args.degree-1, index_dict)
-            print('size of feat dict =', feat_dict.shape())
+            print('shape of feat dict =', feat_dict["train"].shape())
+            print('shape of label dict =', label_dict["train"].shape())
+
         else:
             # load the relased degree 2 features
             with open(os.path.join("preprocessed",
