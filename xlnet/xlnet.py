@@ -143,7 +143,7 @@ tr_segs = torch.tensor(tr_segs)
 val_segs = torch.tensor(val_segs)
 
 # Set batch num
-batch_num = 24
+batch_num = 16
 # Set token embedding, attention embedding, segment embedding
 train_data = TensorDataset(tr_inputs, tr_masks,tr_segs, tr_tags)
 train_sampler = RandomSampler(train_data)
