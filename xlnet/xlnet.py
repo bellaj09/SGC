@@ -158,6 +158,10 @@ valid_dataloader = DataLoader(valid_data, sampler=valid_sampler, batch_size=batc
 model_file_address = 'models'
 model = XLNetForSequenceClassification.from_pretrained(model_file_address,num_labels=len(tag2idx))
 model;
+model.to(device);
+# Add multi GPU support
+if n_gpu >1:
+    model = torch.nn.DataParallel(model)
 
 # Set epoch and grad max num
 epochs = 5
