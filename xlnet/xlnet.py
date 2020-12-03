@@ -131,7 +131,7 @@ for i,sentence in enumerate(sentences):
 tags = [tag2idx[str(lab)] for lab in labels]
 
 # Splitting data into train and test
-tr_inputs, val_inputs, tr_tags, val_tags,tr_masks, val_masks,tr_segs, val_segs = train_test_split(full_input_ids, tags,full_input_masks,full_segment_ids, random_state=4, test_size=0.2)
+tr_inputs, val_inputs, tr_tags, val_tags,tr_masks, val_masks,tr_segs, val_segs = train_test_split(full_input_ids, tags,full_input_masks,full_segment_ids, random_state=4, test_size=0.45)
 
 tr_inputs = torch.tensor(tr_inputs)
 val_inputs = torch.tensor(val_inputs)
