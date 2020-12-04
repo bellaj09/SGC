@@ -164,7 +164,7 @@ if n_gpu >1:
     model = torch.nn.DataParallel(model)
 
 # Set epoch and grad max num
-epochs = 3
+epochs = 1
 max_grad_norm = 1.0
 # Cacluate train optimiazaion num
 num_train_optimization_steps = int( math.ceil(len(tr_inputs) / batch_num) / 1) * epochs
