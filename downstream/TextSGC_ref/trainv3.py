@@ -13,6 +13,7 @@ import tabulate
 from functools import partial
 from utils import *
 from models import SGC
+from sklearn import preprocessing
 
 #torch.cuda.set_device(1) # When GPU 0 is out of memory
 
@@ -108,10 +109,14 @@ for i in range(5):
             loss = criterion(act(output), label)
             if not binary: predict_class = output.max(1)[1]
             else: predict_class = act(output).gt(0.5).float()
-            auroc = output.max(1)[0]
             correct = torch.eq(predict_class, label).long().sum().item()
             acc = correct/predict_class.size(0)
             print_matrix = torch.cat([predict_class, label],0)
+
+        min_max_scaler = preprocessing.MinMaxScaler()
+        output_scaled = min_max_scaler.fit_transform(output)
+        print(output_scaled.shape)
+        auroc = output.max(1)[0]    
 
 
         return {
