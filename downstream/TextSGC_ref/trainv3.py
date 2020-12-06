@@ -30,7 +30,7 @@ parser.add_argument('--degree', type=int, default=2,
                     help='degree of the approximation.')
 parser.add_argument('--tuned', action='store_true', help='use tuned hyperparams')
 parser.add_argument('--preprocessed', action='store_true',
-                    help='use preprocessed data')
+                    help='use preprocessed data') 
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 args.device = 'cuda' if args.cuda else 'cpu'
@@ -107,6 +107,7 @@ for i in range(5):
             loss = criterion(act(output), label)
             if not binary: predict_class = output.max(1)[1]
             else: predict_class = act(output).gt(0.5).float()
+            auroc = output.max(1)
             correct = torch.eq(predict_class, label).long().sum().item()
             acc = correct/predict_class.size(0)
             print_matrix = torch.cat([predict_class, label],0)
@@ -115,7 +116,7 @@ for i in range(5):
         return {
             'loss': loss.item(),
             'accuracy': acc
-        }, print_matrix
+        }, print_matrix, auroc
 
     if __name__ == '__main__':
         if args.dataset == "mr": nclass = 1
@@ -134,9 +135,9 @@ for i in range(5):
                     nclass=nclass)
         if args.cuda: model.cuda()
         val_acc, best_model, train_time = train_linear(model, feat_dict, args.weight_decay, args.dataset=="mr")
-        test_res, test_matrix = eval_linear(best_model, feat_dict["test"].cuda(),
+        test_res, test_matrix, test_auroc = eval_linear(best_model, feat_dict["test"].cuda(),
                             label_dict["test"].cuda(), args.dataset=="mr")
-        train_res, train_matrix = eval_linear(best_model, feat_dict["train"].cuda(),
+        train_res, train_matrix,train_auroc = eval_linear(best_model, feat_dict["train"].cuda(),
                                 label_dict["train"].cuda(), args.dataset=="mr")
         print("Total Time: {:2f}s, Train acc: {:.4f}, Val acc: {:.4f}, Test acc: {:.4f}".format(precompute_time+train_time, train_res["accuracy"], val_acc, test_res["accuracy"]))
         test_acc[i] = test_res["accuracy"]
@@ -144,6 +145,11 @@ for i in range(5):
         printing = test_matrix.cpu().numpy()
         np.savetxt("results/{}.{}.SGC_ref.results.txt".format(args.dataset,i),printing)
         test_res_file.close()
+
+        test_auroc_file = open("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i), 'w')
+        print_auroc = test_auroc.cpu().numpy()
+        np.savetxt("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i),print_auroc)
+        test_auroc_file.close()
         
         # For PubMed - deleting big objects and clearing GPU space 
         del sp_adj
