@@ -14,6 +14,7 @@ from functools import partial
 from utils import *
 from models import SGC
 from sklearn import preprocessing
+from sklearn.metrics import roc_auc_score
 
 #torch.cuda.set_device(1) # When GPU 0 is out of memory
 
@@ -115,8 +116,12 @@ for i in range(5):
 
         min_max_scaler = preprocessing.MinMaxScaler()
         output_scaled = min_max_scaler.fit_transform(output.cpu())
-        print(output_scaled.shape)
-        auroc = output.max(1)[0]    
+        #print(output_scaled.shape) (n_observations, 23)
+        auroc = output_scaled.max(1)[0]
+        y_true = label
+        y_scores = output_scaled
+        auroc_score = roc_auc_score(y_true, y_scores)
+        print(auroc_score)
 
 
         return {
