@@ -108,7 +108,7 @@ for i in range(5):
             loss = criterion(act(output), label)
             if not binary: predict_class = output.max(1)[1]
             else: predict_class = act(output).gt(0.5).float()
-            auroc = output
+            auroc = output.max(1)[0]
             correct = torch.eq(predict_class, label).long().sum().item()
             acc = correct/predict_class.size(0)
             print_matrix = torch.cat([predict_class, label],0)
