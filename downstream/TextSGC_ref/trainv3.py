@@ -148,8 +148,8 @@ for i in range(5):
         test_res_file.close()
 
         # test_auroc_file = open("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i), 'w')
-        df_auroc = pd.DataFrame(test_auroc, header=None)
-        df_auroc.to_csv("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i),index=False,header=False)
+        df_auroc = pd.DataFrame(test_auroc)
+        df_auroc.to_csv("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i),index=False,headers=False)
         # np.savetxt("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i),test_auroc)
         # test_auroc_file.close()
         
