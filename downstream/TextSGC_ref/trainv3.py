@@ -146,9 +146,11 @@ for i in range(5):
         np.savetxt("results/{}.{}.SGC_ref.results.txt".format(args.dataset,i),printing)
         test_res_file.close()
 
-        test_auroc_file = open("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i), 'w')
-        np.savetxt("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i),test_auroc)
-        test_auroc_file.close()
+        # test_auroc_file = open("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i), 'w')
+        df_auroc = pd.DataFrame(test_auroc, header=None)
+        df_auroc.to_csv("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i),index=False,header=False)
+        # np.savetxt("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i),test_auroc)
+        # test_auroc_file.close()
         
         # For PubMed - deleting big objects and clearing GPU space 
         del sp_adj
