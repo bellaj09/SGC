@@ -147,8 +147,7 @@ for i in range(5):
         test_res_file.close()
 
         test_auroc_file = open("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i), 'w')
-        print_auroc = test_auroc.cpu().numpy()
-        np.savetxt("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i),print_auroc)
+        np.savetxt("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i),test_auroc)
         test_auroc_file.close()
         
         # For PubMed - deleting big objects and clearing GPU space 
