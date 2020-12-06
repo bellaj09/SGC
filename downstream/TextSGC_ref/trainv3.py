@@ -114,7 +114,7 @@ for i in range(5):
             print_matrix = torch.cat([predict_class, label],0)
 
         min_max_scaler = preprocessing.MinMaxScaler()
-        output_scaled = min_max_scaler.fit_transform(output)
+        output_scaled = min_max_scaler.fit_transform(output.cpu())
         print(output_scaled.shape)
         auroc = output.max(1)[0]    
 
