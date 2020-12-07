@@ -120,9 +120,10 @@ for i in range(5):
         auroc = output_scaled.max(1)[0]
         y_true = label.cpu()
         y_scores = output_scaled
-        auroc_score = roc_auc_score(y_true, y_scores)
-        print(auroc_score)
-
+        macro_auroc_score = roc_auc_score(y_true, y_scores, multi_class='ovo', average='macro')
+        w_auroc_score = roc_auc_score(y_true, y_scores, multi_class='ovo', average='weighted')
+        print('macro auroc', macro_auroc_score)
+        print('weighted auroc', w_auroc_score)
 
         return {
             'loss': loss.item(),
