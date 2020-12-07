@@ -117,7 +117,7 @@ for i in range(5):
         min_max_scaler = preprocessing.MinMaxScaler()
         output_scaled = min_max_scaler.fit_transform(output.cpu())
         #print(output_scaled.shape) (n_observations, 23)
-        auroc = output_scaled.max(1)[0]
+        auroc = output_scaled.max(1)
         print(auroc)
         # y_true = label.cpu()
         # y_scores = output_scaled
@@ -160,9 +160,9 @@ for i in range(5):
         test_res_file.close()
 
         # test_auroc_file = open("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i), 'w')
-        df_auroc = pd.DataFrame(test_auroc)
-        df_auroc.to_csv("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i),index=False,header=False)
-        # np.savetxt("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i),test_auroc)
+        # df_auroc = pd.DataFrame(test_auroc)
+        # df_auroc.to_csv("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i),index=False,header=False)
+        # # np.savetxt("results/{}.{}.SGC_ref.auroc.txt".format(args.dataset,i),test_auroc)
         # test_auroc_file.close()
         
         # For PubMed - deleting big objects and clearing GPU space 
