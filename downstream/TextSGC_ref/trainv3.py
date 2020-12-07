@@ -114,17 +114,17 @@ for i in range(5):
             acc = correct/predict_class.size(0)
             print_matrix = torch.cat([predict_class, label],0)
 
+        y_scores = output.max(1)[0]
         min_max_scaler = preprocessing.MinMaxScaler()
-        output_scaled = min_max_scaler.fit_transform(output.cpu())
+        y_scores = min_max_scaler.fit_transform(y_scores.cpu())
         #print(output_scaled.shape) (n_observations, 23)
-        auroc = output_scaled.max(1)
+        auroc = y_scores
         print(auroc)
-        # y_true = label.cpu()
-        # y_scores = output_scaled
-        # macro_auroc_score = roc_auc_score(y_true, y_scores, multi_class='ovo', average='macro')
-        # w_auroc_score = roc_auc_score(y_true, y_scores, multi_class='ovo', average='weighted')
-        # print('macro auroc', macro_auroc_score)
-        # print('weighted auroc', w_auroc_score)
+        y_true = label.cpu()
+        macro_auroc_score = roc_auc_score(y_true, y_scores, multi_class='ovo', average='macro')
+        w_auroc_score = roc_auc_score(y_true, y_scores, multi_class='ovo', average='weighted')
+        print('macro auroc', macro_auroc_score)
+        print('weighted auroc', w_auroc_score)
 
         return {
             'loss': loss.item(),
