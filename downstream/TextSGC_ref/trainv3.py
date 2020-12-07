@@ -118,7 +118,7 @@ for i in range(5):
         output_scaled = min_max_scaler.fit_transform(output.cpu())
         #print(output_scaled.shape) (n_observations, 23)
         auroc = output_scaled.max(1)[0]
-        y_true = label
+        y_true = label.cou()
         y_scores = output_scaled
         auroc_score = roc_auc_score(y_true, y_scores)
         print(auroc_score)
