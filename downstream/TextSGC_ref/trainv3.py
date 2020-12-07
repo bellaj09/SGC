@@ -90,7 +90,7 @@ for i in range(5):
                 return loss
             optimizer.step(closure)
         train_time = time.perf_counter()-start
-        val_res, val_matrix, auroc = eval_linear(model, feat_dict["val"].cuda(),
+        val_res, val_matrix = eval_linear(model, feat_dict["val"].cuda(),
                             label_dict["val"].cuda(), binary)     
         #writer.flush()
         #writer.close()
