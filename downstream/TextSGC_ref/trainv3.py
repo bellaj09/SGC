@@ -116,10 +116,10 @@ for i in range(5):
 
         y_scores = output.max(1)[0]
         min_max_scaler = preprocessing.MinMaxScaler()
-        y_scores = min_max_scaler.fit_transform(y_scores.cpu())
+        y_scores = min_max_scaler.fit_transform(y_scores)
         #print(output_scaled.shape) (n_observations, 23)
         auroc = y_scores
-        print(auroc)
+        print('auroc scores', auroc)
         y_true = label.cpu()
         macro_auroc_score = roc_auc_score(y_true, y_scores, multi_class='ovo', average='macro')
         w_auroc_score = roc_auc_score(y_true, y_scores, multi_class='ovo', average='weighted')
