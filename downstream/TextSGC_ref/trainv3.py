@@ -114,22 +114,26 @@ for i in range(5):
             acc = correct/predict_class.size(0)
             print_matrix = torch.cat([predict_class, label],0)
 
-        y_scores = output.max(1)[0]
-        min_max_scaler = preprocessing.MinMaxScaler()
-        y_scores = min_max_scaler.fit_transform(y_scores)
-        #print(output_scaled.shape) (n_observations, 23)
-        auroc = y_scores
-        print('auroc scores', auroc)
-        y_true = label.cpu()
-        macro_auroc_score = roc_auc_score(y_true, y_scores, multi_class='ovo', average='macro')
-        w_auroc_score = roc_auc_score(y_true, y_scores, multi_class='ovo', average='weighted')
-        print('macro auroc', macro_auroc_score)
-        print('weighted auroc', w_auroc_score)
+        # TRYING TO GET AUROC SCORES
+
+        # y_scores = output.max(1)[0]
+        # min_max_scaler = preprocessing.MinMaxScaler()
+        # y_scores = min_max_scaler.fit_transform(y_scores)
+        # #print(output_scaled.shape) (n_observations, 23)
+        # auroc = y_scores
+        # print('auroc scores', auroc)
+        # y_true = label.cpu()
+        # macro_auroc_score = roc_auc_score(y_true, y_scores, multi_class='ovo', average='macro')
+        # w_auroc_score = roc_auc_score(y_true, y_scores, multi_class='ovo', average='weighted')
+        # print('macro auroc', macro_auroc_score)
+        # print('weighted auroc', w_auroc_score)
+
+        # OPTIMISED PRECISION    
 
         return {
             'loss': loss.item(),
             'accuracy': acc
-        }, print_matrix, auroc
+        }, print_matrix
 
     if __name__ == '__main__':
         if args.dataset == "mr": nclass = 1
@@ -148,9 +152,9 @@ for i in range(5):
                     nclass=nclass)
         if args.cuda: model.cuda()
         val_acc, best_model, train_time = train_linear(model, feat_dict, args.weight_decay, args.dataset=="mr")
-        test_res, test_matrix, test_auroc = eval_linear(best_model, feat_dict["test"].cuda(),
+        test_res, test_matrix = eval_linear(best_model, feat_dict["test"].cuda(),
                             label_dict["test"].cuda(), args.dataset=="mr")
-        train_res, train_matrix,train_auroc = eval_linear(best_model, feat_dict["train"].cuda(),
+        train_res, train_matrix = eval_linear(best_model, feat_dict["train"].cuda(),
                                 label_dict["train"].cuda(), args.dataset=="mr")
         print("Total Time: {:2f}s, Train acc: {:.4f}, Val acc: {:.4f}, Test acc: {:.4f}".format(precompute_time+train_time, train_res["accuracy"], val_acc, test_res["accuracy"]))
         test_acc[i] = test_res["accuracy"]
