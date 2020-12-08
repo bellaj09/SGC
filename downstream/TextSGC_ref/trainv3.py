@@ -16,7 +16,7 @@ from models import SGC
 from sklearn import preprocessing
 from sklearn.metrics import roc_auc_score
 
-#torch.cuda.set_device(1) # When GPU 0 is out of memory
+torch.cuda.set_device(1) # When GPU 0 is out of memory
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='20ng', help='Dataset string.')
@@ -62,7 +62,7 @@ for i in range(5):
 
 
     def train_linear(model, feat_dict, weight_decay, binary=False):
-        #writer = SummaryWriter()
+        writer = SummaryWriter()
         if not binary:
             act = partial(F.log_softmax, dim=1)
             criterion = F.nll_loss
@@ -85,15 +85,15 @@ for i in range(5):
                 output = model(feat_dict["train"].cuda()).squeeze()
                 l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
                 loss = criterion(act(output), label_dict["train"].cuda())+l2_reg # sigmoid activation function
-                #writer.add_scalar("Loss/train", loss, epoch)
+                writer.add_scalar("Loss/train", loss, epoch)
                 loss.backward()
                 return loss
             optimizer.step(closure)
         train_time = time.perf_counter()-start
         val_res, val_matrix = eval_linear(model, feat_dict["val"].cuda(),
                             label_dict["val"].cuda(), binary)     
-        #writer.flush()
-        #writer.close()
+        writer.flush()
+        writer.close()
         return val_res['accuracy'], model, train_time
 
     def eval_linear(model, features, label, binary=False):
