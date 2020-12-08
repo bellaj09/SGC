@@ -2,7 +2,7 @@ from nltk.corpus import stopwords
 import nltk
 from nltk.wsd import lesk
 from nltk.corpus import wordnet as wn
-from nltk.stem import WordNetLemmatizer 
+#from nltk.stem import WordNetLemmatizer 
 from utils import clean_str, loadWord2Vec
 import sys
 import argparse
@@ -63,7 +63,7 @@ with open('data/ind.test.ids', "w") as f:
 
 def get_clean_words(docs):
     clean_words = []
-    lemmatizer = WordNetLemmatizer() 
+    #lemmatizer = WordNetLemmatizer() 
     for doc in docs:
         if args.dataset != "mr":
             temp = clean_str(doc).split()
@@ -72,9 +72,9 @@ def get_clean_words(docs):
             temp = clean_str(doc).split() # A list of all words extracted by splitting whitespace 
 
         # Lemmatisation of all words in temp. 
-        for i in range(len(temp)):
-            current_word = temp[i]
-            temp[i] = lemmatizer.lemmatize(current_word)
+        # for i in range(len(temp)):
+        #     current_word = temp[i]
+        #     temp[i] = lemmatizer.lemmatize(current_word)
 
         clean_words.append(temp)
     return clean_words
