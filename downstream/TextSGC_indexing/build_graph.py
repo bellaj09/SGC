@@ -269,7 +269,7 @@ def export_graph(graph, node_size, phase=""):
     adj = sp.csr_matrix(
         (weight, (row, col)), shape=(node_size, node_size))
     if phase == "": path = "data/ind.{}.{}.adj".format(dataset,tokeniser)
-    else: path = "data/ind.{}.{}.{}.adj".format(dataset, phase,tokeniser)
+    else: path = "data/ind.{}.{}.{}.adj".format(dataset,tokeniser,phase)
     with open(path, 'wb') as f:
         pkl.dump(adj, f)
 

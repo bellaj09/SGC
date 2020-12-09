@@ -60,7 +60,7 @@ for i in range(5):
     # add best weight decay to an array
     np.append(best_weight_decays, best['weight_decay'])
 
-    with open('tuned_result/{}.{}.SGC_ref.tuning.txt'.format(args.dataset,i), 'w') as f:
+    with open('tuned_result/{}.{}.{}.SGC_ref.tuning.txt'.format(args.dataset,args.tokeniser,i), 'w') as f:
         f.write(str(best['weight_decay']))
 
 # then show mean?
