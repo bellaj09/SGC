@@ -68,7 +68,7 @@ def get_clean_words(docs):
     clean_words = []
     #lemmatizer = WordNetLemmatizer() 
     for doc in docs:
-        if args.tokenisr == "manual":
+        if args.tokeniser == "manual":
             temp = clean_str_manual(doc).split()
             temp = list(filter(lambda x : x not in stop_words, temp))
         elif args.tokeniser == "ref":
