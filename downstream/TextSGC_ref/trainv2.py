@@ -44,7 +44,7 @@ set_seed(args.seed, args.cuda)
 torch.cuda.set_device(1)
 
 test_acc = np.zeros(5)
-train_time = []
+time_arr = np.zeros(5)
 
 for i in range(5): 
 
@@ -160,7 +160,7 @@ for i in range(5):
                                 label_dict["train"].cuda(), args.dataset=="mr")
         print("Total Time: {:2f}s, Train acc: {:.4f}, Val acc: {:.4f}, Test acc: {:.4f}".format(precompute_time+train_time, train_res["accuracy"], val_acc, test_res["accuracy"]))
         test_acc[i] = test_res["accuracy"]
-        train_time.append(precompute_time+train_time)
+        time_arr[i] = precompute_time+train_time
         test_res_file = open("results/{}.{}.SGC_ref.results.txt".format(args.dataset,i), 'w')
         printing = test_matrix.cpu().numpy()
         np.savetxt("results/{}.{}.SGC_ref.results.txt".format(args.dataset,i),printing)
