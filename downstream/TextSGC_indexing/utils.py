@@ -8,6 +8,7 @@ import re
 import torch
 from time import perf_counter
 import tabulate
+import spacy 
 
 def parse_index_file(filename):
     """Parse index file."""
@@ -167,6 +168,21 @@ def clean_str_manual(string):
     string = re.sub(r"\?", " \? ", string)
     string = re.sub(r"\s{2,}", " ", string)
     return string.strip().lower()
+
+def clean_str_scispacy(string):
+    string = string.lower() # lowercase
+    string = re.sub(r'[?|$|.|!|,]',r'',string) 
+    string = re.sub(r"\s{2,}", " ", string) # remove duplicate whitespaces
+    # remove some punctuation
+    nlp = spacy.load("en_core_sci_lg")
+    doc = nlp(string)
+    str_arr = [token.text for token in doc]
+    
+    return str_arr
+
+
+
+
 
 def sparse_to_torch_sparse(sparse_mx, device='cuda'):
     """Convert a scipy sparse matrix to a torch sparse tensor."""

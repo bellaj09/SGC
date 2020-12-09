@@ -18,7 +18,7 @@ parser.add_argument('--dataset', type=str, default='20ng',
                     choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr','covid_19_production','pubmed'],
                     help='dataset name')
 parser.add_argument('--tokeniser', type=str, default='ref',
-                    choices=['manual'],
+                    choices=['manual', 'scispacy','ref'],
                     help='tokeniser to use')
 args = parser.parse_args()
 
@@ -71,6 +71,10 @@ def get_clean_words(docs):
         if args.tokeniser == "manual":
             temp = clean_str_manual(doc).split()
             temp = list(filter(lambda x : x not in stop_words, temp))
+        elif args.tokeniser == "scispacy":
+            temp = clean_str_scispacy(doc)
+            temp = list(filter(lambda x : x not in stop_words, temp))
+
         elif args.tokeniser == "ref":
             temp = clean_str(doc).split()
             temp = list(filter(lambda x : x not in stop_words, temp))
