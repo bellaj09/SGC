@@ -193,7 +193,7 @@ if __name__ == '__main__':
     avg_acc = np.empty(5)
 
     for i in range(5):
-        full = pd.read_csv('results/{}.{}.SGC_ref.results.txt'.format(dataset,i),header=None)
+        full = pd.read_csv('results/{}.{}.SGC_ref.results.txt'.format(args.dataset,i),header=None)
         df = full.iloc[range(round(len(full)/2)),:].reset_index(drop=True)
         df = df.rename(columns = {0:"predictions"})
         df['labels'] = full.iloc[round(len(full)/2):,:].reset_index(drop=True)
