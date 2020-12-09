@@ -3,7 +3,7 @@ import argparse
 import numpy as np
 import pickle as pkl
 from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
-from args import get_text_args
+#from args import get_text_args
 from utils import *
 from train import train_linear
 import torch
@@ -13,9 +13,8 @@ from models import get_model
 from math import log
 
 torch.cuda.set_device(1)
-writer = SummaryWriter()
-
-parser = argparse.ArgumentParser(description='Tuning Hyperparameters')
+#writer = SummaryWriter()
+parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='20ng',
                     choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr','covid_19_production','pubmed'],
                     help='dataset name')
@@ -46,8 +45,8 @@ for i in range(5):
         val_acc, _, _ = train_linear(model, feat_dict, space['weight_decay'], args.dataset=="mr",i)
         print( 'weight decay ' + str(space['weight_decay']) + '\n' + \
             'overall accuracy: ' + str(val_acc))
-        writer.add_scalar("Weight decay/tuning", space['weight_decay'])
-        writer.add_scalar("Accuracy/tuning", val_acc)
+        # writer.add_scalar("Weight decay/tuning", space['weight_decay'])
+        # writer.add_scalar("Accuracy/tuning", val_acc)
         return {'loss': -val_acc, 'status': STATUS_OK}
 
     # Hyperparameter optimization
@@ -55,8 +54,8 @@ for i in range(5):
 
     best = fmin(linear_objective, space=space, algo=tpe.suggest, max_evals=60)
     print(best)
-    writer.flush()
-    writer.close()
+    # writer.flush()
+    # writer.close()
 
     # add best weight decay to an array
     np.append(best_weight_decays, best['weight_decay'])
