@@ -7,6 +7,7 @@ from utils import clean_str, loadWord2Vec, clean_str_manual, clean_str_scispacy
 import argparse
 import random
 from collections import Counter
+import time
 
 # nltk.download()
 stop_words = set(stopwords.words('english'))
