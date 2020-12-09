@@ -19,7 +19,7 @@ args = parser.parse_args()
 
 dataset = args.dataset
 
-df = pd.read_csv('data/' + dataset + '.txt', sep='\t', header=None)
+df = pd.read_csv('../data/' + dataset + '.txt', sep='\t', header=None)
 X = df[0]
 Y = df[2]
 skf = StratifiedKFold(n_splits=5)
@@ -40,7 +40,7 @@ for i in range(5):
     train_val_labels = []
     test_labels = []
 
-    with open('data/' + dataset + str(i) + '.txt', 'r') as f:
+    with open('/data/' + dataset + str(i) + '.txt', 'r') as f:
         lines = f.readlines()
         for id, line in enumerate(lines):
             doc_name_list.append(line.strip())

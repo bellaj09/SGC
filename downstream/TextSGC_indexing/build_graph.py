@@ -83,6 +83,7 @@ vocab, _ = zip(*word_freq.most_common())
 # put words after documents
 word_id_map = dict(zip(vocab, np.array(range(len(vocab)))+len(train_val_ids+test_ids)))
 vocab_size = len(vocab)
+print("Vocabulary size: ", vocab_size)
 
 
 with open('data/corpus/' + dataset + '_vocab.txt', 'w') as f:
