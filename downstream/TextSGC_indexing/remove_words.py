@@ -77,7 +77,7 @@ def get_clean_words(docs):
         nlp = spacy.load("en_core_sci_lg")
 
     for doc in progress_bar:
-        
+        print(doc)
         if args.tokeniser == "manual":
             temp = clean_str_manual(doc).split()
             temp = list(filter(lambda x : x not in stop_words, temp))
@@ -90,6 +90,7 @@ def get_clean_words(docs):
             doc_temp = nlp(doc)
             temp = [token.text for token in doc_temp]
             temp = list(filter(lambda x : x not in stop_words, temp))
+            print(temp)
 
         elif args.tokeniser == "ref":
             temp = clean_str(doc).split()
