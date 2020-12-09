@@ -185,7 +185,7 @@ for i in range(5):
 
 if __name__ == '__main__':
     print("Mean test accuracy: {:4f}, std dev: {:4f}".format(np.mean(test_acc),np.std(test_acc)))
-    print("Mean train time: {:2f}s, std dev: {:4f}s".format(np.mean(train_time), np.std(train_time)))
+    print("Mean train time: {:2f}s, std dev: {:4f}s".format(np.mean(time_arr), np.std(time_arr)))
     
     macrof1 = np.empty(5)
     weightedf1 = np.empty(5)
@@ -227,6 +227,6 @@ if __name__ == '__main__':
     #print('Weighted F1 scores:', weightedf1)
     print('Mean Weighted F1:', np.mean(weightedf1)*100, ' with std: ', np.std(weightedf1)*100)
     #print('Avg Accuracy Scores:', avg_acc)
-    print('Mean Avg Accuracy:', np.mean(avg_acc)*100, ' with std: ', np.std(avg_acc)*100)
+    #print('Mean Avg Accuracy:', np.mean(avg_acc)*100, ' with std: ', np.std(avg_acc)*100)
     #print('OP Scores:', op_scores)
     print('Mean OP:', np.mean(op_scores)*100, ' with std: ', np.std(op_scores)*100)
