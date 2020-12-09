@@ -87,7 +87,7 @@ def get_clean_words(docs):
             doc = re.sub(r'[?|$|.|!|,]',r'',doc) 
             doc = re.sub(r"\s{2,}", " ", doc) # remove duplicate whitespaces
             doc_temp = nlp(doc)
-            temp = [token.text for token in doc]
+            temp = [token.text for token in doc_temp]
             temp = list(filter(lambda x : x not in stop_words, temp))
 
         elif args.tokeniser == "ref":
