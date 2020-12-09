@@ -24,11 +24,15 @@ parser.add_argument('--dataset', type=str, default='20ng',
 parser.add_argument('--embedding_dim', type=int, default=300,
                     help='word and document embedding size.')
 parser.add_argument('--embedding_path', type=str, default='data/corpus/ohsumed_biobert-base-embeddings.h5',
-                    help='path to biobert embedding output.')                    
+                    help='path to biobert embedding output.')
+parser.add_argument('--tokeniser', type=str, default='ref',
+                    choices=['manual', 'scispacy','ref'],
+                    help='tokeniser to use')                    
 args = parser.parse_args()
 
 # build corpus
 dataset = args.dataset
+tokeniser = args.tokeniser
 
 word_embeddings_dim = args.embedding_dim
 word_vector_map = {} # TODO: modify this to use embedding
@@ -66,7 +70,7 @@ with open('data/corpus/' + dataset + '_labels.txt', 'w') as f:
 print("Loaded labels and indices")
 # Get document content, after removed words
 doc_content_list = []
-with open('data/corpus/' + dataset + '.clean.txt', 'r') as f:
+with open('data/corpus/' + dataset + '.tokeniser' + '.clean.txt', 'r') as f:
     lines = f.readlines()
     doc_content_list = [l.strip() for l in lines]
 
@@ -86,7 +90,7 @@ vocab_size = len(vocab)
 print("Vocabulary size: ", vocab_size)
 
 
-with open('data/corpus/' + dataset + '_vocab.txt', 'w') as f:
+with open('data/corpus/' + dataset + '.tokeniser' + '_vocab.txt', 'w') as f:
     vocab_str = '\n'.join(vocab)
     f.write(vocab_str)
 
@@ -264,8 +268,8 @@ def export_graph(graph, node_size, phase=""):
     row, col, weight = graph
     adj = sp.csr_matrix(
         (weight, (row, col)), shape=(node_size, node_size))
-    if phase == "": path = "data/ind.{}.adj".format(dataset)
-    else: path = "data/ind.{}.{}.adj".format(dataset, phase)
+    if phase == "": path = "data/ind.{}.{}.adj".format(dataset,tokeniser)
+    else: path = "data/ind.{}.{}.{}.adj".format(dataset, phase,tokeniser)
     with open(path, 'wb') as f:
         pkl.dump(adj, f)
 
@@ -287,26 +291,26 @@ export_graph(concat_graph(B, D), node_size, phase="BD")
 export_graph(B, node_size, phase="B")
 
 # dump objects
-f = open("data/ind.{}.{}.x".format(dataset, "train"), 'wb')
-pkl.dump(train_ids, f)
-f.close()
+# f = open("data/ind.{}.{}.{}.x".format(dataset, tokeniser, "train"), 'wb')
+# pkl.dump(train_ids, f)
+# f.close()
 
-f = open("data/ind.{}.{}.y".format(dataset, "train"), 'wb')
-pkl.dump(train_labels, f)
-f.close()
+# f = open("data/ind.{}.{}.{}.y".format(dataset,tokeniser, "train"), 'wb')
+# pkl.dump(train_labels, f)
+# f.close()
 
-f = open("data/ind.{}.{}.x".format(dataset, "val"), 'wb')
-pkl.dump(val_ids, f)
-f.close()
+# f = open("data/ind.{}.{}.{}.x".format(dataset, tokeniser, "val"), 'wb')
+# pkl.dump(val_ids, f)
+# f.close()
 
-f = open("data/ind.{}.{}.y".format(dataset, "val"), 'wb')
-pkl.dump(val_labels, f)
-f.close()
+# f = open("data/ind.{}.{}.{}.y".format(dataset, tokeniser, "val"), 'wb')
+# pkl.dump(val_labels, f)
+# f.close()
 
-f = open("data/ind.{}.{}.x".format(dataset, "test"), 'wb')
-pkl.dump(test_ids, f)
-f.close()
+# f = open("data/ind.{}.{}.{}.x".format(dataset, tokeniser, "test"), 'wb')
+# pkl.dump(test_ids, f)
+# f.close()
 
-f = open("data/ind.{}.{}.y".format(dataset, "test"), 'wb')
-pkl.dump(test_labels, f)
-f.close()
+# f = open("data/ind.{}.{}.{}.y".format(dataset, tokeniser, "test"), 'wb')
+# pkl.dump(test_labels, f)
+# f.close()

@@ -57,7 +57,7 @@ def load_corpus(dataset_str):
 
     return adj, index_dict, label_dict
 
-def load_corpus_crossval(dataset_str, i):
+def load_corpus_crossval(dataset_str, i, tokeniser):
     """
     Loads input corpus from gcn/data directory
 
@@ -91,7 +91,7 @@ def load_corpus_crossval(dataset_str, i):
         index_dict[p] = load_pkl("data/ind.{}.{}.{}.x".format(dataset_str, i, p))
         label_dict[p] = load_pkl("data/ind.{}.{}.{}.y".format(dataset_str, i, p))
 
-    adj = load_pkl("data/ind.{}.BCD.adj".format(dataset_str))
+    adj = load_pkl("data/ind.{}.{}.BCD.adj".format(dataset_str,tokeniser))
     adj = preprocess_adj(adj)
     adj = adj.astype(np.float32)
 

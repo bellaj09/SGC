@@ -23,7 +23,7 @@ best_weight_decays = []
 
 for i in range(5):
 
-    sp_adj, index_dict, label_dict = load_corpus_crossval(args.dataset,i)
+    sp_adj, index_dict, label_dict = load_corpus_crossval(args.dataset,i, args.tokeniser)
     adj = sparse_to_torch_sparse(sp_adj, device=args.device)
 
     adj_dense = sparse_to_torch_dense(sp_adj, device='cuda')

@@ -35,6 +35,9 @@ parser.add_argument('--degree', type=int, default=2,
 parser.add_argument('--tuned', action='store_true', help='use tuned hyperparams')
 parser.add_argument('--preprocessed', action='store_true',
                     help='use preprocessed data') 
+parser.add_argument('--tokeniser', type=str, default='ref',
+                    choices=['manual', 'scispacy','ref'],
+                    help='tokeniser to use')
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 args.device = 'cuda' if args.cuda else 'cpu'
@@ -52,7 +55,7 @@ for i in range(5):
         with open("tuned_result/{}.{}.SGC_ref.tuning.txt".format(args.dataset,i), "r") as f:
             args.weight_decay = float(f.read())
 
-    sp_adj, index_dict, label_dict = load_corpus_crossval(args.dataset,i) # loads the BCD graph (D has the BioBERT embeddings)
+    sp_adj, index_dict, label_dict = load_corpus_crossval(args.dataset,i,args.tokeniser) # loads the BCD graph (D has the BioBERT embeddings)
     for k, v in label_dict.items():
         if args.dataset == "mr":
             label_dict[k] = torch.Tensor(v).to(args.device)

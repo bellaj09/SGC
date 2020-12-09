@@ -26,6 +26,7 @@ parser.add_argument('--tokeniser', type=str, default='ref',
 args = parser.parse_args()
 
 dataset = args.dataset
+tokeniser = args.tokeniser
 
 train_val_ids = []
 test_ids = []
@@ -84,7 +85,7 @@ def get_clean_words(docs):
         elif args.tokeniser == "scispacy":
             doc = doc.strip().lower() # lowercase
             #doc = re.sub(r'[?|$|.|!|,]',r'',doc) 
-            doc = re.sub(r'[^a-zA-Z0-9 \/-]',r'',doc) # remove all non-alphanumeric characters except for dashes and slashes
+            doc = re.sub(r'[^a-zA-Z0-9 \/-]'," ",doc) # remove all non-alphanumeric characters except for dashes and slashes
             doc = re.sub(r"\s{2,}", " ", doc) # remove duplicate whitespaces
             doc_temp = nlp(doc)
             temp = [token.text for token in doc_temp]
@@ -133,7 +134,7 @@ for words in clean_words: # Loops through every single abstract's cleaned words
 
 clean_corpus_str = '\n'.join(clean_docs) # each abstract, cleaned, stopwords removed, tokenised by whitespace. 
 
-f = open('data/corpus/' + dataset + '.clean.txt', 'w') 
+f = open('data/corpus/' + dataset + '.tokeniser' + '.clean.txt', 'w') 
 f.write(clean_corpus_str)
 f.close()
 
@@ -142,7 +143,7 @@ min_len = 10000
 aver_len = 0
 max_len = 0
 
-f = open('data/corpus/' + dataset + '.clean.txt', 'r')
+f = open('data/corpus/' + dataset + '.tokeniser' + '.clean.txt', 'r')
 lines = f.readlines()
 for line in lines:
     line = line.strip()
