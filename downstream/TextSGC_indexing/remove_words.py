@@ -122,7 +122,7 @@ vocab, count = zip(*word_freq.most_common()) # counting frequency of all the wor
 if dataset == "mr":
     cutoff = -1
 else:
-    cutoff = count.index(6) # sets cutoff to be the words that occur at least 5 times!
+    cutoff = count.index(4) # sets cutoff to be the words that occur at least 5 times!
 
 vocab = set(vocab[:cutoff]) 
 
