@@ -3,7 +3,7 @@ import nltk
 from nltk.wsd import lesk
 from nltk.corpus import wordnet as wn
 #from nltk.stem import WordNetLemmatizer 
-from utils import clean_str, loadWord2Vec
+from utils import clean_str, loadWord2Vec, clean_str_manual
 import sys
 import argparse
 import random
@@ -68,11 +68,12 @@ def get_clean_words(docs):
     clean_words = []
     #lemmatizer = WordNetLemmatizer() 
     for doc in docs:
-        if args.dataset != "mr":
+        if args.tokenisr == "manual":
+            temp = clean_str_manual(doc).split()
+            temp = list(filter(lambda x : x not in stop_words, temp))
+        elif args.tokeniser == "ref":
             temp = clean_str(doc).split()
             temp = list(filter(lambda x : x not in stop_words, temp))
-        else:
-            temp = clean_str(doc).split() # A list of all words extracted by splitting whitespace 
 
         # Lemmatisation of all words in temp. 
         # for i in range(len(temp)):
