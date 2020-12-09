@@ -14,7 +14,8 @@ from functools import partial
 from utils import *
 from models import SGC
 from sklearn import preprocessing
-from sklearn.metrics import roc_auc_score
+from sklearn.metrics import f1_score
+from sklearn.metrics import confusion_matrix
 
 torch.cuda.set_device(1) # When GPU 0 is out of memory
 
@@ -43,6 +44,7 @@ set_seed(args.seed, args.cuda)
 torch.cuda.set_device(1)
 
 test_acc = np.zeros(5)
+train_time = np.zeros(5)
 
 for i in range(5): 
 
@@ -62,7 +64,7 @@ for i in range(5):
 
 
     def train_linear(model, feat_dict, weight_decay, binary=False):
-        writer = SummaryWriter()
+        #writer = SummaryWriter()
         if not binary:
             act = partial(F.log_softmax, dim=1)
             criterion = F.nll_loss
@@ -85,15 +87,15 @@ for i in range(5):
                 output = model(feat_dict["train"].cuda()).squeeze()
                 l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
                 loss = criterion(act(output), label_dict["train"].cuda())+l2_reg # sigmoid activation function
-                writer.add_scalar("Loss/train", loss, epoch)
+                #writer.add_scalar("Loss/train", loss, epoch)
                 loss.backward()
                 return loss
             optimizer.step(closure)
         train_time = time.perf_counter()-start
         val_res, val_matrix = eval_linear(model, feat_dict["val"].cuda(),
                             label_dict["val"].cuda(), binary)     
-        writer.flush()
-        writer.close()
+        #writer.flush()
+        #writer.close()
         return val_res['accuracy'], model, train_time
 
     def eval_linear(model, features, label, binary=False):
@@ -158,6 +160,7 @@ for i in range(5):
                                 label_dict["train"].cuda(), args.dataset=="mr")
         print("Total Time: {:2f}s, Train acc: {:.4f}, Val acc: {:.4f}, Test acc: {:.4f}".format(precompute_time+train_time, train_res["accuracy"], val_acc, test_res["accuracy"]))
         test_acc[i] = test_res["accuracy"]
+        train_time[i] = precompute_time+train_time
         test_res_file = open("results/{}.{}.SGC_ref.results.txt".format(args.dataset,i), 'w')
         printing = test_matrix.cpu().numpy()
         np.savetxt("results/{}.{}.SGC_ref.results.txt".format(args.dataset,i),printing)
@@ -181,5 +184,49 @@ for i in range(5):
         torch.cuda.empty_cache()
 
 if __name__ == '__main__':
-    print("Mean test accuracy: {:4f}".format(np.mean(test_acc)))
-    print("Std dev test accuracy: {:4f}".format(np.std(test_acc)))
+    print("Mean test accuracy: {:4f}, std dev: {:4f}".format(np.mean(test_acc),np.std(test_acc)))
+    print("Mean train time: {:2f}s, std dev: {:4f}s".format(np.mean(train_time), np.std(train_time)))
+    
+    macrof1 = np.empty(5)
+    weightedf1 = np.empty(5)
+    op_scores = np.empty(5)
+    avg_acc = np.empty(5)
+
+    for i in range(5):
+        full = pd.read_csv('results/{}.{}.SGC_ref.results.txt'.format(dataset,i),header=None)
+        df = full.iloc[range(round(len(full)/2)),:].reset_index(drop=True)
+        df = df.rename(columns = {0:"predictions"})
+        df['labels'] = full.iloc[round(len(full)/2):,:].reset_index(drop=True)
+        pred = df['predictions']
+        true = df['labels']
+        macrof1[i] = f1_score(true,pred,average='macro')
+        weightedf1[i] = f1_score(true,pred,average='weighted')
+        cnf_matrix = confusion_matrix(true, pred)
+
+        FP = cnf_matrix.sum(axis=0) - np.diag(cnf_matrix) 
+        FN = cnf_matrix.sum(axis=1) - np.diag(cnf_matrix)
+        TP = np.diag(cnf_matrix)
+        TN = cnf_matrix.sum() - (FP + FN + TP)
+        FP = FP.astype(float)
+        FN = FN.astype(float)
+        TP = TP.astype(float)
+        TN = TN.astype(float)
+
+        TNR = TN/(TN+FP) 
+        TPR = TP/(TP+FN)
+        ACC = (TP+TN)/(TP+FP+FN+TN)
+
+        mean_spec = np.mean(TNR)
+        mean_recall = np.mean(TPR)
+        avg_acc[i] = np.mean(ACC)
+
+        op_scores[i] = mean_acc - (abs(mean_spec - mean_recall)/(mean_spec + mean_recall))
+
+    #print('Macro F1 scores:', macrof1)
+    print('Mean Macro F1:', np.mean(macrof1)*100, ' with std: ', np.std(macrof1)*100)
+    #print('Weighted F1 scores:', weightedf1)
+    print('Mean Weighted F1:', np.mean(weightedf1)*100, ' with std: ', np.std(weightedf1)*100)
+    #print('Avg Accuracy Scores:', avg_acc)
+    print('Mean Avg Accuracy:', np.mean(avg_acc)*100, ' with std: ', np.std(avg_acc)*100)
+    #print('OP Scores:', op_scores)
+    print('Mean OP:', np.mean(op_scores)*100, ' with std: ', np.std(op_scores)*100)
