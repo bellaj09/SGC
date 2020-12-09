@@ -3,7 +3,7 @@ import nltk
 from nltk.wsd import lesk
 from nltk.corpus import wordnet as wn
 #from nltk.stem import WordNetLemmatizer 
-from utils import clean_str, loadWord2Vec, clean_str_manual, clean_str_scispacy 
+from utils import clean_str, loadWord2Vec, clean_str_manual 
 import argparse
 import random
 from collections import Counter
