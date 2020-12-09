@@ -72,8 +72,11 @@ def get_clean_words(docs):
             temp = clean_str_manual(doc).split()
             temp = list(filter(lambda x : x not in stop_words, temp))
         elif args.tokeniser == "scispacy":
+            print(doc)
             temp = clean_str_scispacy(doc) 
+            print(temp)
             temp = list(filter(lambda x : x not in stop_words, temp))
+            print(temp)
 
         elif args.tokeniser == "ref":
             temp = clean_str(doc).split()
