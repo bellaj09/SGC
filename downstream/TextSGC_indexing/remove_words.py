@@ -71,16 +71,22 @@ def get_clean_words(docs):
     progress_bar = tqdm(docs)
     progress_bar.set_postfix_str("tokenising documents")
 
+    if args.tokeniser == "scispacy": # Load model once if using scispacy
+        nlp = spacy.load("en_core_sci_lg")
+
     for doc in progress_bar:
+        
         if args.tokeniser == "manual":
             temp = clean_str_manual(doc).split()
             temp = list(filter(lambda x : x not in stop_words, temp))
+            
         elif args.tokeniser == "scispacy":
-            #print(doc)
-            temp = clean_str_scispacy(doc) 
-            #print(temp)
+            doc = doc.strip().lower() # lowercase
+            doc = re.sub(r'[?|$|.|!|,]',r'',doc) 
+            doc = re.sub(r"\s{2,}", " ", doc) # remove duplicate whitespaces
+            doc_temp = nlp(doc)
+            temp = [token.text for token in doc]
             temp = list(filter(lambda x : x not in stop_words, temp))
-            #print(temp)
 
         elif args.tokeniser == "ref":
             temp = clean_str(doc).split()
