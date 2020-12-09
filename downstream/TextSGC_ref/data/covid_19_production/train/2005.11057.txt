@@ -1,1 +1,0 @@
-risk scoring calculation for the current nhsx contact tracing app. We consider how the NHS COVID-19 application will initially calculate a risk score for an individual based on their recent contact with people who report that they have coronavirus symptoms.

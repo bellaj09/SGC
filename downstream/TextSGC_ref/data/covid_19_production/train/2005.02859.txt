@@ -1,1 +1,0 @@
-a stochastic epidemic model of covid-19 disease. To model the evolution of diseases with extended latency periods and the presence of asymptomatic patients like COVID-19, we define a simple discrete time stochastic SIR-type epidemic model. We include both latent periods as well as the presence of quarantine areas, to capture the evolutionary dynamics of such diseases.

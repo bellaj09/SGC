@@ -24,7 +24,7 @@ dataset = args.dataset
 train_val_ids = []
 test_ids = []
 
-with open('data/' + dataset + '.txt', 'r') as f:
+with open('../data/' + dataset + '.txt', 'r') as f:
     lines = f.readlines()
     for id, line in enumerate(lines):
         _, data_name, data_label = line.strip().split("\t")
@@ -47,7 +47,7 @@ train_size = train_val_size - val_size
 train_ids, val_ids = train_val_ids[:train_size], train_val_ids[train_size:]
 
 doc_content_list = []
-f = open('data/corpus/' + dataset + '.txt', 'rb')
+f = open('../data/corpus/' + dataset + '.txt', 'rb')
 for line in f.readlines():
     doc_content_list.append(line.strip().decode('latin1'))
 f.close()
@@ -106,7 +106,7 @@ for words in clean_words: # Loops through every single abstract's cleaned words
 
 clean_corpus_str = '\n'.join(clean_docs) # each abstract, cleaned, stopwords removed, tokenised by whitespace. 
 
-f = open('data/corpus/' + dataset + '.clean.txt', 'w') 
+f = open('/data/corpus/' + dataset + '.clean.txt', 'w') 
 f.write(clean_corpus_str)
 f.close()
 
@@ -115,7 +115,7 @@ min_len = 10000
 aver_len = 0
 max_len = 0
 
-f = open('data/corpus/' + dataset + '.clean.txt', 'r')
+f = open('/data/corpus/' + dataset + '.clean.txt', 'r')
 lines = f.readlines()
 for line in lines:
     line = line.strip()
