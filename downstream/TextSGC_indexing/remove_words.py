@@ -77,7 +77,6 @@ def get_clean_words(docs):
         nlp = spacy.load("en_core_sci_lg")
 
     for doc in progress_bar:
-        print(doc)
         if args.tokeniser == "manual":
             temp = clean_str_manual(doc).split()
             temp = list(filter(lambda x : x not in stop_words, temp))
@@ -85,13 +84,12 @@ def get_clean_words(docs):
         elif args.tokeniser == "scispacy":
             doc = doc.strip().lower() # lowercase
             #doc = re.sub(r'[?|$|.|!|,]',r'',doc) 
-            doc = re.sub(r'[^a-zA-Z0-9\/-]',r'',doc) # remove all non-alphanumeric characters except for dashes and slashes
+            doc = re.sub(r'[^a-zA-Z0-9\/- ]',r'',doc) # remove all non-alphanumeric characters except for dashes and slashes
             doc = re.sub(r"\s{2,}", " ", doc) # remove duplicate whitespaces
             doc_temp = nlp(doc)
             temp = [token.text for token in doc_temp]
             temp = list(filter(lambda x : x not in stop_words, temp))
-            print(temp)
-
+            
         elif args.tokeniser == "ref":
             temp = clean_str(doc).split()
             temp = list(filter(lambda x : x not in stop_words, temp))
@@ -123,7 +121,7 @@ vocab, count = zip(*word_freq.most_common()) # counting frequency of all the wor
 if dataset == "mr":
     cutoff = -1
 else:
-    cutoff = count.index(4) # sets cutoff to be the words that occur at least 5 times!
+    cutoff = count.index(5) # sets cutoff to be the words that occur at least 5 times!
 
 vocab = set(vocab[:cutoff]) 
 
