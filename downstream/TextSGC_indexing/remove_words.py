@@ -9,6 +9,7 @@ import random
 from collections import Counter
 import time
 from tqdm import tqdm
+import spacy
 
 # nltk.download()
 stop_words = set(stopwords.words('english'))
