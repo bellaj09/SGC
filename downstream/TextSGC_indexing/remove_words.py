@@ -3,7 +3,7 @@ import nltk
 from nltk.wsd import lesk
 from nltk.corpus import wordnet as wn
 #from nltk.stem import WordNetLemmatizer 
-from utils import clean_str, loadWord2Vec, clean_str_manual
+from utils import clean_str, loadWord2Vec, clean_str_manual, clean_str_scispacy
 import sys
 import argparse
 import random
@@ -72,7 +72,7 @@ def get_clean_words(docs):
             temp = clean_str_manual(doc).split()
             temp = list(filter(lambda x : x not in stop_words, temp))
         elif args.tokeniser == "scispacy":
-            temp = clean_str_scispacy(doc)
+            temp = clean_str_scispacy(doc) 
             temp = list(filter(lambda x : x not in stop_words, temp))
 
         elif args.tokeniser == "ref":
