@@ -67,16 +67,19 @@ with open('data/ind.test.ids', "w") as f:
 def get_clean_words(docs):
     clean_words = []
     #lemmatizer = WordNetLemmatizer() 
-    for doc in docs:
+    progress_bar = tqdm(docs)
+    progress_bar.set_postfix_str("tokenising documents")
+
+    for doc in progress_bar:
         if args.tokeniser == "manual":
             temp = clean_str_manual(doc).split()
             temp = list(filter(lambda x : x not in stop_words, temp))
         elif args.tokeniser == "scispacy":
-            print(doc)
+            #print(doc)
             temp = clean_str_scispacy(doc) 
-            print(temp)
+            #print(temp)
             temp = list(filter(lambda x : x not in stop_words, temp))
-            print(temp)
+            #print(temp)
 
         elif args.tokeniser == "ref":
             temp = clean_str(doc).split()
