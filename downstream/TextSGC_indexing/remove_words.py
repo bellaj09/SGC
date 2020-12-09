@@ -27,7 +27,7 @@ dataset = args.dataset
 train_val_ids = []
 test_ids = []
 
-with open('..data/' + dataset + '.txt', 'r') as f:
+with open('../data/' + dataset + '.txt', 'r') as f:
     lines = f.readlines()
     for id, line in enumerate(lines):
         _, data_name, data_label = line.strip().split("\t")
@@ -50,7 +50,7 @@ train_size = train_val_size - val_size
 train_ids, val_ids = train_val_ids[:train_size], train_val_ids[train_size:]
 
 doc_content_list = []
-f = open('..data/corpus/' + dataset + '.txt', 'rb')
+f = open('../data/corpus/' + dataset + '.txt', 'rb')
 for line in f.readlines():
     doc_content_list.append(line.strip().decode('latin1'))
 f.close()
