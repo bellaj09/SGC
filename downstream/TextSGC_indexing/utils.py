@@ -170,7 +170,7 @@ def clean_str_manual(string):
     return string.strip().lower()
 
 def clean_str_scispacy(string):
-    string = string.lower() # lowercase
+    string = string.strip().lower() # lowercase
     string = re.sub(r'[?|$|.|!|,]',r'',string) 
     string = re.sub(r"\s{2,}", " ", string) # remove duplicate whitespaces
     # remove some punctuation
@@ -179,8 +179,6 @@ def clean_str_scispacy(string):
     str_arr = [token.text for token in doc]
     
     return str_arr
-
-
 
 
 
