@@ -151,7 +151,8 @@ def clean_str(string):
 
 def clean_str_manual(string):
     string = re.sub(r'[?|$|.|!]',r'',string)
-    string = re.sub(r'[-]'," ",string)
+    string = re.sub(r'[-]'," ",string) # splitting hyphenated words
+    string = re.sub(r'[/]'," ",string) # splitting words with a slash between
     string = re.sub(r'[^a-zA-Z0-9 ]',r'',string)
     string = re.sub(r"\'s", " \'s", string)
     string = re.sub(r"\'ve", " \'ve", string)
