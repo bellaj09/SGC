@@ -8,6 +8,7 @@ import sys
 import argparse
 import random
 from collections import Counter
+import time
 
 # nltk.download()
 stop_words = set(stopwords.words('english'))
@@ -78,7 +79,10 @@ def get_clean_words(docs):
 
         clean_words.append(temp)
     return clean_words
+start = time.time()
 clean_words = get_clean_words(doc_content_list) 
+end = time.time()
+print("Tokenisation time: {}s".format(end - start))
 
 # clean_words is an array of all the abstracts, each has its words listed, split by whitespace
 

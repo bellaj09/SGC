@@ -3,8 +3,7 @@ import nltk
 from nltk.wsd import lesk
 from nltk.corpus import wordnet as wn
 #from nltk.stem import WordNetLemmatizer 
-from utils import clean_str, loadWord2Vec, clean_str_manual, clean_str_scispacy
-import sys
+from utils import clean_str, loadWord2Vec, clean_str_manual, clean_str_scispacy 
 import argparse
 import random
 from collections import Counter
@@ -86,7 +85,11 @@ def get_clean_words(docs):
 
         clean_words.append(temp)
     return clean_words
+start = time.time()
 clean_words = get_clean_words(doc_content_list) 
+end = time.time()
+print("Tokenisation time: {}s".format(end - start))
+
 
 # clean_words is an array of all the abstracts, each has its words listed, split by whitespace
 
