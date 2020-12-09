@@ -218,7 +218,7 @@ if __name__ == '__main__':
 
         mean_spec = np.mean(TNR)
         mean_recall = np.mean(TPR)
-        avg_acc[i] = np.mean(ACC)
+        mean_acc = np.mean(ACC)
 
         op_scores[i] = mean_acc - (abs(mean_spec - mean_recall)/(mean_spec + mean_recall))
 
