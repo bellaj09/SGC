@@ -15,7 +15,15 @@ from math import log
 torch.cuda.set_device(1)
 writer = SummaryWriter()
 
-args = get_text_args()
+parser = argparse.ArgumentParser(description='Tuning Hyperparameters')
+parser.add_argument('--dataset', type=str, default='20ng',
+                    choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr','covid_19_production','pubmed'],
+                    help='dataset name')
+parser.add_argument('--tokeniser', type=str, default='ref',
+                    choices=['manual', 'scispacy','ref'],
+                    help='tokeniser to use')
+# args = parser.parse_args()
+# args = get_text_args()
 args.device = 'cuda' if args.cuda else 'cpu'
 set_seed(args.seed, args.cuda)
 
