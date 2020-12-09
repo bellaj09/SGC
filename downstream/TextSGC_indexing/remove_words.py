@@ -84,7 +84,8 @@ def get_clean_words(docs):
             
         elif args.tokeniser == "scispacy":
             doc = doc.strip().lower() # lowercase
-            doc = re.sub(r'[?|$|.|!|,]',r'',doc) 
+            #doc = re.sub(r'[?|$|.|!|,]',r'',doc) 
+            doc = re.sub(r'[^a-zA-Z0-9\/-]',r'',doc) # remove all non-alphanumeric characters except for dashes and slashes
             doc = re.sub(r"\s{2,}", " ", doc) # remove duplicate whitespaces
             doc_temp = nlp(doc)
             temp = [token.text for token in doc_temp]

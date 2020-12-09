@@ -169,16 +169,16 @@ def clean_str_manual(string):
     string = re.sub(r"\s{2,}", " ", string)
     return string.strip().lower()
 
-def clean_str_scispacy(string):
-    string = string.strip().lower() # lowercase
-    string = re.sub(r'[?|$|.|!|,]',r'',string) 
-    string = re.sub(r"\s{2,}", " ", string) # remove duplicate whitespaces
-    # remove some punctuation
-    nlp = spacy.load("en_core_sci_lg")
-    doc = nlp(string)
-    str_arr = [token.text for token in doc]
+# def clean_str_scispacy(string):
+#     string = string.strip().lower() # lowercase
+#     string = re.sub(r'[?|$|.|!|,]',r'',string) 
+#     string = re.sub(r"\s{2,}", " ", string) # remove duplicate whitespaces
+#     # remove some punctuation
+#     nlp = spacy.load("en_core_sci_lg")
+#     doc = nlp(string)
+#     str_arr = [token.text for token in doc]
     
-    return str_arr
+#     return str_arr
 
 
 
