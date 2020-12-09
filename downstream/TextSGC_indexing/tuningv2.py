@@ -21,7 +21,7 @@ parser.add_argument('--dataset', type=str, default='20ng',
 parser.add_argument('--tokeniser', type=str, default='ref',
                     choices=['manual', 'scispacy','ref'],
                     help='tokeniser to use')
-args = parser.parse_args()                    
+args, unknown = parser.parse_known_args()                    
 # args = get_text_args()
 args.device = 'cuda' if args.cuda else 'cpu'
 set_seed(args.seed, args.cuda)
