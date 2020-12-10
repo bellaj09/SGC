@@ -187,7 +187,7 @@ for i in range(5):
         torch.cuda.empty_cache()
 
 if __name__ == '__main__':
-    print("Mean test accuracy: {:4f}, std dev: {:4f}".format(np.mean(test_acc),np.std(test_acc)))
+    print("Mean test accuracy: {:4f}, std dev: {:4f}".format(np.mean(test_acc)*100,np.std(test_acc)*100))
     print("Mean train time: {:2f}s, std dev: {:4f}s".format(np.mean(time_arr), np.std(time_arr)))
     
     macrof1 = np.empty(5)
