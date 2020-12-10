@@ -21,7 +21,7 @@ parser.add_argument('--tokeniser', type=str, default='ref',
                     choices=['manual', 'scispacy','ref','nltk','treebank'],
                     help='tokeniser to use')
 parser.add_argument('--stopwords', type=str, default='nltk',
-                    choices=['nltk','stanford', 'pubmed','top50'],
+                    choices=['nltk','stanford', 'pubmed','top100'],
                     help='stopwords list')                    
 args = parser.parse_args()
 
@@ -84,14 +84,14 @@ with open('data/ind.test.ids', "w") as f:
 
 # doc_content_list becomes a list of every test/train abstract in the txt, latin1 decoded and trailing/leading whitespaces removed
 
-if args.stopwords == 'top50':
+if args.stopwords == 'top100':
     word_freq = Counter()
     # total = 0
     for i in train_ids+test_ids+val_ids:
         all_words = doc_content_list[i].split()
         word_freq.update(all_words)     
     vocab, count = zip(*word_freq.most_common()) 
-    stop_words = set(vocab[:49]) # take the top 50 words
+    stop_words = set(vocab[:99]) # take the top 50 words
 
 print('Stop Words: ',stop_words)
 
