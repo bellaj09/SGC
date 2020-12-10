@@ -14,18 +14,19 @@ from math import log
 
 #torch.cuda.set_device(1)
 #writer = SummaryWriter()
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(description="Hyperparameter Tuning")
 parser.add_argument('--dataset', type=str, default='20ng',
                     choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr','covid_19_production','pubmed'],
                     help='dataset name')
 parser.add_argument('--tokeniser', action='store',type=str, default='ref',
-                    choices=['manual', 'scispacy','ref'],
                     help='tokeniser to use')
-#args = parser.parse_known_args()                    
-args = get_text_args()
+args = parser.parse_known_args() 
+print(args)                   
+#args = get_text_args()
 args.device = 'cuda' if args.cuda else 'cpu'
 set_seed(args.seed, args.cuda)
 
+tokeniser = args.tokeniser
 best_weight_decays = []
 
 for i in range(5):
