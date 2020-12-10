@@ -56,6 +56,16 @@ for i in range(5):
     with open('tuned_result/{}.{}.SGC_ref.tuning.txt'.format(args.dataset,i), 'w') as f:
         f.write(str(best['weight_decay']))
 
+    del sp_adj
+    del adj
+    del adj_dense
+    del feat_dict 
+    del precompute_time
+    del index_dict
+    del label_dict
+    del features
+    torch.cuda.empty_cache()
+
 # then show mean?
 print(best_weight_decays)
 

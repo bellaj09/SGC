@@ -85,14 +85,13 @@ with open('data/ind.test.ids', "w") as f:
 # doc_content_list becomes a list of every test/train abstract in the txt, latin1 decoded and trailing/leading whitespaces removed
 
 if args.stopwords == 'top50':
-    stop_words = {} # try no stopwords 
-    # word_freq = Counter()
-    # # total = 0
-    # for i in train_ids+test_ids+val_ids:
-    #     all_words = doc_content_list[i].lower().split()
-    #     word_freq.update(all_words)     
-    # vocab, count = zip(*word_freq.most_common()) 
-    # stop_words = set(vocab[:49]) # take the top 50 words
+    word_freq = Counter()
+    # total = 0
+    for i in train_ids+test_ids+val_ids:
+        all_words = doc_content_list[i].lower().split()
+        word_freq.update(all_words)     
+    vocab, count = zip(*word_freq.most_common()) 
+    stop_words = set(vocab[:49]) # take the top 50 words
 
 print('Stop Words: ',stop_words)
 
