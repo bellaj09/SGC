@@ -36,7 +36,7 @@ parser.add_argument('--tuned', action='store_true', help='use tuned hyperparams'
 parser.add_argument('--preprocessed', action='store_true',
                     help='use preprocessed data') 
 parser.add_argument('--tokeniser', type=str, action='store',default='ref',
-                    choices=['manual', 'scispacy','ref'],
+                    choices=['manual', 'scispacy','ref','stanford','treebank'],
                     help='tokeniser to use')
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()

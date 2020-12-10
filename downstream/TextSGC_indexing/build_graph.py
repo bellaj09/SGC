@@ -26,7 +26,7 @@ parser.add_argument('--embedding_dim', type=int, default=300,
 parser.add_argument('--embedding_path', type=str, default='data/corpus/ohsumed_biobert-base-embeddings.h5',
                     help='path to biobert embedding output.')
 parser.add_argument('--tokeniser', type=str, default='ref',
-                    choices=['manual', 'scispacy','ref'],
+                    choices=['manual', 'scispacy','ref','stanford','treebank'],
                     help='tokeniser to use')                    
 args = parser.parse_args()
 
@@ -70,7 +70,7 @@ with open('data/corpus/' + dataset + '_labels.txt', 'w') as f:
 print("Loaded labels and indices")
 # Get document content, after removed words
 doc_content_list = []
-with open('data/corpus/' + dataset + '.tokeniser' + '.clean.txt', 'r') as f:
+with open('data/corpus/' + dataset + '.' + tokeniser + '.clean.txt', 'r') as f:
     lines = f.readlines()
     doc_content_list = [l.strip() for l in lines]
 
@@ -90,7 +90,7 @@ vocab_size = len(vocab)
 print("Vocabulary size: ", vocab_size)
 
 
-with open('data/corpus/' + dataset + '.tokeniser' + '_vocab.txt', 'w') as f:
+with open('data/corpus/' + dataset + '.' + tokeniser + '_vocab.txt', 'w') as f:
     vocab_str = '\n'.join(vocab)
     f.write(vocab_str)
 

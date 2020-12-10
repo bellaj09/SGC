@@ -4,6 +4,8 @@ from nltk.wsd import lesk
 from nltk.corpus import wordnet as wn
 #from nltk.stem import WordNetLemmatizer 
 from utils import clean_str, loadWord2Vec, clean_str_manual 
+from nltk.tokenize.stanford import StanfordTokenizer
+from nltk.tokenize.treebank import TreebankWordTokenizer
 import argparse
 import random
 from collections import Counter
@@ -11,6 +13,7 @@ import time
 from tqdm import tqdm
 import spacy
 import re
+
 
 # nltk.download()
 stop_words = set(stopwords.words('english'))
@@ -21,7 +24,7 @@ parser.add_argument('--dataset', type=str, default='20ng',
                     choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr','covid_19_production','pubmed'],
                     help='dataset name')
 parser.add_argument('--tokeniser', type=str, default='ref',
-                    choices=['manual', 'scispacy','ref'],
+                    choices=['manual', 'scispacy','ref','stanford','treebank'],
                     help='tokeniser to use')
 args = parser.parse_args()
 
@@ -85,7 +88,7 @@ def get_clean_words(docs):
         elif args.tokeniser == "scispacy":
             doc = doc.strip().lower() # lowercase
             #doc = re.sub(r'[?|$|.|!|,]',r'',doc) 
-            doc = re.sub(r'[^a-zA-Z0-9 \/-]'," ",doc) # remove all non-alphanumeric characters except for dashes and slashes
+            doc = re.sub(r'[^a-zA-Z0-9 \/-]'," ",doc) # replace with space non-alphanumeric characters except for dashes and slashes
             doc = re.sub(r"\s{2,}", " ", doc) # remove duplicate whitespaces
             doc_temp = nlp(doc)
             temp = [token.text for token in doc_temp]
@@ -93,6 +96,17 @@ def get_clean_words(docs):
             
         elif args.tokeniser == "ref":
             temp = clean_str(doc).split()
+            temp = list(filter(lambda x : x not in stop_words, temp))
+
+        elif args.tokeniser == 'stanford': # try not to americanize yet
+            # americanize options
+            doc = doc.strip().lower()
+            temp = StanfordTokenizer().tokenize(doc)
+            temp = list(filter(lambda x : x not in stop_words, temp))
+
+        elif args.tokeniser == 'treebank':
+            doc = doc.strip().lower()
+            temp = TreebankWordTokenizer().tokenize(doc)
             temp = list(filter(lambda x : x not in stop_words, temp))
 
         # Lemmatisation of all words in temp. 
@@ -134,7 +148,7 @@ for words in clean_words: # Loops through every single abstract's cleaned words
 
 clean_corpus_str = '\n'.join(clean_docs) # each abstract, cleaned, stopwords removed, tokenised by whitespace. 
 
-f = open('data/corpus/' + dataset + '.tokeniser' + '.clean.txt', 'w') 
+f = open('data/corpus/' + dataset + '.' + tokeniser + '.clean.txt', 'w') 
 f.write(clean_corpus_str)
 f.close()
 
@@ -143,7 +157,7 @@ min_len = 10000
 aver_len = 0
 max_len = 0
 
-f = open('data/corpus/' + dataset + '.tokeniser' + '.clean.txt', 'r')
+f = open('data/corpus/' + dataset + '.' + tokeniser + '.clean.txt', 'r')
 lines = f.readlines()
 for line in lines:
     line = line.strip()
