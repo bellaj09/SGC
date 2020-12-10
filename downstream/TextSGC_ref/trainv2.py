@@ -18,6 +18,7 @@ from sklearn.metrics import f1_score
 from sklearn.metrics import confusion_matrix
 
 torch.cuda.set_device(1) # When GPU 0 is out of memory
+torch.cuda.empty_cache()
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='20ng', help='Dataset string.')
@@ -41,7 +42,6 @@ args.device = 'cuda' if args.cuda else 'cpu'
 
 torch.backends.cudnn.benchmark = True
 set_seed(args.seed, args.cuda)
-torch.cuda.set_device(1)
 
 test_acc = np.zeros(5)
 time_arr = np.zeros(5)
