@@ -20,9 +20,9 @@ parser.add_argument('--dataset', type=str, default='20ng',
                     help='dataset name')
 parser.add_argument('--tokeniser', action='store',type=str, default='ref',
                     help='tokeniser to use')
-args = parser.parse_known_args() 
-print(args)                   
-#args = get_text_args()
+# args = parser.parse_known_args() 
+# print(args)                   
+args = get_text_args()
 args.device = 'cuda' if args.cuda else 'cpu'
 set_seed(args.seed, args.cuda)
 
