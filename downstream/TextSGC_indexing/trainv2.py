@@ -52,7 +52,7 @@ time_arr = np.zeros(5)
 for i in range(5): 
 
     if args.tuned:
-        with open("tuned_result/{}.{}.SGC_ref.tuning.txt".format(args.dataset,i), "r") as f:
+        with open("tuned_result/{}.{}.{}.SGC_ref.tuning.txt".format(args.dataset,args.tokeniser,i), "r") as f:
             args.weight_decay = float(f.read())
 
     sp_adj, index_dict, label_dict = load_corpus_crossval(args.dataset,i,args.tokeniser) # loads the BCD graph (D has the BioBERT embeddings)
