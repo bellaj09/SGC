@@ -43,8 +43,7 @@ elif args.stopwords == 'stanford':
     'challenge', 'device', 'condition', 'conditions', 'suffer', 'suffering' ,'suffered', 'feel', 'feeling', 'prescription', 'prescribe',
     'prescribed', 'over-the-counter', 'otc'}
 elif args.stopwords == 'pubmed':
-    stop_words = 
-print(stop_words)
+    stop_words = {'a', 'about', 'again', 'all', 'almost', 'also', 'although', 'always', 'among', 'an', 'and', 'another', 'any', 'are', 'as', 'at', 'be', 'because', 'been', 'before', 'being', 'between', 'both', 'but', 'bycan', 'could', 'did', 'do', 'does', 'done', 'due', 'during', 'each', 'either', 'enough', 'especially', 'etc', 'for', 'found', 'from', 'further', 'had', 'has', 'have', 'having', 'here', 'how', 'however', 'i', 'if', 'in', 'into', 'is', 'it', 'its', 'itself', 'just', 'kg', 'km', 'made', 'mainly', 'make', 'may', 'mg', 'might', 'ml', 'mm', 'most', 'mostly', 'must', 'nearly', 'neither', 'no', 'nor', 'obtained', 'of', 'often', 'on', 'our', 'overall', 'perhaps', 'pmid', 'quite', 'rather', 'really', 'regarding', 'seem', 'seen', 'several', 'should', 'show', 'showed', 'shown', 'shows', 'significantly', 'since', 'so', 'some', 'such', 'than', 'that', 'the', 'their', 'theirs', 'them', 'then', 'there', 'therefore', 'these', 'they', 'this', 'those', 'through', 'thus', 'to', 'upon', 'various', 'very', 'was', 'we', 'were', 'what', 'when', 'which', 'while', 'with', 'within', 'without', 'would'}
 
 
 
@@ -84,6 +83,17 @@ with open('data/ind.test.ids', "w") as f:
     f.write('\n'.join([str(i) for i in test_ids]))
 
 # doc_content_list becomes a list of every test/train abstract in the txt, latin1 decoded and trailing/leading whitespaces removed
+
+if args.stopwords == 'top50':
+    word_freq = Counter()
+    # total = 0
+    for i in train_ids+test_ids+val_ids:
+        all_words = doc_content_list[i].split()
+        word_freq.update(all_words)     
+    vocab, count = zip(*word_freq.most_common()) 
+    stop_words = set(vocab[:49]) # take the top 50 words
+
+print('Stop Words: ',stop_words)
 
 def get_clean_words(docs):
     clean_words = []
