@@ -4,7 +4,6 @@ from nltk.wsd import lesk
 from nltk.corpus import wordnet as wn
 #from nltk.stem import WordNetLemmatizer 
 from utils import clean_str, loadWord2Vec, clean_str_manual 
-from nltk.tokenize.stanford import StanfordTokenizer
 from nltk.tokenize.treebank import TreebankWordTokenizer
 import argparse
 import random
@@ -24,7 +23,7 @@ parser.add_argument('--dataset', type=str, default='20ng',
                     choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr','covid_19_production','pubmed'],
                     help='dataset name')
 parser.add_argument('--tokeniser', type=str, default='ref',
-                    choices=['manual', 'scispacy','ref','stanford','treebank'],
+                    choices=['manual', 'scispacy','ref','nltk','treebank'],
                     help='tokeniser to use')
 args = parser.parse_args()
 
@@ -98,10 +97,10 @@ def get_clean_words(docs):
             temp = clean_str(doc).split()
             temp = list(filter(lambda x : x not in stop_words, temp))
 
-        elif args.tokeniser == 'stanford': # try not to americanize yet
+        elif args.tokeniser == 'nltk': # try not to americanize yet
             # americanize options
             doc = doc.strip().lower()
-            temp = StanfordTokenizer().tokenize(doc)
+            temp = nltk.word_tokenize(doc)
             temp = list(filter(lambda x : x not in stop_words, temp))
 
         elif args.tokeniser == 'treebank':
