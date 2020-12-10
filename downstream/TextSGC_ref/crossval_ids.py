@@ -40,7 +40,7 @@ for i in range(5):
     train_val_labels = []
     test_labels = []
 
-    with open('/data/' + dataset + str(i) + '.txt', 'r') as f:
+    with open('data/' + dataset + str(i) + '.txt', 'r') as f:
         lines = f.readlines()
         for id, line in enumerate(lines):
             doc_name_list.append(line.strip())

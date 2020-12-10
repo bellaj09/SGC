@@ -13,11 +13,6 @@ from tqdm import tqdm
 import spacy
 import re
 
-
-# nltk.download()
-stop_words = set(stopwords.words('english'))
-print(stop_words)
-
 parser = argparse.ArgumentParser(description='Build Document Graph')
 parser.add_argument('--dataset', type=str, default='20ng',
                     choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr','covid_19_production','pubmed'],
@@ -25,6 +20,9 @@ parser.add_argument('--dataset', type=str, default='20ng',
 parser.add_argument('--tokeniser', type=str, default='ref',
                     choices=['manual', 'scispacy','ref','nltk','treebank'],
                     help='tokeniser to use')
+parser.add_argument('--stopwords', type=str, default='nltk',
+                    choices=['nltk','stanford', 'pubmed','top50'],
+                    help='stopwords list')                    
 args = parser.parse_args()
 
 dataset = args.dataset
@@ -32,6 +30,23 @@ tokeniser = args.tokeniser
 
 train_val_ids = []
 test_ids = []
+
+# Define stopwords
+# nltk.download()
+if args.stopwords == "nltk":
+    stop_words = set(stopwords.words('english'))
+elif args.stopwords == 'stanford':
+    stop_words = {'disease', 'diseases', 'disorder', 'symptom', 'symptoms', 'drug', 'drugs', 'problems', 'problem','prob', 'probs', 'med', 'meds',
+    'pill', 'pills', 'medicine', 'medicines', 'medication', 'medications', 'treatment', 'treatments', 'caps', 'capsules', 'capsule',
+    'tablet', 'tablets', 'tabs', 'doctor', 'dr', 'dr.', 'doc', 'physician', 'physicians', 'test', 'tests', 'testing', 'specialist', 'specialists',
+   'side-effect', 'side-effects', 'pharmaceutical', 'pharmaceuticals', 'pharma', 'diagnosis', 'diagnose', 'diagnosed', 'exam',
+    'challenge', 'device', 'condition', 'conditions', 'suffer', 'suffering' ,'suffered', 'feel', 'feeling', 'prescription', 'prescribe',
+    'prescribed', 'over-the-counter', 'otc'}
+elif args.stopwords == 'pubmed':
+    stop_words = 
+print(stop_words)
+
+
 
 with open('../data/' + dataset + '.txt', 'r') as f:
     lines = f.readlines()

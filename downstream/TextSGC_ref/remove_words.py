@@ -110,7 +110,7 @@ for words in clean_words: # Loops through every single abstract's cleaned words
 
 clean_corpus_str = '\n'.join(clean_docs) # each abstract, cleaned, stopwords removed, tokenised by whitespace. 
 
-f = open('/data/corpus/' + dataset + '.clean.txt', 'w') 
+f = open('data/corpus/' + dataset + '.clean.txt', 'w') 
 f.write(clean_corpus_str)
 f.close()
 
@@ -119,7 +119,7 @@ min_len = 10000
 aver_len = 0
 max_len = 0
 
-f = open('/data/corpus/' + dataset + '.clean.txt', 'r')
+f = open('data/corpus/' + dataset + '.clean.txt', 'r')
 lines = f.readlines()
 for line in lines:
     line = line.strip()
