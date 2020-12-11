@@ -2,7 +2,7 @@ from nltk.corpus import stopwords
 import nltk
 from nltk.wsd import lesk
 from nltk.corpus import wordnet as wn
-#from nltk.stem import WordNetLemmatizer 
+from nltk.stem import WordNetLemmatizer 
 from utils import clean_str, loadWord2Vec, clean_str_manual 
 from nltk.tokenize.treebank import TreebankWordTokenizer
 import argparse
@@ -22,7 +22,10 @@ parser.add_argument('--tokeniser', type=str, default='ref',
                     help='tokeniser to use')
 parser.add_argument('--stopwords', type=str, default='nltk',
                     choices=['nltk','stanford', 'pubmed','top50'],
-                    help='stopwords list')                    
+                    help='stopwords list')
+parser.add_argument('--lemmatiser', type=str, default='none',
+                    choices=['wordnet','bio','none'],
+                    help='lemmatisation algorithm')                                                      
 args = parser.parse_args()
 
 dataset = args.dataset
@@ -97,7 +100,7 @@ print('Stop Words: ',stop_words)
 
 def get_clean_words(docs):
     clean_words = []
-    #lemmatizer = WordNetLemmatizer() 
+    
     progress_bar = tqdm(docs)
     progress_bar.set_postfix_str("tokenising documents")
 
@@ -132,11 +135,21 @@ def get_clean_words(docs):
             doc = doc.strip().lower()
             temp = TreebankWordTokenizer().tokenize(doc)
             temp = list(filter(lambda x : x not in stop_words, temp))
-
-        # Lemmatisation of all words in temp. 
-        # for i in range(len(temp)):
-        #     current_word = temp[i]
-        #     temp[i] = lemmatizer.lemmatize(current_word)
+        
+        if args.lemmatiser == 'wordnet':
+            lemmatizer = WordNetLemmatizer() 
+            Lemmatisation of all words in temp. 
+            for i in range(len(temp)):
+                current_word = temp[i]
+                temp[i] = lemmatizer.lemmatize(current_word)
+        elif args.lemmatiser == 'bio':
+            tagged_df = pd.DataFrame(pos_tag(temp))
+            tagged_df.to_csv('tagged_string.txt',sep = '\t',header = False, index = False)
+            subprocess.run(["java -Xmx1G -jar biolemmatizer-core-1.2-jar-with-dependencies.jar -l -i 'tagged_string.txt' -o 'biolemmatizer_output.txt'"], shell=True)
+            df = pd.read_csv('biolemmatizer_output.txt', header=None, sep='\t')
+            temp = df[2].to_numpy()
+            clean_words.append(temp)
+            bar.next()
 
         clean_words.append(temp)
     return clean_words
