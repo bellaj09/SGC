@@ -94,22 +94,50 @@ with open('data/corpus/' + dataset + '.' + tokeniser + '_vocab.txt', 'w') as f:
     vocab_str = '\n'.join(vocab)
     f.write(vocab_str)
 
-# split training and validation
-idx = list(range(len(train_val_labels)))
-random.shuffle(idx)
-train_val_ids = [train_val_ids[i] for i in idx]
-train_val_labels = [train_val_labels[i] for i in idx]
+# # split training and validation
+# idx = list(range(len(train_val_labels)))
+# random.shuffle(idx)
+# train_val_ids = [train_val_ids[i] for i in idx]
+# train_val_labels = [train_val_labels[i] for i in idx]
 
-idx = list(range(len(test_labels)))
-random.shuffle(idx)
-test_ids = [test_ids[i] for i in idx]
-test_labels = [test_labels[i] for i in idx]
+# idx = list(range(len(test_labels)))
+# random.shuffle(idx)
+# test_ids = [test_ids[i] for i in idx]
+# test_labels = [test_labels[i] for i in idx]
 
-train_val_size = len(train_val_ids)
-val_size = int(0.1 * train_val_size)
-train_size = train_val_size - val_size
-train_ids, val_ids = train_val_ids[:train_size], train_val_ids[train_size:]
-train_labels, val_labels = train_val_labels[:train_size], train_val_labels[train_size:]
+# train_val_size = len(train_val_ids)
+# val_size = int(0.1 * train_val_size)
+# train_size = train_val_size - val_size
+# train_ids, val_ids = train_val_ids[:train_size], train_val_ids[train_size:]
+# train_labels, val_labels = train_val_labels[:train_size], train_val_labels[train_size:]
+
+# Load the train val ids from pkls made by crossval_ids.py
+f = open("data/ind.{}.{}.{}.x".format(dataset, i, "train"), 'wb')
+train_ids = pkl.load(f)
+f.close()
+
+f = open("data/ind.{}.{}.{}.y".format(dataset, i, "train"), 'wb')
+train_labels = pkl.load(f)
+f.close()
+
+f = open("data/ind.{}.{}.{}.x".format(dataset, i, "val"), 'wb')
+val_ids = pkl.load(f)
+f.close()
+
+f = open("data/ind.{}.{}.{}.y".format(dataset, i, "val"), 'wb')
+val_labels = pkl.load(f)
+f.close()
+
+f = open("data/ind.{}.{}.{}.x".format(dataset, i, "test"), 'wb')
+test_ids = pkl.load(f)
+f.close()
+
+f = open("data/ind.{}.{}.{}.y".format(dataset, i, "test"), 'wb')
+test_labels = pkl.load(f)
+f.close()
+
+train_val_ids = train_ids + val_ids
+train_val_labels = train_labels + val_labels
 
 # Construct feature vectors
 # def average_word_vec(doc_id, doc_content_list, word_to_vector):
@@ -290,27 +318,3 @@ export_graph(concat_graph(B, C), node_size, phase="BC")
 export_graph(concat_graph(B, D), node_size, phase="BD")
 export_graph(B, node_size, phase="B")
 
-# dump objects
-# f = open("data/ind.{}.{}.{}.x".format(dataset, tokeniser, "train"), 'wb')
-# pkl.dump(train_ids, f)
-# f.close()
-
-# f = open("data/ind.{}.{}.{}.y".format(dataset,tokeniser, "train"), 'wb')
-# pkl.dump(train_labels, f)
-# f.close()
-
-# f = open("data/ind.{}.{}.{}.x".format(dataset, tokeniser, "val"), 'wb')
-# pkl.dump(val_ids, f)
-# f.close()
-
-# f = open("data/ind.{}.{}.{}.y".format(dataset, tokeniser, "val"), 'wb')
-# pkl.dump(val_labels, f)
-# f.close()
-
-# f = open("data/ind.{}.{}.{}.x".format(dataset, tokeniser, "test"), 'wb')
-# pkl.dump(test_ids, f)
-# f.close()
-
-# f = open("data/ind.{}.{}.{}.y".format(dataset, tokeniser, "test"), 'wb')
-# pkl.dump(test_labels, f)
-# f.close()
