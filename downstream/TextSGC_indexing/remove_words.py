@@ -5,6 +5,7 @@ from nltk.corpus import wordnet as wn
 from nltk.stem import WordNetLemmatizer 
 from utils import clean_str, loadWord2Vec, clean_str_manual 
 from nltk.tokenize.treebank import TreebankWordTokenizer
+from nltk.tokenize import sent_tokenize, word_tokenize
 import argparse
 import random
 from collections import Counter
@@ -142,9 +143,20 @@ def get_clean_words(docs):
             temp = list(filter(lambda x : x not in stop_words, temp))
 
         elif args.tokeniser == 'treebank':
+            # Trying to add manual rules to Treebank
             doc = doc.strip().lower()
+            doc = re.sub(r'[-]'," ",doc) # splitting hyphenated words
+            doc = re.sub(r'[/]'," ",doc) # splitting words with a slash between
+            doc = re.sub(r'[^a-zA-Z0-9 ]',r'',doc) # all other special characters can just disappear
             temp = TreebankWordTokenizer().tokenize(doc)
             temp = list(filter(lambda x : x not in stop_words, temp))
+
+            ## OR do sentence tokenisation first
+            # doc = doc.strip().lower()
+            # doc = sent_tokenize(doc)
+            # doc = np.concatenate([word_tokenize(s) for s in doc])
+            # temp = TreebankWordTokenizer().tokenize(doc)
+            # temp = list(filter(lambda x : x not in stop_words, temp))
         
         if args.lemmatiser == 'wordnet':
             lemmatizer = WordNetLemmatizer() 

@@ -188,8 +188,6 @@ for i in range(5):
 
 if __name__ == '__main__':
     print("Mean test accuracy: {:4f}, std dev: {:4f}".format(np.mean(test_acc)*100,np.std(test_acc)*100))
-    print("Mean train time: {:2f}s, std dev: {:4f}s".format(np.mean(time_arr), np.std(time_arr)))
-    
     macrof1 = np.empty(5)
     weightedf1 = np.empty(5)
     op_scores = np.empty(5)
@@ -233,3 +231,6 @@ if __name__ == '__main__':
     #print('Mean Avg Accuracy:', np.mean(avg_acc)*100, ' with std: ', np.std(avg_acc)*100)
     #print('OP Scores:', op_scores)
     print('Mean OP:', np.mean(op_scores)*100, ' with std: ', np.std(op_scores)*100)
+
+    print("Mean train time: {:2f}s, std dev: {:4f}s".format(np.mean(time_arr), np.std(time_arr)))
+    
