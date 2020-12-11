@@ -21,7 +21,7 @@ parser.add_argument('--tokeniser', type=str, default='ref',
                     choices=['manual', 'scispacy','ref','nltk','treebank'],
                     help='tokeniser to use')
 parser.add_argument('--stopwords', type=str, default='nltk',
-                    choices=['nltk','stanford', 'pubmed','top50'],
+                    choices=['nltk','stanford', 'pubmed','top50','top100','none'],
                     help='stopwords list')
 parser.add_argument('--lemmatiser', type=str, default='none',
                     choices=['wordnet','bio','none'],
@@ -35,7 +35,7 @@ train_val_ids = []
 test_ids = []
 
 # Define stopwords
-# nltk.download()
+# nltk.download() 
 if args.stopwords == "nltk":
     stop_words = set(stopwords.words('english'))
 elif args.stopwords == 'stanford':
@@ -47,7 +47,8 @@ elif args.stopwords == 'stanford':
     'prescribed', 'over-the-counter', 'otc'}
 elif args.stopwords == 'pubmed':
     stop_words = {'a', 'about', 'again', 'all', 'almost', 'also', 'although', 'always', 'among', 'an', 'and', 'another', 'any', 'are', 'as', 'at', 'be', 'because', 'been', 'before', 'being', 'between', 'both', 'but', 'bycan', 'could', 'did', 'do', 'does', 'done', 'due', 'during', 'each', 'either', 'enough', 'especially', 'etc', 'for', 'found', 'from', 'further', 'had', 'has', 'have', 'having', 'here', 'how', 'however', 'i', 'if', 'in', 'into', 'is', 'it', 'its', 'itself', 'just', 'kg', 'km', 'made', 'mainly', 'make', 'may', 'mg', 'might', 'ml', 'mm', 'most', 'mostly', 'must', 'nearly', 'neither', 'no', 'nor', 'obtained', 'of', 'often', 'on', 'our', 'overall', 'perhaps', 'pmid', 'quite', 'rather', 'really', 'regarding', 'seem', 'seen', 'several', 'should', 'show', 'showed', 'shown', 'shows', 'significantly', 'since', 'so', 'some', 'such', 'than', 'that', 'the', 'their', 'theirs', 'them', 'then', 'there', 'therefore', 'these', 'they', 'this', 'those', 'through', 'thus', 'to', 'upon', 'various', 'very', 'was', 'we', 'were', 'what', 'when', 'which', 'while', 'with', 'within', 'without', 'would'}
-
+elif args.stopwords == 'none':
+    stop_words = {}
 
 
 with open('../data/' + dataset + '.txt', 'r') as f:
@@ -95,6 +96,15 @@ if args.stopwords == 'top50':
         word_freq.update(all_words)     
     vocab, count = zip(*word_freq.most_common()) 
     stop_words = set(vocab[:49]) # take the top 50 words
+
+if args.stopwords == 'top100':
+    word_freq = Counter()
+    # total = 0
+    for i in train_ids+test_ids+val_ids:
+        all_words = doc_content_list[i].lower().split()
+        word_freq.update(all_words)     
+    vocab, count = zip(*word_freq.most_common()) 
+    stop_words = set(vocab[:99]) # take the top 50 words
 
 print('Stop Words: ',stop_words)
 

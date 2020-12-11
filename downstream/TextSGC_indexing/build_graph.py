@@ -111,34 +111,6 @@ train_size = train_val_size - val_size
 train_ids, val_ids = train_val_ids[:train_size], train_val_ids[train_size:]
 train_labels, val_labels = train_val_labels[:train_size], train_val_labels[train_size:]
 
-# # Load the train val ids from pkls made by crossval_ids.py
-# f = open("data/ind.{}.{}.{}.x".format(dataset, i, "train"), 'wb')
-# train_ids = pkl.load(f)
-# f.close()
-
-# f = open("data/ind.{}.{}.{}.y".format(dataset, i, "train"), 'wb')
-# train_labels = pkl.load(f)
-# f.close()
-
-# f = open("data/ind.{}.{}.{}.x".format(dataset, i, "val"), 'wb')
-# val_ids = pkl.load(f)
-# f.close()
-
-# f = open("data/ind.{}.{}.{}.y".format(dataset, i, "val"), 'wb')
-# val_labels = pkl.load(f)
-# f.close()
-
-# f = open("data/ind.{}.{}.{}.x".format(dataset, i, "test"), 'wb')
-# test_ids = pkl.load(f)
-# f.close()
-
-# f = open("data/ind.{}.{}.{}.y".format(dataset, i, "test"), 'wb')
-# test_labels = pkl.load(f)
-# f.close()
-
-# train_val_ids = train_ids + val_ids
-# train_val_labels = train_labels + val_labels
-
 # Construct feature vectors
 # def average_word_vec(doc_id, doc_content_list, word_to_vector):
 #     doc_vec = np.array([0.0 for k in range(word_embeddings_dim)])
@@ -302,8 +274,6 @@ def export_graph(graph, node_size, phase=""):
         pkl.dump(adj, f)
 
 ids = train_val_ids+test_ids
-print('length of ids:', len(ids))
-print('length of doc content list:', len(doc_content_list))
 windows = construct_context_windows(ids, doc_content_list)
 word_window_freq = count_word_window_freq(windows)
 word_pair_count = count_word_pair_count(windows)
