@@ -145,18 +145,18 @@ def get_clean_words(docs):
 
         elif args.tokeniser == 'treebank':
             # Trying to add manual rules to Treebank
-            # doc = doc.strip().lower()
-            # doc = re.sub(r'[-]'," ",doc) # splitting hyphenated words
-            # doc = re.sub(r'[/]'," ",doc) # splitting words with a slash between
-            # doc = re.sub(r'[^a-zA-Z0-9 ]',r'',doc) # all other special characters can just disappear
-            # temp = TreebankWordTokenizer().tokenize(doc)
-            # temp = list(filter(lambda x : x not in stop_words, temp))
+            doc = doc.strip().lower()
+            doc = re.sub(r'[-]'," ",doc) # splitting hyphenated words
+            doc = re.sub(r'[/]'," ",doc) # splitting words with a slash between
+            doc = re.sub(r'[^a-zA-Z0-9 ]',r'',doc) # all other special characters can just disappear
+            temp = TreebankWordTokenizer().tokenize(doc)
+            temp = list(filter(lambda x : x not in stop_words, temp))
 
             # OR do sentence tokenisation first
-            doc = doc.strip().lower()
-            doc = sent_tokenize(doc)
-            temp = np.concatenate([TreebankWordTokenizer().tokenize(s) for s in doc])
-            temp = list(filter(lambda x : x not in stop_words, temp))
+            # doc = doc.strip().lower()
+            # doc = sent_tokenize(doc)
+            # temp = np.concatenate([TreebankWordTokenizer().tokenize(s) for s in doc])
+            # temp = list(filter(lambda x : x not in stop_words, temp))
         
         if args.lemmatiser == 'wordnet':
             lemmatizer = WordNetLemmatizer() 
