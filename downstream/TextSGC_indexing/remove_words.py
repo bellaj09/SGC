@@ -13,6 +13,7 @@ import time
 from tqdm import tqdm
 import spacy
 import re
+import numpy as np
 
 parser = argparse.ArgumentParser(description='Build Document Graph')
 parser.add_argument('--dataset', type=str, default='20ng',
