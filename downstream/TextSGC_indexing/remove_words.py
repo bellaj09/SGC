@@ -146,9 +146,9 @@ def get_clean_words(docs):
         elif args.tokeniser == 'treebank':
             # Trying to add manual rules to Treebank
             doc = doc.strip().lower()
-            doc = re.sub(r'[-]'," ",doc) # splitting hyphenated words
-            doc = re.sub(r'[/]'," ",doc) # splitting words with a slash between
-            doc = re.sub(r'[^a-zA-Z0-9 ]',r'',doc) # all other special characters can just disappear
+            # doc = re.sub(r'[-]'," ",doc) # splitting hyphenated words
+            # doc = re.sub(r'[/]'," ",doc) # splitting words with a slash between
+            doc = re.sub(r'[^a-zA-Z0-9  -]',r'',doc) # all special characters can just disappear, except for hyphen
             temp = TreebankWordTokenizer().tokenize(doc)
             temp = list(filter(lambda x : x not in stop_words, temp))
 
