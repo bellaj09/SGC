@@ -155,8 +155,7 @@ def get_clean_words(docs):
             # OR do sentence tokenisation first
             doc = doc.strip().lower()
             doc = sent_tokenize(doc)
-            doc = np.concatenate([word_tokenize(s) for s in doc])
-            temp = TreebankWordTokenizer().tokenize(doc)
+            temp = np.concatenate([TreebankWordTokenizer().tokenize(s) for s in doc])
             temp = list(filter(lambda x : x not in stop_words, temp))
         
         if args.lemmatiser == 'wordnet':
