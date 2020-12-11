@@ -138,7 +138,7 @@ def get_clean_words(docs):
         
         if args.lemmatiser == 'wordnet':
             lemmatizer = WordNetLemmatizer() 
-            Lemmatisation of all words in temp. 
+            #Lemmatisation of all words in temp. 
             for i in range(len(temp)):
                 current_word = temp[i]
                 temp[i] = lemmatizer.lemmatize(current_word)
