@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser(description='Build Document Graph')
 parser.add_argument('--dataset', type=str, default='20ng',
                     choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr','covid_19_production','pubmed'],
                     help='dataset name')
-parser.add_argument('--tokeniser', type=str, default='ref',
+parser.add_argument('--tokeniser', type=str, default='treebank', # Chosen tokeniser: Treebank + Manual Rules
                     choices=['manual', 'scispacy','ref','nltk','treebank'],
                     help='tokeniser to use')
 parser.add_argument('--stopwords', type=str, default='nltk',
@@ -144,10 +144,8 @@ def get_clean_words(docs):
             temp = list(filter(lambda x : x not in stop_words, temp))
 
         elif args.tokeniser == 'treebank':
-            # Trying to add manual rules to Treebank
+            # CHOSEN: Treebank + Manual Rules
             doc = doc.strip().lower()
-            # doc = re.sub(r'[-]'," ",doc) # splitting hyphenated words
-            doc = re.sub(r'[/]'," ",doc) # splitting words with a slash between
             doc = re.sub(r'[^a-zA-Z0-9  -]',r'',doc) # all special characters can just disappear, except for hyphen
             temp = TreebankWordTokenizer().tokenize(doc)
             temp = list(filter(lambda x : x not in stop_words, temp))
