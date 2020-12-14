@@ -22,7 +22,7 @@ parser.add_argument('--dataset', type=str, default='20ng',
 parser.add_argument('--tokeniser', type=str, default='treebank', # Chosen tokeniser: Treebank + Manual Rules
                     choices=['manual', 'scispacy','ref','nltk','treebank'],
                     help='tokeniser to use')
-parser.add_argument('--stopwords', type=str, default='nltk',
+parser.add_argument('--stopwords', type=str, default='pubmed',
                     choices=['nltk','stanford', 'pubmed','top50','top100','none','pubmednltk'],
                     help='stopwords list')
 parser.add_argument('--lemmatiser', type=str, default='none',
