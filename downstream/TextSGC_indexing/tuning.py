@@ -18,7 +18,7 @@ parser = argparse.ArgumentParser(description="Hyperparameter Tuning")
 parser.add_argument('--dataset', type=str, default='20ng',
                     choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr','covid_19_production','pubmed'],
                     help='dataset name')
-parser.add_argument('--tokeniser', action='store',type=str, default='ref',
+parser.add_argument('--tokeniser', action='store',type=str, default='treebank',
                     help='tokeniser to use')
 # args = parser.parse_known_args() 
 # print(args)                   

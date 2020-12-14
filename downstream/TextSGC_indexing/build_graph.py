@@ -25,7 +25,7 @@ parser.add_argument('--embedding_dim', type=int, default=300,
                     help='word and document embedding size.')
 parser.add_argument('--embedding_path', type=str, default='data/corpus/ohsumed_biobert-base-embeddings.h5',
                     help='path to biobert embedding output.')
-parser.add_argument('--tokeniser', type=str, default='ref',
+parser.add_argument('--tokeniser', type=str, default='treebank',
                     choices=['manual', 'scispacy','ref','nltk','treebank'],
                     help='tokeniser to use')                    
 args = parser.parse_args()
