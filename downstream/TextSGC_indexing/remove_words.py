@@ -195,8 +195,7 @@ def get_clean_words(docs):
             subprocess.run(["java -Xmx1G -jar biolemmatizer-core-1.2-jar-with-dependencies.jar -l -i 'tagged_string.txt' -o 'biolemmatizer_output.txt'"], shell=True)
             df = pd.read_csv('biolemmatizer_output.txt', header=None, sep='\t')
             temp = df[2].to_numpy()
-            clean_words.append(temp)
-
+        print(temp)
         clean_words.append(temp)
     return clean_words
 start = time.time()
@@ -231,7 +230,7 @@ for words in clean_words: # Loops through every single abstract's cleaned words
 
 clean_corpus_str = '\n'.join(clean_docs) # each abstract, cleaned, stopwords removed, tokenised by whitespace. 
 
-f = open('data/corpus/' + dataset + '.' + tokeniser + '.clean.txt', 'w') 
+f = open('data/corpus/' + dataset + '.' + tokeniser + '.' + lemmatiser + '.clean.txt', 'w') 
 f.write(clean_corpus_str)
 f.close()
 
@@ -240,7 +239,7 @@ min_len = 10000
 aver_len = 0
 max_len = 0
 
-f = open('data/corpus/' + dataset + '.' + tokeniser + '.clean.txt', 'r')
+f = open('data/corpus/' + dataset + '.' + tokeniser + '.' + lemmatiser + '.clean.txt', 'r')
 lines = f.readlines()
 for line in lines:
     line = line.strip()
