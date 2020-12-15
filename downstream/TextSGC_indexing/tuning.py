@@ -44,8 +44,8 @@ for i in range(5):
                         nclass=nclass,
                         nhid=0, dropout=0, cuda=args.cuda)
         val_acc, _, _ = train_linear(model, feat_dict, space['weight_decay'], args.dataset=="mr",i)
-        print( 'weight decay ' + str(space['weight_decay']) + '\n' + \
-            'overall accuracy: ' + str(val_acc))
+        #print( 'weight decay ' + str(space['weight_decay']) + '\n' + \
+            #'overall accuracy: ' + str(val_acc))
         # writer.add_scalar("Weight decay/tuning", space['weight_decay'])
         # writer.add_scalar("Accuracy/tuning", val_acc)
         return {'loss': -val_acc, 'status': STATUS_OK}
