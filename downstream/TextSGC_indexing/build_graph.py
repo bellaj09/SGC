@@ -27,12 +27,16 @@ parser.add_argument('--embedding_path', type=str, default='data/corpus/ohsumed_b
                     help='path to biobert embedding output.')
 parser.add_argument('--tokeniser', type=str, default='treebank',
                     choices=['manual', 'scispacy','ref','nltk','treebank'],
-                    help='tokeniser to use')                    
+                    help='tokeniser to use')    
+parser.add_argument('--lemmatiser', type=str, default='none',
+                    choices=['wordnet','bio','none'],
+                    help='lemmatisation algorithm')                   
 args = parser.parse_args()
 
 # build corpus
 dataset = args.dataset
 tokeniser = args.tokeniser
+lemmatiser = args.lemmatiser 
 
 word_embeddings_dim = args.embedding_dim
 word_vector_map = {} # TODO: modify this to use embedding
@@ -70,7 +74,7 @@ with open('data/corpus/' + dataset + '_labels.txt', 'w') as f:
 print("Loaded labels and indices")
 # Get document content, after removed words
 doc_content_list = []
-with open('data/corpus/' + dataset + '.' + tokeniser + '.clean.txt', 'r') as f:
+with open('data/corpus/' + dataset + '.' + tokeniser + '.' + lemmatiser + '.clean.txt', 'r') as f:
     lines = f.readlines()
     doc_content_list = [l.strip() for l in lines]
 
@@ -90,7 +94,7 @@ vocab_size = len(vocab)
 print("Vocabulary size: ", vocab_size)
 
 
-with open('data/corpus/' + dataset + '.' + tokeniser + '_vocab.txt', 'w') as f:
+with open('data/corpus/' + dataset + '.' + tokeniser  + '.' + lemmatiser + '_vocab.txt', 'w') as f:
     vocab_str = '\n'.join(vocab)
     f.write(vocab_str)
 

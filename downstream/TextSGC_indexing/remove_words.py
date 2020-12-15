@@ -35,6 +35,7 @@ args = parser.parse_args()
 
 dataset = args.dataset
 tokeniser = args.tokeniser
+lemmatiser = args.lemmatiser
 
 train_val_ids = []
 test_ids = []
