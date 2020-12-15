@@ -17,7 +17,6 @@ import numpy as np
 import pandas as pd
 import subprocess
 nltk.download('averaged_perceptron_tagger')
-from progress.bar import ChargingBar
 
 parser = argparse.ArgumentParser(description='Build Document Graph')
 parser.add_argument('--dataset', type=str, default='20ng',
@@ -196,7 +195,6 @@ def get_clean_words(docs):
             df = pd.read_csv('biolemmatizer_output.txt', header=None, sep='\t')
             temp = df[2].to_numpy()
             clean_words.append(temp)
-            bar.next()
 
         clean_words.append(temp)
     return clean_words
