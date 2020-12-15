@@ -207,7 +207,7 @@ print("Tokenisation time: {}s".format(end - start))
 
 word_freq = Counter() # initialising as a Counter object
 # total = 0
-for i in train_ids+test_ids+val_ids:
+for i in range(20):#train_ids+test_ids+val_ids:
     doc_words = clean_words[i]
     word_freq.update(doc_words) 
     
