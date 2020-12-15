@@ -187,7 +187,7 @@ def get_clean_words(docs):
                 temp.append(lemmatizer.lemmatize(current_word, current_tag))
        
         elif args.lemmatiser == 'bio':
-            tagged_df = pd.DataFrame(pos_tag(temp))
+            tagged_df = pd.DataFrame(nltk.pos_tag(temp))
             tagged_df.to_csv('tagged_string.txt',sep = '\t',header = False, index = False)
             subprocess.run(["java -Xmx1G -jar biolemmatizer-core-1.2-jar-with-dependencies.jar -l -i 'tagged_string.txt' -o 'biolemmatizer_output.txt'"], shell=True)
             df = pd.read_csv('biolemmatizer_output.txt', header=None, sep='\t')
