@@ -204,9 +204,9 @@ clean_words = get_clean_words(doc_content_list)
 end = time.time()
 print("Tokenisation time: {}s".format(end - start))
 
-f = open('data/corpus/' + dataset + '.' + tokeniser + '.' + lemmatiser + '.clean_temp.txt', 'w') 
-f.write(clean_words)
-f.close()
+# f = open('data/corpus/' + dataset + '.' + tokeniser + '.' + lemmatiser + '.clean_temp.txt', 'w') 
+# f.write(clean_words)
+# f.close()
 
 # clean_words is an array of all the abstracts, each has its words listed, split by whitespace
 
