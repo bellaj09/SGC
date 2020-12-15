@@ -160,23 +160,31 @@ def get_clean_words(docs):
         elif args.tokeniser == 'treebank':
             # CHOSEN: Treebank + Manual Rules
             doc = doc.strip().lower()
-            
+
             doc = re.sub(r'[^a-zA-Z0-9  -]',r'',doc) # all special characters can just disappear, except for hyphen
             temp = TreebankWordTokenizer().tokenize(doc)
             temp = list(filter(lambda x : x not in stop_words, temp))
-
-            # OR do sentence tokenisation first
-            # doc = doc.strip().lower()
-            # doc = sent_tokenize(doc)
-            # temp = np.concatenate([TreebankWordTokenizer().tokenize(s) for s in doc])
-            # temp = list(filter(lambda x : x not in stop_words, temp))
         
         if args.lemmatiser == 'wordnet':
             lemmatizer = WordNetLemmatizer() 
-            #Lemmatisation of all words in temp. 
-            for i in range(len(temp)):
-                current_word = temp[i]
-                temp[i] = lemmatizer.lemmatize(current_word)
+            def get_wordnet_pos(treebank_tag):  # Convert Treebank POS tags to WordNet
+                if treebank_tag.startswith('J'):
+                    return wn.ADJ
+                elif treebank_tag.startswith('V'):
+                    return wn.VERB
+                elif treebank_tag.startswith('N'):
+                    return wn.NOUN
+                elif treebank_tag.startswith('R'):
+                    return wn.ADV
+                else:
+                    return wn.NOUN
+            temp_pos = nltk.pos_tag(temp)
+            temp = []
+            for i in range(len(temp_pos)):
+                current_word = temp_pos[i][0]
+                current_tag = get_wordnet_pos(temp_pos[i][1])
+                temp.append(lemmatizer.lemmatize(current_word, current_tag))
+       
         elif args.lemmatiser == 'bio':
             tagged_df = pd.DataFrame(pos_tag(temp))
             tagged_df.to_csv('tagged_string.txt',sep = '\t',header = False, index = False)
