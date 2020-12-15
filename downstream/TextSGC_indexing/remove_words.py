@@ -204,6 +204,9 @@ clean_words = get_clean_words(doc_content_list)
 end = time.time()
 print("Tokenisation time: {}s".format(end - start))
 
+f = open('data/corpus/' + dataset + '.' + tokeniser + '.' + lemmatiser + '.clean_temp.txt', 'w') 
+f.write(clean_words)
+f.close()
 
 # clean_words is an array of all the abstracts, each has its words listed, split by whitespace
 
@@ -225,7 +228,7 @@ vocab = set(vocab[:cutoff])
 
 clean_docs = []
 for words in clean_words: # Loops through every single abstract's cleaned words
-    closed_words = [w for w in words if w in vocab ] # an array of the words in each abstract, if they are in the vocab of words that appear at least 5 times.
+    closed_words = [str(w) for w in words if w in vocab ] # an array of the words in each abstract, if they are in the vocab of words that appear at least 5 times.
     doc_str = ' '.join(closed_words)
     clean_docs.append(doc_str)
 
