@@ -15,6 +15,9 @@ import spacy
 import re
 import numpy as np
 import pandas as pd
+import subprocess
+nltk.download('averaged_perceptron_tagger')
+from progress.bar import ChargingBar
 
 parser = argparse.ArgumentParser(description='Build Document Graph')
 parser.add_argument('--dataset', type=str, default='20ng',
