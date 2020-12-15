@@ -131,7 +131,7 @@ print('Stop Words: ',stop_words)
 def get_clean_words(docs):
     clean_words = []
     
-    progress_bar = tqdm(docs[:20])
+    progress_bar = tqdm(docs)
     progress_bar.set_postfix_str("tokenising documents")
 
     if args.tokeniser == "scispacy": # Load model once if using scispacy
@@ -195,7 +195,9 @@ def get_clean_words(docs):
             subprocess.run(["java -Xmx1G -jar biolemmatizer-core-1.2-jar-with-dependencies.jar -l -i 'tagged_string.txt' -o 'biolemmatizer_output.txt'"], shell=True)
             df = pd.read_csv('biolemmatizer_output.txt', header=None, sep='\t')
             temp = df[2].to_list()
+        
         clean_words.append(temp)
+
     return clean_words
 start = time.time()
 clean_words = get_clean_words(doc_content_list) 
@@ -207,7 +209,7 @@ print("Tokenisation time: {}s".format(end - start))
 
 word_freq = Counter() # initialising as a Counter object
 # total = 0
-for i in range(20):#train_ids+test_ids+val_ids:
+for i in train_ids+test_ids+val_ids:
     doc_words = clean_words[i]
     word_freq.update(doc_words) 
     
