@@ -22,7 +22,7 @@ parser.add_argument('--dataset', type=str, default='20ng',
 parser.add_argument('--tokeniser', type=str, default='treebank', # Chosen tokeniser: Treebank + Manual Rules
                     choices=['manual', 'scispacy','ref','nltk','treebank'],
                     help='tokeniser to use')
-parser.add_argument('--stopwords', type=str, default='pubmed',
+parser.add_argument('--stopwords', type=str, default='stanford',
                     choices=['nltk','stanford', 'pubmed','top50','top100','none','pubmednltk'],
                     help='stopwords list')
 parser.add_argument('--lemmatiser', type=str, default='none',
@@ -160,6 +160,7 @@ def get_clean_words(docs):
         elif args.tokeniser == 'treebank':
             # CHOSEN: Treebank + Manual Rules
             doc = doc.strip().lower()
+            
             doc = re.sub(r'[^a-zA-Z0-9  -]',r'',doc) # all special characters can just disappear, except for hyphen
             temp = TreebankWordTokenizer().tokenize(doc)
             temp = list(filter(lambda x : x not in stop_words, temp))
