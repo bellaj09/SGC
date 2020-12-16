@@ -189,20 +189,12 @@ def get_clean_words(docs):
                 current_tag = get_wordnet_pos(temp_pos[i][1])
                 temp.append(lemmatizer.lemmatize(current_word, current_tag))
        
-        elif args.lemmatiser == 'bio':
-            pos_set = []
-            doc_lens = []
-            for doc in doc_arrays: 
-                doc_lens.append(len(doc)) # number of words in that doc
-                for tags in nltk.pos_tag(doc):
-                    pos_set.append(tags)
-            
-
-            tagged_df = pd.DataFrame(nltk.pos_tag(temp))
-            tagged_df.to_csv('tagged_string.txt',sep = '\t',header = False, index = False)
-            subprocess.run(["java -Xmx1G -jar biolemmatizer-core-1.2-jar-with-dependencies.jar -l -i 'tagged_string.txt' -o 'biolemmatizer_output.txt'"], shell=True)
-            df = pd.read_csv('biolemmatizer_output.txt', header=None, sep='\t')
-            temp = df[2].to_list()
+        # elif args.lemmatiser == 'bio':
+        #     tagged_df = pd.DataFrame(nltk.pos_tag(temp))
+        #     tagged_df.to_csv('tagged_string.txt',sep = '\t',header = False, index = False)
+        #     subprocess.run(["java -Xmx1G -jar biolemmatizer-core-1.2-jar-with-dependencies.jar -l -i 'tagged_string.txt' -o 'biolemmatizer_output.txt'"], shell=True)
+        #     df = pd.read_csv('biolemmatizer_output.txt', header=None, sep='\t')
+        #     temp = df[2].to_list()
         
         clean_words.append(temp)
 
