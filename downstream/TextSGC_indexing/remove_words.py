@@ -204,8 +204,8 @@ def get_clean_words(docs):
         # Loop through clean_words, POS tag and biolemmatize
         for doc in clean_words: 
             doc_lens.append(len(doc)) # track number of tokens in each doc
-                for tags in nltk.pos_tag(doc):
-                    pos_set.append(tags) # compile one big list of all tagged tokens
+            for tags in nltk.pos_tag(doc):
+                pos_set.append(tags) # compile one big list of all tagged tokens
         tagged_df = pd.DataFrame(pos_set)
         tagged_df.to_csv('tagged_string.txt',sep = '\t',header = False, index = False)
         subprocess.run(["java -Xmx1G -jar biolemmatizer-core-1.2-jar-with-dependencies.jar -l -i 'tagged_string.txt' -o 'biolemmatizer_output.txt'"], shell=True)
