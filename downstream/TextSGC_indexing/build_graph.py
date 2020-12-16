@@ -30,13 +30,16 @@ parser.add_argument('--tokeniser', type=str, default='treebank',
                     help='tokeniser to use')    
 parser.add_argument('--lemmatiser', type=str, default='none',
                     choices=['wordnet','bio','none'],
-                    help='lemmatisation algorithm')                   
+                    help='lemmatisation algorithm')
+parser.add_argument('--win_size', type=int, default=20,
+                    help='context window size for PMI scoring')                        
 args = parser.parse_args()
 
 # build corpus
 dataset = args.dataset
 tokeniser = args.tokeniser
-lemmatiser = args.lemmatiser 
+lemmatiser = args.lemmatiser
+win_size = args.win_size 
 
 word_embeddings_dim = args.embedding_dim
 word_vector_map = {} # TODO: modify this to use embedding
@@ -168,7 +171,7 @@ def create_window(seq, n=2):
         yield result
 
 # word co-occurence with context windows
-def construct_context_windows(ids, doc_words_list, window_size=20):
+def construct_context_windows(ids, doc_words_list, window_size=win_size):
     windows = []
     for id in ids:
         doc_words = doc_content_list[id]
