@@ -59,7 +59,7 @@ model = BertForSequenceClassification.from_pretrained("dmis-lab/biobert-large-ca
 model.to(device)
 model.train()
 
-train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
+train_loader = DataLoader(train_dataset, batch_size=8, shuffle=True)
 
 optim = AdamW(model.parameters(), lr=5e-5)
 
