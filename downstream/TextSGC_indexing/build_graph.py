@@ -28,7 +28,7 @@ parser.add_argument('--embedding_path', type=str, default='data/corpus/ohsumed_b
 parser.add_argument('--tokeniser', type=str, default='treebank',
                     choices=['manual', 'scispacy','ref','nltk','treebank'],
                     help='tokeniser to use')    
-parser.add_argument('--lemmatiser', type=str, default='none',
+parser.add_argument('--lemmatiser', type=str, default='bio',
                     choices=['wordnet','bio','none'],
                     help='lemmatisation algorithm')
 parser.add_argument('--win_size', type=int, default=20,
