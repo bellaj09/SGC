@@ -3,6 +3,7 @@ import pandas as pd
 import re
 from sklearn.model_selection import train_test_split
 import torch
+from tqdm import tqdm
 
 tokenizer = BertTokenizerFast.from_pretrained('dmis-lab/biobert-large-cased-v1.1')
 # Read Ohsumed dataset
@@ -65,7 +66,9 @@ optim = AdamW(model.parameters(), lr=5e-5)
 
 for epoch in range(3):
     print('epoch',epoch)
-    for batch in train_loader:
+    progress_bar = tqdm(train_loader)
+    progress_bar.set_postfix_str("finetuning in batches")
+    for batch in progress_bar:
         optim.zero_grad()
         input_ids = batch['input_ids'].to(device)
         attention_mask = batch['attention_mask'].to(device)
@@ -76,4 +79,4 @@ for epoch in range(3):
         optim.step()
 
 model.eval()
-torch.save(model,'corpus/')
+torch.save(model,'corpus/biobert_finetuned.pth')
