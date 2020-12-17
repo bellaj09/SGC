@@ -59,11 +59,12 @@ model = BertForSequenceClassification.from_pretrained("dmis-lab/biobert-large-ca
 model.to(device)
 model.train()
 
-train_loader = DataLoader(train_dataset, batch_size=8, shuffle=True)
+train_loader = DataLoader(train_dataset, batch_size=2, shuffle=True)
 
 optim = AdamW(model.parameters(), lr=5e-5)
 
 for epoch in range(3):
+    print('epoch',epoch)
     for batch in train_loader:
         optim.zero_grad()
         input_ids = batch['input_ids'].to(device)
