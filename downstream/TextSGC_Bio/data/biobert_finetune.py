@@ -57,6 +57,11 @@ for i in ohsumed_df.index:
     all_texts.append(text)
     all_labels.append(ohsumed_df.loc[i,2])
 
+# Setting up GPU environment
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+n_gpu = torch.cuda.device_count()
+print('number gpus', n_gpu)
+
 # Set text input embedding
 full_input_ids = []
 full_input_masks = []
@@ -241,12 +246,12 @@ tokenizer.save_vocabulary(save_address)
 model = AutoModelForSequenceClassification.from_pretrained(save_address)
 
 # Set model to GPU
-model.to(device);
+model.to(device)
 if n_gpu >1:
     model = torch.nn.DataParallel(model)
 
 ## Evaluate model
-model.eval();
+model.eval()
 
 # Set acc funtion
 def accuracy(out, labels):
