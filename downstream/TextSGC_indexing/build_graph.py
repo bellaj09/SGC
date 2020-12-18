@@ -39,7 +39,7 @@ tokeniser = args.tokeniser
 lemmatiser = args.lemmatiser
 win_size = args.win_size 
 
-args.embedding_path = 'data/corpus/{}_biobert-base-embeddings.h5'.format(dataset)
+args.embedding_path = '../TextSGC_Bio/data/corpus/{}_biobert-large-embeddings.h5'.format(dataset)
 word_embeddings_dim = args.embedding_dim
 word_vector_map = h5py.File(args.embedding_path, 'r') # TODO: modify this to use embedding
 
