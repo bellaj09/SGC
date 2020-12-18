@@ -154,7 +154,7 @@ valid_dataloader = DataLoader(valid_data, sampler=valid_sampler, batch_size=batc
 # Folder contains confg(json) and weight(bin) files
 #model = BertForSequenceClassification.from_pretrained('dmis-lab/biobert-large-cased-v1.1',num_labels=23)
 config = AutoConfig.from_pretrained('dmis-lab/biobert-large-cased-v1.1')
-model = AutoModelForSequenceClassification.from_pretrained('dmis-lab/biobert-large-cased-v1.1', config=config, num_labels=23)
+model = AutoModelForSequenceClassification.from_pretrained('dmis-lab/biobert-large-cased-v1.1', config=config)
 model.to(device)
 
 # Add multi GPU support
@@ -238,7 +238,7 @@ model_to_save.config.to_json_file(output_config_file)
 tokenizer.save_vocabulary(save_address)
 
 ## Load the trained model
-model = BertForSequenceClassification.from_pretrained(save_address,num_labels=23)
+model = AutoModelForSequenceClassification.from_pretrained(save_address)
 
 # Set model to GPU
 model.to(device);
