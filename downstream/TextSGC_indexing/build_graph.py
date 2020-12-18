@@ -218,6 +218,7 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
                   (1.0 * word_freq_i * word_freq_j/(num_window * num_window)))
         # if pmi <= 0:
         #     continue
+        similarity = similarity + pmi
         row.append(word_id_map[i])
         col.append(word_id_map[j])
         weight.append(similarity) # just using cosine similarities for now
