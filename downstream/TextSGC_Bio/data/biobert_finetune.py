@@ -2,7 +2,7 @@ import argparse
 from transformers import (
     AutoConfig,
     AutoTokenizer,
-    AutoModel,
+    AutoModelForSequenceClassification,
     HfArgumentParser,
     set_seed,
     BertTokenizer
@@ -154,7 +154,7 @@ valid_dataloader = DataLoader(valid_data, sampler=valid_sampler, batch_size=batc
 # Folder contains confg(json) and weight(bin) files
 #model = BertForSequenceClassification.from_pretrained('dmis-lab/biobert-large-cased-v1.1',num_labels=23)
 config = AutoConfig.from_pretrained('dmis-lab/biobert-large-cased-v1.1')
-model = AutoModel.from_pretrained('dmis-lab/biobert-large-cased-v1.1', config=config, num_labels=23)
+model = AutoModelForSequenceClassification.from_pretrained('dmis-lab/biobert-large-cased-v1.1', config=config, num_labels=23)
 model.to(device)
 
 # Add multi GPU support
