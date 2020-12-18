@@ -35,7 +35,7 @@ import os
 #     doc_content_list = [l.strip() for l in lines]
 
 max_len = 506
-dataset = args.dataset
+#dataset = args.dataset
 
 #tokenizer = BertTokenizer.from_pretrained('dmis-lab/biobert-large-cased-v1.1')
 tokenizer = AutoTokenizer.from_pretrained('dmis-lab/biobert-large-cased-v1.1')
