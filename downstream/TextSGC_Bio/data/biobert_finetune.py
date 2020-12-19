@@ -3,6 +3,7 @@ from transformers import (
     AutoConfig,
     AutoTokenizer,
     AutoModelForSequenceClassification,
+    BertForSequenceClassification,
     HfArgumentParser,
     set_seed,
     BertTokenizer
@@ -164,7 +165,7 @@ valid_dataloader = DataLoader(valid_data, sampler=valid_sampler, batch_size=batc
 # Folder contains confg(json) and weight(bin) files
 #model = BertForSequenceClassification.from_pretrained('dmis-lab/biobert-large-cased-v1.1',num_labels=23)
 config = AutoConfig.from_pretrained('dmis-lab/biobert-large-cased-v1.1')
-model = AutoModelForSequenceClassification.from_pretrained('dmis-lab/biobert-large-cased-v1.1', config=config)
+model = BertForSequenceClassification.from_pretrained('dmis-lab/biobert-large-cased-v1.1', config=config, num_labels=23)
 model.to(device)
 
 # Add multi GPU support
@@ -248,7 +249,7 @@ model_to_save.config.to_json_file(output_config_file)
 tokenizer.save_vocabulary(save_address)
 
 ## Load the trained model
-model = AutoModelForSequenceClassification.from_pretrained(save_address)
+model = BertForSequenceClassification.from_pretrained(save_address,num_labels=23)
 
 # Set model to GPU
 model.to(device)
