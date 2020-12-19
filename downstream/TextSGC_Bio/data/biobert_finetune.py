@@ -64,3 +64,16 @@ print('Tokenized: ', tokenizer.tokenize(all_texts[0]))
 
 # Print the sentence mapped to token ids.
 print('Token IDs: ', tokenizer.convert_tokens_to_ids(tokenizer.tokenize(all_texts[0])))
+
+max_len = 0
+
+# For every sentence...
+for sent in all_texts:
+
+    # Tokenize the text and add `[CLS]` and `[SEP]` tokens.
+    input_ids = tokenizer.encode(sent, add_special_tokens=True)
+
+    # Update the maximum sentence length.
+    max_len = max(max_len, len(input_ids))
+
+print('Max sentence length: ', max_len)
