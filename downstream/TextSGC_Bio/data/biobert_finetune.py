@@ -169,8 +169,8 @@ model = BertForSequenceClassification.from_pretrained('dmis-lab/biobert-large-ca
 model.to(device)
 
 # Add multi GPU support
-if n_gpu >1:
-    model = torch.nn.DataParallel(model)
+# if n_gpu >1:
+#     model = torch.nn.DataParallel(model)
 
 # Set epoch and grad max num
 epochs = 3
