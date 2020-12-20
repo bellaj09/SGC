@@ -232,8 +232,8 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
         if i in word_vector_map and j in word_vector_map:
             # i_i = words_em.index(i)
             # j_i = words_em.index(j)
-            vector_i = A.index(np.array(word_vector_map[i]['embedding'][:]))
-            vector_j = A.index(np.array(word_vector_map[j]['embedding'][:]))
+            vector_i = np.array(word_vector_map[i]['embedding'][:])
+            vector_j = np.array(word_vector_map[j]['embedding'][:])
             similarity = 1.0 - cosine(vector_i, vector_j)
             #similarity = similarities[i_i,j_i]
         word_freq_i = word_window_freq[i]
