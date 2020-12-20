@@ -248,7 +248,7 @@ training_stats = []
 total_t0 = time.time()
 
 del all_texts
-torch.cuda_empty_cache()
+torch.cuda.empty_cache()
 
 # For each epoch...
 for epoch_i in range(0, epochs):
