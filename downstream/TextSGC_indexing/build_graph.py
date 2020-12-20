@@ -208,7 +208,7 @@ progress_bar = tqdm(word_vector_map)
 progress_bar.set_postfix_str("collecting embeddings")
 for word in progress_bar:
     A.append(np.array(word_vector_map[word]['embedding'][:]))
-print('A shape:', A.shape)
+#print('A shape:', A.shape)
 A_sparse = sparse.csr_matrix(A)
 print('A sparse shape:', A_sparse.shape)
 similarities = cosine_similarity(A_sparse)
