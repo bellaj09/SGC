@@ -143,7 +143,7 @@ from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 # The DataLoader needs to know our batch size for training, so we specify it 
 # here. For fine-tuning BERT on a specific task, the authors recommend a batch 
 # size of 16 or 32.
-batch_size = 4
+batch_size = 2
 
 # Create the DataLoaders for our training and validation sets.
 # We'll take training samples in random order. 
@@ -441,3 +441,40 @@ print("")
 print("Training complete!")
 
 print("Total training took {:} (h:mm:ss)".format(format_time(time.time()-total_t0)))
+
+# Summary of the training process
+
+# Display floats with two decimal places.
+pd.set_option('precision', 2)
+
+# Create a DataFrame from our training statistics.
+df_stats = pd.DataFrame(data=training_stats)
+
+# Use the 'epoch' as the row index.
+df_stats = df_stats.set_index('epoch')
+
+# A hack to force the column headers to wrap.
+#df = df.style.set_table_styles([dict(selector="th",props=[('max-width', '70px')])])
+
+# Display the table.
+df_stats
+
+# Saving best-practices: if you use defaults names for the model, you can reload it using from_pretrained()
+
+output_dir = './model_save/'
+
+# Create output directory if needed
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
+print("Saving model to %s" % output_dir)
+
+# Save a trained model, configuration and tokenizer using `save_pretrained()`.
+# They can then be reloaded using `from_pretrained()`
+model_to_save = model.module if hasattr(model, 'module') else model  # Take care of distributed/parallel training
+model_to_save.save_pretrained(output_dir)
+tokenizer.save_pretrained(output_dir)
+
+# Good practice: save your training arguments together with the trained model
+torch.save(args, os.path.join(output_dir, 'training_args.bin'))
+
