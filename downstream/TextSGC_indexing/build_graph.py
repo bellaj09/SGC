@@ -203,7 +203,7 @@ def count_word_pair_count(windows):
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy import sparse
 
-A = np.array(word_vector_map[:]['embedding'][:]) # all words
+A = np.array(word_vector_map[:,'embedding',:) # all words
 print('A shape:', A.shape)
 A_sparse = sparse.csr_matrix(A)
 print('A sparse shape:', A_sparse.shape)
