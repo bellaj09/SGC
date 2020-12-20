@@ -39,7 +39,7 @@ tokeniser = args.tokeniser
 lemmatiser = args.lemmatiser
 win_size = args.win_size 
 
-args.embedding_path = 'data/corpus/{}_ft-biobert-large_embeddings.h5'.format(dataset) 
+args.embedding_path = 'data/corpus/{}_ft-biobertlarge_embeddings.h5'.format(dataset) 
 word_embeddings_dim = args.embedding_dim
 word_vector_map = h5py.File(args.embedding_path, 'r') # TODO: modify this to use embedding
 
@@ -220,9 +220,9 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
         #     continue
         if pmi >= 0:
             similarity = similarity + pmi
-        row.append(word_id_map[i])
-        col.append(word_id_map[j])
-        weight.append(similarity) # just using cosine similarities for now
+            row.append(word_id_map[i])
+            col.append(word_id_map[j])
+            weight.append(similarity) # just using cosine similarities for now
     return row, col, weight
 
 def calc_word_doc_freq(ids, doc_content_list):
