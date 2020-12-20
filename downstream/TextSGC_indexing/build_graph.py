@@ -9,7 +9,7 @@ from utils import loadWord2Vec, clean_str
 from math import log
 from sklearn import svm
 from nltk.corpus import wordnet as wn
-from sklearn import feature_extraction
+from sklearn import feature_extraction, feature_selection
 #from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.spatial.distance import cosine
 from tqdm import tqdm
