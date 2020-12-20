@@ -143,7 +143,7 @@ from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 # The DataLoader needs to know our batch size for training, so we specify it 
 # here. For fine-tuning BERT on a specific task, the authors recommend a batch 
 # size of 16 or 32.
-batch_size = 8
+batch_size = 2
 
 # Create the DataLoaders for our training and validation sets.
 # We'll take training samples in random order. 
@@ -246,6 +246,9 @@ training_stats = []
 
 # Measure the total training time for the whole run.
 total_t0 = time.time()
+
+del all_texts
+torch.cuda_empty_cache()
 
 # For each epoch...
 for epoch_i in range(0, epochs):
