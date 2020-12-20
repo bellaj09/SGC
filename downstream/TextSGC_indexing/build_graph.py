@@ -92,7 +92,7 @@ vectorizer = feature_extraction.text.TfidfVectorizer(max_features=15000, ngram_r
 vectorizer.fit(doc_content_list)
 X_train = vectorizer.transform(doc_content_list)
 X_names = vectorizer.get_feature_names()
-p_value_limit = 0.90
+p_value_limit = 0.80
 dtf_features = pd.DataFrame()
 
 for cat in np.unique(y):
