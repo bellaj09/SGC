@@ -207,7 +207,7 @@ A = []
 progress_bar = tqdm(word_vector_map)
 progress_bar.set_postfix_str("collecting embeddings")
 for word in progress_bar:
-    A.append(word_vector_map[word]['embedding'][:])
+    A.append(np.array(word_vector_map[word]['embedding'][:]))
 print('A shape:', A.shape)
 A_sparse = sparse.csr_matrix(A)
 print('A sparse shape:', A_sparse.shape)
