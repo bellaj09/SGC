@@ -39,7 +39,7 @@ tokeniser = args.tokeniser
 lemmatiser = args.lemmatiser
 win_size = args.win_size 
 
-args.embedding_path = 'data/corpus/{}_biobert-large_embeddings.h5'.format(dataset) 
+args.embedding_path = 'data/corpus/{}_ft-biobert-large_embeddings.h5'.format(dataset) 
 word_embeddings_dim = args.embedding_dim
 word_vector_map = h5py.File(args.embedding_path, 'r') # TODO: modify this to use embedding
 
@@ -232,7 +232,7 @@ def calc_word_doc_freq(ids, doc_content_list):
     for doc_id in ids:
         doc_words = doc_content_list[doc_id]
         words = set(doc_words.split())
-        word_doc_freq.update(words)
+        word_doc_freq.update(words) # counter becomes word : how many docs it is in
     return word_doc_freq
 
 def calc_doc_word_freq(ids, doc_content_list):
@@ -256,9 +256,9 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
         for word in words:
             word_id = word_id_map[word]
             key = (doc_id, word_id)
-            freq = doc_word_freq[key]
+            freq = doc_word_freq[key] # how many times the word appears in each document
             idf = log(1.0 * len(ids) /
-                      word_doc_freq[word])
+                      word_doc_freq[word]) # log( no. docs / no. docs containing the word )
             w = freq*idf
             if phase == "B":
                 row.append(doc_id)
@@ -295,8 +295,8 @@ D = build_word_word_graph(len(windows), word_id_map, word_window_freq, word_pair
 
 doc_word_freq = calc_doc_word_freq(ids, doc_content_list)
 word_doc_freq = calc_word_doc_freq(ids, doc_content_list)
-B = build_doc_word_graph(ids, doc_content_list, doc_word_freq, word_doc_freq, phase="B")
-C = build_doc_word_graph(ids, doc_content_list, doc_word_freq, word_doc_freq, phase="C")
+B = build_doc_word_graph(ids, doc_content_list, doc_word_freq, word_doc_freq, phase="B") # docs in rows
+C = build_doc_word_graph(ids, doc_content_list, doc_word_freq, word_doc_freq, phase="C") # words in rows
 
 node_size = len(vocab)+len(train_val_ids)+len(test_ids)
 export_graph(concat_graph(B, C, D), node_size, phase="BCD")

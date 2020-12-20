@@ -1,3 +1,6 @@
+import torch
+torch.cuda.empty_cache()
+
 import argparse
 from transformers import (
     AutoConfig,
@@ -12,7 +15,6 @@ from transformers import (
 import pandas as pd 
 import re
 from sklearn.model_selection import train_test_split
-import torch
 from torch.optim import Adam
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler, random_split
 from tqdm import tqdm, trange
@@ -55,6 +57,8 @@ all_labels = []
 for i in ohsumed_df.index:
     f = open(ohsumed_df.loc[i,0],'r')
     text = f.read()
+    text = text.strip().lower()
+    text = re.sub(r'[^a-zA-Z  -]',r'',text) # all numbers, punctuation and special characters can just disappear, except for hyphen
     all_texts.append(text)
     all_labels.append(ohsumed_df.loc[i,2])
 
@@ -143,7 +147,7 @@ from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 # The DataLoader needs to know our batch size for training, so we specify it 
 # here. For fine-tuning BERT on a specific task, the authors recommend a batch 
 # size of 16 or 32.
-batch_size = 2
+batch_size = 8
 
 # Create the DataLoaders for our training and validation sets.
 # We'll take training samples in random order. 
@@ -247,7 +251,13 @@ training_stats = []
 # Measure the total training time for the whole run.
 total_t0 = time.time()
 
+# Deleting unused tensors to free memory before training
+del input_ids
+del attention_masks
+del labels
 del all_texts
+del all_labels
+del ohsumed_df
 torch.cuda.empty_cache()
 
 # For each epoch...
@@ -461,7 +471,7 @@ df_stats
 
 # Saving best-practices: if you use defaults names for the model, you can reload it using from_pretrained()
 
-output_dir = './model_save/'
+output_dir = './tokenised_model_save/'
 
 # Create output directory if needed
 if not os.path.exists(output_dir):
