@@ -28,7 +28,7 @@ parser.add_argument('--degree', type=int, default=2,
 parser.add_argument('--tuned', action='store_true', help='use tuned hyperparams')
 parser.add_argument('--preprocessed', action='store_true',
                     help='use preprocessed data')
-parser.add_argument('--tokeniser', action='store',type=str, default='ref',
+parser.add_argument('--tokeniser', action='store',type=str, default='treebank',
                     choices=['manual', 'scispacy','ref','nltk','treebank'],
                     help='tokeniser to use')
 args = parser.parse_args()

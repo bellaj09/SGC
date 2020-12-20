@@ -39,7 +39,7 @@ tokeniser = args.tokeniser
 lemmatiser = args.lemmatiser
 win_size = args.win_size 
 
-args.embedding_path = 'data/corpus/{}_ft-biobertlarge_embeddings.h5'.format(dataset) 
+args.embedding_path = 'data/corpus/{}_ft-biobert-large_embeddings.h5'.format(dataset) 
 word_embeddings_dim = args.embedding_dim
 word_vector_map = h5py.File(args.embedding_path, 'r') # TODO: modify this to use embedding
 
@@ -198,7 +198,17 @@ def count_word_pair_count(windows):
         word_pairs = list(itertools.permutations(window, 2))
         word_pair_count.update(word_pairs)
     return word_pair_count
-  
+
+# Reduce word vector map to np array of the embeddings
+from sklearn.metrics.pairwise import cosine_similarity
+from scipy import sparse
+
+A = np.array(word_vector_map[:]['embedding'][:]) # all words
+print('A shape:', A.shape)
+A_sparse = sparse.csr_matrix(A)
+print('A sparse shape:', A_sparse.shape)
+similarities = cosine_similarity(A_sparse)
+
 def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_count):
     row = []
     col = []
@@ -209,20 +219,21 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
     for pair, count in progress_bar:
         i, j = pair
         if i in word_vector_map and j in word_vector_map:
-            vector_i = np.array(word_vector_map[i]['embedding'][:])
-            vector_j = np.array(word_vector_map[j]['embedding'][:])
-            similarity = 1.0 - cosine(vector_i, vector_j)
+            vector_i = A.index(np.array(word_vector_map[i]['embedding'][:]))
+            vector_j = A.index(np.array(word_vector_map[j]['embedding'][:]))
+            #similarity = 1.0 - cosine(vector_i, vector_j)
+            similarity = similarities[vector_i,vector_j]
         word_freq_i = word_window_freq[i]
         word_freq_j = word_window_freq[j]
         pmi = log((1.0 * count / num_window) /
                   (1.0 * word_freq_i * word_freq_j/(num_window * num_window)))
         # if pmi <= 0:
         #     continue
-        if pmi >= 0:
+        if pmi >= 0: # only append weights if words frequently co-occur
             similarity = similarity + pmi
             row.append(word_id_map[i])
             col.append(word_id_map[j])
-            weight.append(similarity) # just using cosine similarities for now
+            weight.append(similarity)
     return row, col, weight
 
 def calc_word_doc_freq(ids, doc_content_list):
