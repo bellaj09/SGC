@@ -307,7 +307,7 @@ def calc_doc_word_freq(ids, doc_content_list):
     for doc_id in ids:
         doc_words = doc_content_list[doc_id]
         words = doc_words.split()
-        word_ids = [word_id_map[word] for word in words]
+        word_ids = [word_id_map[word] for word in words if word in vocab]
         doc_word_pairs = zip([doc_id for _ in word_ids], word_ids)
         doc_word_freq.update(doc_word_pairs)
     return doc_word_freq
@@ -321,21 +321,22 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
         words = set(doc_words.split())
         doc_word_set = set()
         for word in words:
-            word_id = word_id_map[word]
-            key = (doc_id, word_id)
-            freq = doc_word_freq[key] # how many times the word appears in each document
-            idf = log(1.0 * len(ids) /
-                      word_doc_freq[word]) # log( no. docs / no. docs containing the word )
-            w = freq*idf
-            if phase == "B":
-                row.append(doc_id)
-                col.append(word_id)
-                weight.append(w)
-            elif phase == "C":
-                row.append(word_id)
-                col.append(doc_id)
-                weight.append(w)
-            else: raise ValueError("wrong phase")
+            if word in vocab:
+                word_id = word_id_map[word]
+                key = (doc_id, word_id)
+                freq = doc_word_freq[key] # how many times the word appears in each document
+                idf = log(1.0 * len(ids) /
+                        word_doc_freq[word]) # log( no. docs / no. docs containing the word )
+                w = freq*idf
+                if phase == "B":
+                    row.append(doc_id)
+                    col.append(word_id)
+                    weight.append(w)
+                elif phase == "C":
+                    row.append(word_id)
+                    col.append(doc_id)
+                    weight.append(w)
+                else: raise ValueError("wrong phase")
     return row, col, weight
 
 def concat_graph(*args):
