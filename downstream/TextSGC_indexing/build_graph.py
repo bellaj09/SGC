@@ -203,21 +203,22 @@ def count_word_pair_count(windows):
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy import sparse
 
-A = []
-words_em = []
-progress_bar = tqdm(word_vector_map)
-progress_bar.set_postfix_str("collecting embeddings")
-for word in progress_bar:
-    A.append(np.array(word_vector_map[word]['embedding'][:]))
-    words_em.append(word)
-#print('A shape:', A.shape)
-A_sparse = sparse.csr_matrix(A)
-print('A sparse shape:', A_sparse.shape)
-import time
-start = time.perf_counter()
-similarities = cosine_similarity(A_sparse)
-calc_time = time.perf_counter()-start
-print('calculation time: ', calc_time)
+# A = []
+# words_em = []
+# progress_bar = tqdm(word_vector_map)
+# progress_bar.set_postfix_str("collecting embeddings")
+# for word in progress_bar:
+#     A.append(np.array(word_vector_map[word]['embedding'][:]))
+#     words_em.append(word)
+# #print('A shape:', A.shape)
+# A_sparse = sparse.csr_matrix(A)
+# print('A sparse shape:', A_sparse.shape)
+# import time
+# start = time.perf_counter()
+# similarities = cosine_similarity(A_sparse)
+# print('shape of similarities matrix: ', similarities.shape)
+# calc_time = time.perf_counter()-start
+# print('calculation time: ', calc_time)
 
 def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_count):
     row = []
@@ -229,12 +230,12 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
     for pair, count in progress_bar:
         i, j = pair
         if i in word_vector_map and j in word_vector_map:
-            i_i = words_em.index(i)
-            j_i = words_em.index(j)
-            # vector_i = A.index(np.array(word_vector_map[i]['embedding'][:]))
-            # vector_j = A.index(np.array(word_vector_map[j]['embedding'][:]))
-            #similarity = 1.0 - cosine(vector_i, vector_j)
-            similarity = similarities[i_i,j_i]
+            # i_i = words_em.index(i)
+            # j_i = words_em.index(j)
+            vector_i = A.index(np.array(word_vector_map[i]['embedding'][:]))
+            vector_j = A.index(np.array(word_vector_map[j]['embedding'][:]))
+            similarity = 1.0 - cosine(vector_i, vector_j)
+            #similarity = similarities[i_i,j_i]
         word_freq_i = word_window_freq[i]
         word_freq_j = word_window_freq[j]
         pmi = log((1.0 * count / num_window) /
