@@ -39,9 +39,9 @@ tokeniser = args.tokeniser
 lemmatiser = args.lemmatiser
 win_size = args.win_size 
 
-#args.embedding_path = 'data/corpus/{}_ft-biobert-large_embeddings.h5'.format(dataset) 
+args.embedding_path = 'data/corpus/{}_ft-biobert-large_embeddings.h5'.format(dataset) 
 word_embeddings_dim = args.embedding_dim
-#word_vector_map = h5py.File(args.embedding_path, 'r') # TODO: modify this to use embedding
+word_vector_map = h5py.File(args.embedding_path, 'r') # TODO: modify this to use embedding
 
 doc_name_list = []
 train_val_ids = []
