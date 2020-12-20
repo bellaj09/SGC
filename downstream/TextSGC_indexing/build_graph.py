@@ -27,7 +27,7 @@ parser.add_argument('--tokeniser', type=str, default='treebank',
 parser.add_argument('--lemmatiser', type=str, default='bio',
                     choices=['wordnet','bio','none'],
                     help='lemmatisation algorithm')
-parser.add_argument('--win_size', type=int, default=20,
+parser.add_argument('--win_size', type=int, default=30,
                     help='context window size for PMI scoring')
 parser.add_argument('--embedding_dim', type=int, default=300,
                     help='word and document embedding size.')                        
@@ -38,10 +38,6 @@ dataset = args.dataset
 tokeniser = args.tokeniser
 lemmatiser = args.lemmatiser
 win_size = args.win_size 
-
-args.embedding_path = 'data/corpus/{}_ft-biobert-large_embeddings.h5'.format(dataset) 
-word_embeddings_dim = args.embedding_dim
-word_vector_map = h5py.File(args.embedding_path, 'r') # TODO: modify this to use embedding
 
 doc_name_list = []
 train_val_ids = []
@@ -72,21 +68,60 @@ with open('data/' + dataset + '0.txt', 'r') as f:
 with open('data/corpus/' + dataset + '_labels.txt', 'w') as f:
     f.write('\n'.join(label_names))
 
-
 print("Loaded labels and indices")
 # Get document content, after removed words
 doc_content_list = []
-with open('data/corpus/' + dataset + '.' + tokeniser + '.' + lemmatiser + '.clean.txt', 'r') as f:
+with open('data/corpus/' + dataset + '.' + tokeniser + '.' + lemmatiser + '.clean.txt', 'r') as f: # clean.txt is in the order of the corpus txt
     lines = f.readlines()
     doc_content_list = [l.strip() for l in lines]
 
 print("Loaded document content")
+
+all_labels = []
+with open('data/' + dataset + '.txt', 'r') as f:
+    lines = f.readlines()
+    for id, line in enumerate(lines):
+        _, _, label = line.strip().split("\t")
+        all_labels.append(label_names_to_index[label])
+
+# Feature selection 
+y = all_labels
+vectorizer = feature_extraction.text.TfidfVectorizer(max_features=15000, ngram_range=(1,2))
+vectorizer.fit(doc_content_list)
+X_train = vectorizer.transform(doc_content_list)
+X_names = vectorizer.get_feature_names()
+p_value_limit = 0.90
+dtf_features = pd.DataFrame()
+
+for cat in np.unique(y):
+    chi2, p = feature_selection.chi2(X_train, y==cat)
+    dtf_features = dtf_features.append(pd.DataFrame(
+                   {"feature":X_names, "score":1-p, "y":cat}))
+    dtf_features = dtf_features.sort_values(["y","score"], 
+                    ascending=[True,False])
+    dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
+
+X_names = dtf_features["feature"].unique().tolist()
+for cat in np.unique(y):
+   print("# {}:".format(cat))
+   print("  . selected features:",
+         len(dtf_features[dtf_features["y"]==cat]))
+   print("  . top features:", ",".join(
+dtf_features[dtf_features["y"]==cat]["feature"].values[:10]))
+   print(" ")
+
+vectorizer = feature_extraction.text.TfidfVectorizer(vocabulary=X_names)
+vectorizer.fit(doc_content_list)
+X_train = vectorizer.transform(doc_content_list)
+dic_vocabulary = vectorizer.vocabulary_
+
 # Build vocab
 word_freq = Counter()
 progress_bar = tqdm(doc_content_list)
 progress_bar.set_postfix_str("building vocabulary")
 for doc_words in progress_bar:
     words = doc_words.split()
+    words = [w for w in words if w in dic_vocabulary] # restrict to just the selected words
     word_freq.update(words)
 
 vocab, _ = zip(*word_freq.most_common())
@@ -99,6 +134,10 @@ print("Vocabulary size: ", vocab_size)
 with open('data/corpus/' + dataset + '.' + tokeniser  + '.' + lemmatiser + '_vocab.txt', 'w') as f:
     vocab_str = '\n'.join(vocab)
     f.write(vocab_str)
+
+args.embedding_path = 'data/corpus/{}_ft-biobert-large_embeddings.h5'.format(dataset) 
+word_embeddings_dim = args.embedding_dim
+word_vector_map = h5py.File(args.embedding_path, 'r') # TODO: modify this to use embedding
 
 # split training and validation using the i = 0 subset
 idx = list(range(len(train_val_labels)))
@@ -200,8 +239,8 @@ def count_word_pair_count(windows):
     return word_pair_count
 
 # Reduce word vector map to np array of the embeddings
-from sklearn.metrics.pairwise import cosine_similarity
-from scipy import sparse
+# from sklearn.metrics.pairwise import cosine_similarity
+# from scipy import sparse
 
 # A = []
 # words_em = []
@@ -242,8 +281,8 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
                   (1.0 * word_freq_i * word_freq_j/(num_window * num_window)))
         # if pmi <= 0:
         #     continue
-        if pmi >= 0: # only append weights if words frequently co-occur
-            similarity = similarity + pmi
+        #if pmi >= 0: # only append weights if words frequently co-occur
+        similarity = similarity + pmi
         row.append(word_id_map[i])
         col.append(word_id_map[j])
         weight.append(similarity)

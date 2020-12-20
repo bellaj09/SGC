@@ -34,7 +34,7 @@ def get_text_args():
     parser.add_argument('--experiment', type=str, default="base-experiment",
                         help='feature-type')
     parser.add_argument('--tuned', action='store_true', help='use tuned hyperparams')
-    parser.add_argument('--tokeniser', action='store', type=str, default='ref', help='tokeniser to use')
+    parser.add_argument('--tokeniser', action='store', type=str, default='treebank', help='tokeniser to use')
 
     args, _ = parser.parse_known_args()
     args.cuda = not args.no_cuda and torch.cuda.is_available()
