@@ -211,7 +211,11 @@ for word in progress_bar:
 #print('A shape:', A.shape)
 A_sparse = sparse.csr_matrix(A)
 print('A sparse shape:', A_sparse.shape)
+import time
+start = time.perf_counter()
 similarities = cosine_similarity(A_sparse)
+calc_time = time.perf_counter()-start
+print('calculation time: ', calc_time)
 
 def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_count):
     row = []
