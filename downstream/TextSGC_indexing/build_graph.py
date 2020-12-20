@@ -203,7 +203,11 @@ def count_word_pair_count(windows):
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy import sparse
 
-A = np.array(word_vector_map[:,'embedding',:]) # all words
+A = []
+progress_bar = tqdm(word_vector_map)
+progress_bar.set_postfix_str("collecting embeddings")
+for word in progress_bar:
+    A.append(word_vector_map[word]['embedding'][:])
 print('A shape:', A.shape)
 A_sparse = sparse.csr_matrix(A)
 print('A sparse shape:', A_sparse.shape)
