@@ -113,7 +113,7 @@ for cat in np.unique(y):
     print("{}".format(index_to_label_name[cat]))
     indices = np.argwhere(y==cat)
     indices = np.concatenate(indices)
-    tokens_and_counts = zip([X_names[i] for i in indices], np.asarray([cv_fit[i] for i in indices].sum(axis=0)).ravel())
+    tokens_and_counts = zip([X_names[i] for i in indices], np.asarray([cv_fit[i] for i in indices]).sum(axis=0)).ravel()
     df = pd.DataFrame(tokens_and_counts, columns=['token', 'count'])
     df = df.sort_values("count", ascending = False)
     print("  . top features:", ",".join(
