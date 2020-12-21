@@ -110,7 +110,8 @@ for cat in np.unique(y):
     # dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
     
     # Return array of frequency of the tokens in each class
-    tokens_and_counts = zip(X_names[y==cat], np.asarray(cv_fit.sum(axis=0)).ravel())
+    indices = (y==cat).nonzero()
+    tokens_and_counts = zip(X_names[indices], np.asarray(cv_fit.sum(axis=0)).ravel())
     counts = tokens_and_counts[1]
     dtf_features = dtf_features.append(pd.DataFrame(
                    {"feature":X_names, "score":counts, "y":cat}))
