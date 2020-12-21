@@ -113,7 +113,7 @@ for cat in np.unique(y):
     print("{}".format(index_to_label_name[cat]))
     indices = np.argwhere(y==cat)
     indices = np.concatenate(indices)
-    
+    vectorizer = feature_extraction.text.CountVectorizer()
     cat_texts = [doc_content_list[i] for i in indices]
     cv_fit = vectorizer.fit_transform(cat_texts)
     tokens = np.array([X_names[i] for i in indices])
