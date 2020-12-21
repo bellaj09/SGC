@@ -28,7 +28,7 @@ parser.add_argument('--tokeniser', type=str, default='treebank', # Chosen tokeni
 parser.add_argument('--stopwords', type=str, default='stanford',
                     choices=['nltk','stanford', 'pubmed','top50','top100','none','pubmednltk'],
                     help='stopwords list')
-parser.add_argument('--lemmatiser', type=str, default='none',
+parser.add_argument('--lemmatiser', type=str, default='bio',
                     choices=['wordnet','bio','none'],
                     help='lemmatisation algorithm')                                                      
 args = parser.parse_args()

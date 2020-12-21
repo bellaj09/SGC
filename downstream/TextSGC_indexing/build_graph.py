@@ -89,6 +89,7 @@ with open('data/' + dataset + '.txt', 'r') as f:
         all_labels.append(label_names_to_index[label])
 
 # Feature selection 
+start = time.perf_counter()
 y = all_labels
 vectorizer = feature_extraction.text.TfidfVectorizer(max_features=15000, ngram_range=(1,2))
 vectorizer.fit(doc_content_list)
@@ -119,6 +120,9 @@ vectorizer = feature_extraction.text.TfidfVectorizer(vocabulary=X_names)
 vectorizer.fit(doc_content_list)
 X_train = vectorizer.transform(doc_content_list)
 dic_vocabulary = vectorizer.vocabulary_
+
+feat_sel_time = time.perf_counter()-start
+print("Feature selection time: ", feat_sel_time)
 
 # Build vocab
 word_freq = Counter()
