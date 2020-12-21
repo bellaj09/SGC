@@ -133,7 +133,7 @@ for cat in np.unique(y):
                     {"feature":X_names, "score":p, "y":cat}))
     dtf_features = dtf_features.sort_values(["y","score"], 
                     ascending=[True,False])
-    p_value_limit = np.median(p)
+    p_value_limit = np.mean(p)
     dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
 
 X_names = dtf_features["feature"].unique().tolist()
