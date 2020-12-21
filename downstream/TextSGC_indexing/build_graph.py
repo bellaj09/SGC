@@ -111,6 +111,7 @@ for cat in np.unique(y):
     
     # Return array of frequency of the tokens in each class
     indices = np.where(np.any(y==cat))
+    print(indices)
     tokens_and_counts = zip(X_names[indices], np.asarray(cv_fit.sum(axis=0)).ravel())
     counts = tokens_and_counts[1]
     dtf_features = dtf_features.append(pd.DataFrame(
