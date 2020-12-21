@@ -113,7 +113,7 @@ for cat in np.unique(y):
     indices = np.argwhere(y==cat)
     indices = np.concatenate(indices)
     print(indices)
-    tokens_and_counts = zip(X_names[indices], np.asarray(cv_fit.sum(axis=0)).ravel())
+    tokens_and_counts = zip([X_names[i] for i in indices], np.asarray(cv_fit.sum(axis=0)).ravel())
     counts = tokens_and_counts[1]
     dtf_features = dtf_features.append(pd.DataFrame(
                    {"feature":X_names, "score":counts, "y":cat}))
