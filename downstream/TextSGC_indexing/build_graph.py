@@ -142,7 +142,7 @@ for cat in np.unique(y):
    print("  . selected features:",
          len(dtf_features[dtf_features["y"]==cat]))
    print("  . top features:", ",".join(
-dtf_features[dtf_features["y"]==cat].sort_vales("score",ascending=False)["feature"].values[:10]))
+dtf_features[dtf_features["y"]==cat].sort_values("score",ascending=False)["feature"].values[:10]))
    print(" ")
 
 vectorizer = feature_extraction.text.TfidfVectorizer(vocabulary=X_names)
