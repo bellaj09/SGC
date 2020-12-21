@@ -103,7 +103,8 @@ print('length of doc content list:', len(doc_content_list))
 print('length of X train:', X_train.shape)
 
 for cat in np.unique(y):
-    print('shape of y==cat', y==cat.shape)
+    test = y==cat
+    print('shape of y==cat', test.shape)
     chi2, p = feature_selection.chi2(X_train, y==cat)
     dtf_features = dtf_features.append(pd.DataFrame(
                    {"feature":X_names, "score":1-p, "y":cat}))
