@@ -110,16 +110,14 @@ for cat in np.unique(y):
     # dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
     
     # Return array of frequency of the tokens in each class
+    print("{}".format(index_to_label_name[cat]))
     indices = np.argwhere(y==cat)
     indices = np.concatenate(indices)
-    print(indices)
     tokens_and_counts = zip([X_names[i] for i in indices], np.asarray(cv_fit.sum(axis=0)).ravel())
     df = pd.DataFrame(tokens_and_counts, columns=['token', 'count'])
-    counts = df['count']
-    dtf_features = dtf_features.append(pd.DataFrame(
-                   {"feature":X_names, "score":counts, "y":cat}))
-    dtf_features = dtf_features.sort_values(["y","score"], 
-                    ascending=[True,False])
+    df = df.sort_values("count", ascending = False)
+    print("  . top features:", ",".join(
+    df["token"].values[:10]))
 
 X_names = dtf_features["feature"].unique().tolist()
 for cat in np.unique(y):
