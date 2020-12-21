@@ -119,7 +119,7 @@ for cat in np.unique(y):
     print("  . top features:", ",".join(
     df["token"].values[:10]))
     print("  . top features counts:", ",".join(
-    df["count"].values[:10]))
+    str(df["count"].values[:10])))
 
 X_names = dtf_features["feature"].unique().tolist()
 for cat in np.unique(y):
