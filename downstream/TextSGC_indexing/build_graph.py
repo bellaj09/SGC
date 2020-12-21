@@ -93,6 +93,7 @@ with open('data/' + dataset + '.txt', 'r') as f:
 start = time.perf_counter()
 y = all_labels
 vectorizer = feature_extraction.text.CountVectorizer()
+cv_fit = vectorizer.fit_transform(doc_content_list)
 #vectorizer = feature_extraction.text.TfidfVectorizer(max_features=22000, ngram_range=(1,2))
 vectorizer.fit(doc_content_list)
 X_train = vectorizer.transform(doc_content_list)
@@ -101,12 +102,20 @@ p_value_limit = args.p_value
 dtf_features = pd.DataFrame()
 
 for cat in np.unique(y):
-    chi2, p = feature_selection.chi2(X_train, y==cat)
+    #chi2, p = feature_selection.chi2(X_train, y==cat)
+    # dtf_features = dtf_features.append(pd.DataFrame(
+    #                {"feature":X_names, "score":1-p, "y":cat}))
+    # dtf_features = dtf_features.sort_values(["y","score"], 
+    #                 ascending=[True,False])
+    # dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
+    
+    # Return array of frequency of the tokens in each class
+    tokens_and_counts = zip(X_names[y==cat], np.asarray(cv_fit.sum(axis=0)).ravel())
+    counts = tokens_and_counts[1]
     dtf_features = dtf_features.append(pd.DataFrame(
-                   {"feature":X_names, "score":1-p, "y":cat}))
+                   {"feature":X_names, "score":counts, "y":cat}))
     dtf_features = dtf_features.sort_values(["y","score"], 
                     ascending=[True,False])
-    dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
 
 X_names = dtf_features["feature"].unique().tolist()
 for cat in np.unique(y):
