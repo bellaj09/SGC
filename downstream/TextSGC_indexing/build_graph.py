@@ -114,7 +114,7 @@ for cat in np.unique(y):
     indices = np.argwhere(y==cat)
     indices = np.concatenate(indices)
     #tokens_and_counts = zip([X_names[i] for i in indices], cv_fit[indices].toarray().sum(axis=0)).ravel()
-    tokens = [X_names[i] for i in indices].toarray()
+    tokens = [X_names[i] for i in indices]
     counts = cv_fit[indices].toarray().sum(axis=0)
     print('token len', len(tokens), 'count len', len(counts))
     df = pd.DataFrame({'token': tokens, 'count': counts})
