@@ -93,7 +93,7 @@ with open('data/' + dataset + '.txt', 'r') as f:
 start = time.perf_counter()
 y = all_labels
 #vectorizer = feature_extraction.text.CountVectorizer()
-vectorizer = feature_extraction.text.TfidfVectorizer(max_features=22000, ngram_range=(1,2))
+vectorizer = feature_extraction.text.TfidfVectorizer(max_features=15000, ngram_range=(1,2))
 vectorizer.fit(doc_content_list)
 X_train = vectorizer.transform(doc_content_list)
 X_names = vectorizer.get_feature_names()
