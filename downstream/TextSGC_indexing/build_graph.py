@@ -17,6 +17,7 @@ from collections import Counter
 import itertools
 import h5py 
 import pandas as pd
+import time
 
 parser = argparse.ArgumentParser(description='Build Document Graph')
 parser.add_argument('--dataset', type=str, default='20ng',
