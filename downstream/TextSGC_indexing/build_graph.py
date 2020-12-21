@@ -113,14 +113,17 @@ for cat in np.unique(y):
     print("{}".format(index_to_label_name[cat]))
     indices = np.argwhere(y==cat)
     indices = np.concatenate(indices)
-    vectorizer = feature_extraction.text.CountVectorizer()
+
+    cv = feature_extraction.text.CountVectorizer()
     cat_texts = [doc_content_list[i] for i in indices]
     cv_fit = vectorizer.fit_transform(cat_texts)
-    tokens = np.array([X_names[i] for i in indices])
-    counts = cv_fit.toarray().sum(axis=0)
-    print('token len', len(tokens), 'count len', len(counts))
-    df = pd.DataFrame({'token': tokens, 'count': counts})
+    word_list = cv.get_feature_names()
+    count_list = cv_fit.toarray().sum(axis=0)
+   
+    print('token len', len(word_list), 'count len', len(count_list))
+    df = pd.DataFrame({'token': word_list, 'count': count_list})
     df = df.sort_values("count", ascending = False)
+
     print("  . top features:", ",".join(
     df["token"].values[:10]))
     print("  . top features counts:", ",".join(
