@@ -115,25 +115,25 @@ dtf_features = pd.DataFrame()
 #     dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
 
 ## F TEST
-for cat in np.unique(y):
-    f_test, p = feature_selection.f_classif(X_train, y==cat)
-    dtf_features = dtf_features.append(pd.DataFrame(
-                    {"feature":X_names, "score":1-p, "y":cat}))
-    dtf_features = dtf_features.sort_values(["y","score"], 
-                    ascending=[True,False])
-    dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
-
-# # FEATURE GINI IMPORTANCES (DECISION TREES)
-# from sklearn.tree import DecisionTreeClassifier
 # for cat in np.unique(y):
-#     tree = DecisionTreeClassifier().fit(X_train, y==cat)
-#     p = tree.feature_importances_
-    # print('min gini: ', p.min, 'max gini: ', p.max)
+#     f_test, p = feature_selection.f_classif(X_train, y==cat)
 #     dtf_features = dtf_features.append(pd.DataFrame(
-#                     {"feature":X_names, "score":p, "y":cat}))
+#                     {"feature":X_names, "score":1-p, "y":cat}))
 #     dtf_features = dtf_features.sort_values(["y","score"], 
 #                     ascending=[True,False])
 #     dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
+
+# # FEATURE GINI IMPORTANCES (DECISION TREES)
+from sklearn.tree import DecisionTreeClassifier
+for cat in np.unique(y):
+    tree = DecisionTreeClassifier().fit(X_train, y==cat)
+    p = tree.feature_importances_
+    print('min gini: ', p.min, 'max gini: ', p.max)
+    dtf_features = dtf_features.append(pd.DataFrame(
+                    {"feature":X_names, "score":p, "y":cat}))
+    dtf_features = dtf_features.sort_values(["y","score"], 
+                    ascending=[True,False])
+    dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
 
 X_names = dtf_features["feature"].unique().tolist()
 for cat in np.unique(y):
