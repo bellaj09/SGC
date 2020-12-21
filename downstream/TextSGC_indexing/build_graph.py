@@ -92,9 +92,8 @@ with open('data/' + dataset + '.txt', 'r') as f:
 # Feature selection 
 start = time.perf_counter()
 y = all_labels
-vectorizer = feature_extraction.text.CountVectorizer()
-#cv_fit = vectorizer.fit_transform(doc_content_list)
-#vectorizer = feature_extraction.text.TfidfVectorizer(max_features=22000, ngram_range=(1,2))
+#vectorizer = feature_extraction.text.CountVectorizer()
+vectorizer = feature_extraction.text.TfidfVectorizer(max_features=22000, ngram_range=(1,2))
 vectorizer.fit(doc_content_list)
 X_train = vectorizer.transform(doc_content_list)
 X_names = vectorizer.get_feature_names()
@@ -102,32 +101,12 @@ p_value_limit = args.p_value
 dtf_features = pd.DataFrame()
 
 for cat in np.unique(y):
-    #chi2, p = feature_selection.chi2(X_train, y==cat)
-    # dtf_features = dtf_features.append(pd.DataFrame(
-    #                {"feature":X_names, "score":1-p, "y":cat}))
-    # dtf_features = dtf_features.sort_values(["y","score"], 
-    #                 ascending=[True,False])
-    # dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
-    
-    # Return array of frequency of the tokens in each class
-    print("{}".format(index_to_label_name[cat]))
-    indices = np.argwhere(y==cat)
-    indices = np.concatenate(indices)
-
-    cv = feature_extraction.text.CountVectorizer()
-    cat_texts = [doc_content_list[i] for i in indices]
-    cv_fit = cv.fit_transform(cat_texts)
-    word_list = cv.get_feature_names()
-    count_list = cv_fit.toarray().sum(axis=1).sum(axis=0)
-   
-    print('token len', len(word_list), 'count len', len(count_list))
-    df = pd.DataFrame({'token': word_list, 'count': count_list})
-    df = df.sort_values("count", ascending = False)
-
-    print("  . top features:", ",".join(
-    df["token"].values[:10]))
-    print("  . top features counts:", ",".join(
-    str(df["count"].values[:10])))
+    chi2, p = feature_selection.chi2(X_train, y==cat)
+    dtf_features = dtf_features.append(pd.DataFrame(
+                   {"feature":X_names, "score":1-p, "y":cat}))
+    dtf_features = dtf_features.sort_values(["y","score"], 
+                    ascending=[True,False])
+    dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
 
 X_names = dtf_features["feature"].unique().tolist()
 for cat in np.unique(y):
