@@ -92,19 +92,15 @@ with open('data/' + dataset + '.txt', 'r') as f:
 # Feature selection 
 start = time.perf_counter()
 y = all_labels
-vectorizer = feature_extraction.text.TfidfVectorizer(max_features=22000, ngram_range=(1,2))
+vectorizer = feature_extraction.text.CountVectorizer()
+#vectorizer = feature_extraction.text.TfidfVectorizer(max_features=22000, ngram_range=(1,2))
 vectorizer.fit(doc_content_list)
 X_train = vectorizer.transform(doc_content_list)
 X_names = vectorizer.get_feature_names()
 p_value_limit = args.p_value
 dtf_features = pd.DataFrame()
-print('length of cat:', len(np.unique(y)))
-print('length of doc content list:', len(doc_content_list))
-print('length of X train:', X_train.shape)
 
 for cat in np.unique(y):
-    test = y==cat
-    print('shape of y==cat', test.shape)
     chi2, p = feature_selection.chi2(X_train, y==cat)
     dtf_features = dtf_features.append(pd.DataFrame(
                    {"feature":X_names, "score":1-p, "y":cat}))
