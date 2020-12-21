@@ -116,7 +116,7 @@ for cat in np.unique(y):
 
     cv = feature_extraction.text.CountVectorizer()
     cat_texts = [doc_content_list[i] for i in indices]
-    cv_fit = vectorizer.fit_transform(cat_texts)
+    cv_fit = cv.fit_transform(cat_texts)
     word_list = cv.get_feature_names()
     count_list = cv_fit.toarray().sum(axis=0)
    
