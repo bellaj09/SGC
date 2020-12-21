@@ -31,7 +31,9 @@ parser.add_argument('--lemmatiser', type=str, default='bio',
 parser.add_argument('--win_size', type=int, default=30,
                     help='context window size for PMI scoring')
 parser.add_argument('--embedding_dim', type=int, default=300,
-                    help='word and document embedding size.')                        
+                    help='word and document embedding size.')       
+parser.add_argument('--p_value', type=float, default=0.9,
+                    help='threshhold pvalue for chi square feature selection')                                        
 args = parser.parse_args()
 
 # build corpus
@@ -92,7 +94,7 @@ vectorizer = feature_extraction.text.TfidfVectorizer(max_features=15000, ngram_r
 vectorizer.fit(doc_content_list)
 X_train = vectorizer.transform(doc_content_list)
 X_names = vectorizer.get_feature_names()
-p_value_limit = 0.80
+p_value_limit = args.p_value
 dtf_features = pd.DataFrame()
 
 for cat in np.unique(y):
@@ -138,9 +140,9 @@ with open('data/corpus/' + dataset + '.' + tokeniser  + '.' + lemmatiser + '_voc
     vocab_str = '\n'.join(vocab)
     f.write(vocab_str)
 
-args.embedding_path = 'data/corpus/{}_ft-biobert-large_embeddings.h5'.format(dataset) 
-word_embeddings_dim = args.embedding_dim
-word_vector_map = h5py.File(args.embedding_path, 'r') # TODO: modify this to use embedding
+# args.embedding_path = 'data/corpus/{}_ft-biobert-large_embeddings.h5'.format(dataset) 
+# word_embeddings_dim = args.embedding_dim
+# word_vector_map = h5py.File(args.embedding_path, 'r') # TODO: modify this to use embedding
 
 # split training and validation using the i = 0 subset
 idx = list(range(len(train_val_labels)))
@@ -272,24 +274,24 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
     for pair, count in progress_bar:
         i, j = pair
         if i in vocab and j in vocab:
-            if i in word_vector_map and j in word_vector_map:
-                # i_i = words_em.index(i)
-                # j_i = words_em.index(j)
-                vector_i = np.array(word_vector_map[i]['embedding'][:])
-                vector_j = np.array(word_vector_map[j]['embedding'][:])
-                similarity = 1.0 - cosine(vector_i, vector_j)
-                #similarity = similarities[i_i,j_i]
+            # if i in word_vector_map and j in word_vector_map:
+            #     # i_i = words_em.index(i)
+            #     # j_i = words_em.index(j)
+            #     vector_i = np.array(word_vector_map[i]['embedding'][:])
+            #     vector_j = np.array(word_vector_map[j]['embedding'][:])
+            #     similarity = 1.0 - cosine(vector_i, vector_j)
+            #     #similarity = similarities[i_i,j_i]
             word_freq_i = word_window_freq[i]
             word_freq_j = word_window_freq[j]
             pmi = log((1.0 * count / num_window) /
                     (1.0 * word_freq_i * word_freq_j/(num_window * num_window)))
-            # if pmi <= 0:
-            #     continue
+            if pmi <= 0:
+                continue
             #if pmi >= 0: # only append weights if words frequently co-occur
-            similarity = similarity + pmi
+            # similarity = similarity + pmi
             row.append(word_id_map[i])
             col.append(word_id_map[j])
-            weight.append(similarity)
+            weight.append(pmi)
     return row, col, weight
 
 def calc_word_doc_freq(ids, doc_content_list):
