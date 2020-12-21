@@ -113,8 +113,10 @@ for cat in np.unique(y):
     print("{}".format(index_to_label_name[cat]))
     indices = np.argwhere(y==cat)
     indices = np.concatenate(indices)
-    tokens_and_counts = zip([X_names[i] for i in indices], cv_fit[indices].toarray().sum(axis=0)).ravel()
-    df = pd.DataFrame(tokens_and_counts, columns=['token', 'count'])
+    #tokens_and_counts = zip([X_names[i] for i in indices], cv_fit[indices].toarray().sum(axis=0)).ravel()
+    tokens = [X_names[i] for i in indices]
+    counts = cv_fit[indices].toarray().sum(axis=0)
+    df = pd.DataFrame([tokens,counts], columns=['token', 'count'])
     df = df.sort_values("count", ascending = False)
     print("  . top features:", ",".join(
     df["token"].values[:10]))
