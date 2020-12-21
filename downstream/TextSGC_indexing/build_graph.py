@@ -118,7 +118,7 @@ for cat in np.unique(y):
     cat_texts = [doc_content_list[i] for i in indices]
     cv_fit = cv.fit_transform(cat_texts)
     word_list = cv.get_feature_names()
-    count_list = cv_fit.toarray().sum(axis=0)
+    count_list = cv_fit.toarray().sum(axis=1).sum(axis=0)
    
     print('token len', len(word_list), 'count len', len(count_list))
     df = pd.DataFrame({'token': word_list, 'count': count_list})
