@@ -93,7 +93,7 @@ with open('data/' + dataset + '.txt', 'r') as f:
 start = time.perf_counter()
 y = all_labels
 vectorizer = feature_extraction.text.CountVectorizer()
-cv_fit = vectorizer.fit_transform(doc_content_list)
+#cv_fit = vectorizer.fit_transform(doc_content_list)
 #vectorizer = feature_extraction.text.TfidfVectorizer(max_features=22000, ngram_range=(1,2))
 vectorizer.fit(doc_content_list)
 X_train = vectorizer.transform(doc_content_list)
@@ -113,9 +113,11 @@ for cat in np.unique(y):
     print("{}".format(index_to_label_name[cat]))
     indices = np.argwhere(y==cat)
     indices = np.concatenate(indices)
-    #tokens_and_counts = zip([X_names[i] for i in indices], cv_fit[indices].toarray().sum(axis=0)).ravel()
+    
+    cat_texts = doc_content_list[indices]
+    cv_fit = vectorizer.fit_transform(cat_texts)
     tokens = np.array([X_names[i] for i in indices])
-    counts = np.array([cv_fit[i] for i in indices]).sum(axis=0)
+    counts = cv_fit.toarray().sum(axis=0)
     print('token len', len(tokens), 'count len', len(counts))
     df = pd.DataFrame({'token': tokens, 'count': counts})
     df = df.sort_values("count", ascending = False)
