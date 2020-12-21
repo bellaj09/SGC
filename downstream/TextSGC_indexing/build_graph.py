@@ -139,7 +139,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.inspection import permutation_importance
 for cat in np.unique(y):
     tree = DecisionTreeClassifier().fit(X_train, y==cat)
-    p = permutation_importance(tree, X_train,y==cat, n_repeats=10, random_state=42)
+    p = permutation_importance(tree, X_train.toarray(),y==cat, n_repeats=10, random_state=42)
     print('min perm: ', np.min(p), 'max perm: ', np.max(p), 'mean perm: ', np.mean(p), 'median perm: ', np.median(p))
     dtf_features = dtf_features.append(pd.DataFrame(
                     {"feature":X_names, "score":p, "y":cat}))
