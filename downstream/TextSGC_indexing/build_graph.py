@@ -94,7 +94,7 @@ if dataset == "pubmed":
 else:
     max_feat = 15000
 
-# Feature selection 
+############################################## Feature selection ##########################################
 start = time.perf_counter()
 y = all_labels
 #vectorizer = feature_extraction.text.CountVectorizer()
@@ -121,9 +121,19 @@ for cat in np.unique(y):
                     {"feature":X_names, "score":1-p, "y":cat}))
     dtf_features = dtf_features.sort_values(["y","score"], 
                     ascending=[True,False])
+    print('min gini: ', p.min, 'max gini: ', p.max)
     dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
 
-# FEATURE IMPORTANCES
+# # FEATURE GINI IMPORTANCES (DECISION TREES)
+# from sklearn.tree import DecisionTreeClassifier
+# for cat in np.unique(y):
+#     tree = DecisionTreeClassifier().fit(X_train, y==cat)
+#     p = tree.feature_importances_
+#     dtf_features = dtf_features.append(pd.DataFrame(
+#                     {"feature":X_names, "score":p, "y":cat}))
+#     dtf_features = dtf_features.sort_values(["y","score"], 
+#                     ascending=[True,False])
+#     dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
 
 X_names = dtf_features["feature"].unique().tolist()
 for cat in np.unique(y):
@@ -132,7 +142,7 @@ for cat in np.unique(y):
    print("  . selected features:",
          len(dtf_features[dtf_features["y"]==cat]))
    print("  . top features:", ",".join(
-dtf_features[dtf_features["y"]==cat]["feature"].values[:10]))
+dtf_features[dtf_features["y"]==cat].sort_vales("score",ascending=False)["feature"].values[:10]))
    print(" ")
 
 vectorizer = feature_extraction.text.TfidfVectorizer(vocabulary=X_names)
@@ -143,6 +153,7 @@ dic_vocabulary = vectorizer.vocabulary_
 feat_sel_time = time.perf_counter()-start
 print("Feature selection time: ", feat_sel_time)
 
+############################################## BUILDING VOCABULARY ##########################################
 # Build vocab
 word_freq = Counter()
 progress_bar = tqdm(doc_content_list)
