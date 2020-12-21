@@ -100,7 +100,7 @@ p_value_limit = args.p_value
 dtf_features = pd.DataFrame()
 print('length of cat:', len(np.unique(y)))
 print('length of doc content list:', len(doc_content_list))
-print('length of X train:', len(X_train))
+print('length of X train:', X_train.shape)
 
 for cat in np.unique(y):
     chi2, p = feature_selection.chi2(X_train, y==cat)
