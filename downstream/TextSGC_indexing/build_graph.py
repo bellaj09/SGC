@@ -89,24 +89,41 @@ with open('data/' + dataset + '.txt', 'r') as f:
         _, _, label = line.strip().split("\t")
         all_labels.append(label_names_to_index[label])
 
+if dataset == "pubmed":
+    max_feat = 22000
+else:
+    max_feat = 15000
+
 # Feature selection 
 start = time.perf_counter()
 y = all_labels
 #vectorizer = feature_extraction.text.CountVectorizer()
-vectorizer = feature_extraction.text.TfidfVectorizer(max_features=15000, ngram_range=(1,2))
+vectorizer = feature_extraction.text.TfidfVectorizer(max_features=max_feat, ngram_range=(1,2))
 vectorizer.fit(doc_content_list)
 X_train = vectorizer.transform(doc_content_list)
 X_names = vectorizer.get_feature_names()
 p_value_limit = args.p_value
 dtf_features = pd.DataFrame()
 
+## CHI SQUARED
+# for cat in np.unique(y):
+#     chi2, p = feature_selection.chi2(X_train, y==cat)
+#     dtf_features = dtf_features.append(pd.DataFrame(
+#                    {"feature":X_names, "score":1-p, "y":cat}))
+#     dtf_features = dtf_features.sort_values(["y","score"], 
+#                     ascending=[True,False])
+#     dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
+
+## F TEST
 for cat in np.unique(y):
-    chi2, p = feature_selection.chi2(X_train, y==cat)
+    f_test, p = feature_selection.f_classif(X_train, y==cat)
     dtf_features = dtf_features.append(pd.DataFrame(
-                   {"feature":X_names, "score":1-p, "y":cat}))
+                    {"feature":X_names, "score":1-p, "y":cat}))
     dtf_features = dtf_features.sort_values(["y","score"], 
                     ascending=[True,False])
     dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
+
+# FEATURE IMPORTANCES
 
 X_names = dtf_features["feature"].unique().tolist()
 for cat in np.unique(y):
