@@ -120,14 +120,14 @@ dtf_features = pd.DataFrame()
 #     dtf_features = dtf_features.sort_values(["y","score"], 
 #                     ascending=[True,False])
 
-# # CHI SQUARED
-# for cat in np.unique(y):
-#     chi2, p = feature_selection.chi2(X_train, y==cat)
-#     dtf_features = dtf_features.append(pd.DataFrame(
-#                    {"feature":X_names, "score":1-p, "y":cat}))
-#     dtf_features = dtf_features.sort_values(["y","score"], 
-#                     ascending=[True,False])
-#     dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
+# CHI SQUARED
+for cat in np.unique(y):
+    chi2, p = feature_selection.chi2(X_train, y==cat)
+    dtf_features = dtf_features.append(pd.DataFrame(
+                   {"feature":X_names, "score":1-p, "y":cat}))
+    dtf_features = dtf_features.sort_values(["y","score"], 
+                    ascending=[True,False])
+    dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
 
 # # F TEST
 # for cat in np.unique(y):
@@ -138,17 +138,17 @@ dtf_features = pd.DataFrame()
 #                     ascending=[True,False])
 #     dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
 
-# FEATURE GINI IMPORTANCES (DECISION TREES)
-from sklearn.tree import DecisionTreeClassifier
-for cat in np.unique(y):
-    tree = DecisionTreeClassifier().fit(X_train, y==cat)
-    p = tree.feature_importances_
-    #print('min gini: ', np.min(p), 'max gini: ', np.max(p), 'mean gini: ', np.mean(p), 'median gini: ', np.median(p))
-    dtf_features = dtf_features.append(pd.DataFrame(
-                    {"feature":X_names, "score":p, "y":cat}))
-    dtf_features = dtf_features.sort_values(["y","score"], 
-                    ascending=[True,False])
-    dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
+# # FEATURE GINI IMPORTANCES (DECISION TREES)
+# from sklearn.tree import DecisionTreeClassifier
+# for cat in np.unique(y):
+#     tree = DecisionTreeClassifier().fit(X_train, y==cat)
+#     p = tree.feature_importances_
+#     #print('min gini: ', np.min(p), 'max gini: ', np.max(p), 'mean gini: ', np.mean(p), 'median gini: ', np.median(p))
+#     dtf_features = dtf_features.append(pd.DataFrame(
+#                     {"feature":X_names, "score":p, "y":cat}))
+#     dtf_features = dtf_features.sort_values(["y","score"], 
+#                     ascending=[True,False])
+#     dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
 
 # ## FEATURE PERMUTATION IMPORTANCES
 # from sklearn.inspection import permutation_importance
