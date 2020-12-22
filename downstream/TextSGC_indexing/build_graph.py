@@ -120,23 +120,23 @@ dtf_features = pd.DataFrame()
 #     dtf_features = dtf_features.sort_values(["y","score"], 
 #                     ascending=[True,False])
 
-# CHI SQUARED
-for cat in np.unique(y):
-    chi2, p = feature_selection.chi2(X_train, y==cat)
-    dtf_features = dtf_features.append(pd.DataFrame(
-                   {"feature":X_names, "score":1-p, "y":cat}))
-    dtf_features = dtf_features.sort_values(["y","score"], 
-                    ascending=[True,False])
-    dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
-
-## F TEST
+# # CHI SQUARED
 # for cat in np.unique(y):
-#     f_test, p = feature_selection.f_classif(X_train, y==cat)
+#     chi2, p = feature_selection.chi2(X_train, y==cat)
 #     dtf_features = dtf_features.append(pd.DataFrame(
-#                     {"feature":X_names, "score":1-p, "y":cat}))
+#                    {"feature":X_names, "score":1-p, "y":cat}))
 #     dtf_features = dtf_features.sort_values(["y","score"], 
 #                     ascending=[True,False])
 #     dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
+
+# F TEST
+for cat in np.unique(y):
+    f_test, p = feature_selection.f_classif(X_train, y==cat)
+    dtf_features = dtf_features.append(pd.DataFrame(
+                    {"feature":X_names, "score":1-p, "y":cat}))
+    dtf_features = dtf_features.sort_values(["y","score"], 
+                    ascending=[True,False])
+    dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
 
 # # FEATURE GINI IMPORTANCES (DECISION TREES)
 # from sklearn.tree import DecisionTreeClassifier
