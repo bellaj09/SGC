@@ -97,7 +97,7 @@ else:
 ############################################## Feature selection ##########################################
 start = time.perf_counter()
 y = all_labels
-cv = feature_extraction.text.CountVectorizer()
+#cv = feature_extraction.text.CountVectorizer()
 vectorizer = feature_extraction.text.TfidfVectorizer(max_features=max_feat, ngram_range=(1,2))
 vectorizer.fit(doc_content_list)
 X_train = vectorizer.transform(doc_content_list)
@@ -105,29 +105,29 @@ X_names = vectorizer.get_feature_names()
 p_value_limit = args.p_value
 dtf_features = pd.DataFrame()
 
-## ABSOLUTE FREQUENCY
-for cat in np.unique(y):
-    indices = np.argwhere(y==cat)
-    indices = np.concatenate(indices)
-    cat_texts = [doc_content_list[i] for i in indices]
-    cv_fit=cv.fit_transform(cat_texts)
-
-    tokens = cv.get_feature_names()
-    counts = cv_fit.toarray().sum(axis=0)
-
-    dtf_features = dtf_features.append(pd.DataFrame(
-                   {"feature":tokens, "score":counts, "y":cat}))
-    dtf_features = dtf_features.sort_values(["y","score"], 
-                    ascending=[True,False])
-
-## CHI SQUARED
+# ## ABSOLUTE FREQUENCY
 # for cat in np.unique(y):
-#     chi2, p = feature_selection.chi2(X_train, y==cat)
+#     indices = np.argwhere(y==cat)
+#     indices = np.concatenate(indices)
+#     cat_texts = [doc_content_list[i] for i in indices]
+#     cv_fit=cv.fit_transform(cat_texts)
+
+#     tokens = cv.get_feature_names()
+#     counts = cv_fit.toarray().sum(axis=0)
+
 #     dtf_features = dtf_features.append(pd.DataFrame(
-#                    {"feature":X_names, "score":1-p, "y":cat}))
+#                    {"feature":tokens, "score":counts, "y":cat}))
 #     dtf_features = dtf_features.sort_values(["y","score"], 
 #                     ascending=[True,False])
-#     dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
+
+# CHI SQUARED
+for cat in np.unique(y):
+    chi2, p = feature_selection.chi2(X_train, y==cat)
+    dtf_features = dtf_features.append(pd.DataFrame(
+                   {"feature":X_names, "score":1-p, "y":cat}))
+    dtf_features = dtf_features.sort_values(["y","score"], 
+                    ascending=[True,False])
+    dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
 
 ## F TEST
 # for cat in np.unique(y):
