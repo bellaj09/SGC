@@ -98,7 +98,7 @@ else:
 start = time.perf_counter()
 y = all_labels
 #cv = feature_extraction.text.CountVectorizer()
-vectorizer = feature_extraction.text.TfidfVectorizer(max_features=max_feat, ngram_range=(1))
+vectorizer = feature_extraction.text.TfidfVectorizer(max_features=max_feat, ngram_range=(1,1))
 vectorizer.fit(doc_content_list)
 X_train = vectorizer.transform(doc_content_list)
 X_names = vectorizer.get_feature_names()
