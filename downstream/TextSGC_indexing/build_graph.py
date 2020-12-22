@@ -33,7 +33,7 @@ parser.add_argument('--win_size', type=int, default=30,
                     help='context window size for PMI scoring')
 parser.add_argument('--embedding_dim', type=int, default=300,
                     help='word and document embedding size.')       
-parser.add_argument('--p_value', type=float, default=0.9,
+parser.add_argument('--p_value', type=float, default=0.90,
                     help='threshhold pvalue for chi square feature selection')                                        
 args = parser.parse_args()
 
@@ -98,7 +98,7 @@ else:
 start = time.perf_counter()
 y = all_labels
 #cv = feature_extraction.text.CountVectorizer()
-vectorizer = feature_extraction.text.TfidfVectorizer(max_features=max_feat, ngram_range=(1,2))
+vectorizer = feature_extraction.text.TfidfVectorizer(max_features=max_feat, ngram_range=(1))
 vectorizer.fit(doc_content_list)
 X_train = vectorizer.transform(doc_content_list)
 X_names = vectorizer.get_feature_names()
