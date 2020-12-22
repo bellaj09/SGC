@@ -365,17 +365,17 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
                 vector_j = np.array(word_vector_map[j])                
                 similarity = 1.0 - cosine(vector_i, vector_j)
 
-            word_freq_i = word_window_freq[i]
-            word_freq_j = word_window_freq[j]
-            pmi = log((1.0 * count / num_window) /
-                    (1.0 * word_freq_i * word_freq_j/(num_window * num_window)))
-            # if pmi <= 0:
-            #     continue
-            #if pmi >= 0: # only append weights if words frequently co-occur
-            # similarity = similarity + pmi
-            row.append(word_id_map[i])
-            col.append(word_id_map[j])
-            weight.append(similarity)
+                word_freq_i = word_window_freq[i]
+                word_freq_j = word_window_freq[j]
+                pmi = log((1.0 * count / num_window) /
+                        (1.0 * word_freq_i * word_freq_j/(num_window * num_window)))
+                # if pmi <= 0:
+                #     continue
+                #if pmi >= 0: # only append weights if words frequently co-occur
+                # similarity = similarity + pmi
+                row.append(word_id_map[i])
+                col.append(word_id_map[j])
+                weight.append(similarity)
     return row, col, weight
 
 def calc_word_doc_freq(ids, doc_content_list):
