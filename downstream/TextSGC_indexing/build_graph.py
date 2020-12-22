@@ -220,8 +220,9 @@ with open(w2v_words, 'r') as f_words:
     rw = csv.reader(f_words, delimiter="\t", quotechar='"')
     with open(w2v_embeddings,'r') as f_embeds:
         re = csv.reader(f_embeds, delimiter="\t", quotechar='"')
+        embeds = [e for e in re]
         for i, word in enumerate(re):
-            word_vector_map[word] = re[i] # creating dictionary of word:embedding
+            word_vector_map[word] = embeds[i] # creating dictionary of word:embedding
 
 # split training and validation using the i = 0 subset
 idx = list(range(len(train_val_labels)))
