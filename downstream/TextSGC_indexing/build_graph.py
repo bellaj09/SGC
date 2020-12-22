@@ -29,7 +29,7 @@ parser.add_argument('--tokeniser', type=str, default='treebank',
 parser.add_argument('--lemmatiser', type=str, default='bio',
                     choices=['wordnet','bio','none'],
                     help='lemmatisation algorithm')
-parser.add_argument('--win_size', type=int, default=30,
+parser.add_argument('--win_size', type=int, default=20,
                     help='context window size for PMI scoring')
 parser.add_argument('--embedding_dim', type=int, default=300,
                     help='word and document embedding size.')       
@@ -163,14 +163,16 @@ for cat in np.unique(y):
 #     dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
 
 X_names = dtf_features["feature"].unique().tolist()
-for cat in np.unique(y):
-   print("# {}:".format(cat))
-   print("{}".format(index_to_label_name[cat]))
-   print("  . selected features:",
-         len(dtf_features[dtf_features["y"]==cat]))
-   print("  . top features:", ",".join(
-dtf_features[dtf_features["y"]==cat].sort_values("score",ascending=False)["feature"].values[:10]))
-   print(" ")
+
+## PRINTING TOP FEATURES PER CLASS
+# for cat in np.unique(y):
+#    print("# {}:".format(cat))
+#    print("{}".format(index_to_label_name[cat]))
+#    print("  . selected features:",
+#          len(dtf_features[dtf_features["y"]==cat]))
+#    print("  . top features:", ",".join(
+# dtf_features[dtf_features["y"]==cat].sort_values("score",ascending=False)["feature"].values[:10]))
+#    print(" ")
 
 vectorizer = feature_extraction.text.TfidfVectorizer(vocabulary=X_names)
 vectorizer.fit(doc_content_list)
@@ -419,6 +421,7 @@ def export_graph(graph, node_size, phase=""):
         pkl.dump(adj, f)
 
 ids = train_val_ids+test_ids
+start_graph = time.perf_counter()
 windows = construct_context_windows(ids, doc_content_list)
 word_window_freq = count_word_window_freq(windows)
 word_pair_count = count_word_pair_count(windows)
@@ -428,6 +431,8 @@ doc_word_freq = calc_doc_word_freq(ids, doc_content_list)
 word_doc_freq = calc_word_doc_freq(ids, doc_content_list)
 B = build_doc_word_graph(ids, doc_content_list, doc_word_freq, word_doc_freq, phase="B") # docs in rows
 C = build_doc_word_graph(ids, doc_content_list, doc_word_freq, word_doc_freq, phase="C") # words in rows
+end_graph = time.perf_counter() - start_graph
+print("Graph building time: ", end_graph)
 
 node_size = len(vocab)+len(train_val_ids)+len(test_ids)
 export_graph(concat_graph(B, C, D), node_size, phase="BCD")
