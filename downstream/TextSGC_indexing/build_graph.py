@@ -97,13 +97,27 @@ else:
 ############################################## Feature selection ##########################################
 start = time.perf_counter()
 y = all_labels
-#vectorizer = feature_extraction.text.CountVectorizer()
-vectorizer = feature_extraction.text.TfidfVectorizer(max_features=max_feat, ngram_range=(1,2))
+cv = feature_extraction.text.CountVectorizer()
+#vectorizer = feature_extraction.text.TfidfVectorizer(max_features=max_feat, ngram_range=(1,2))
 vectorizer.fit(doc_content_list)
 X_train = vectorizer.transform(doc_content_list)
 X_names = vectorizer.get_feature_names()
 p_value_limit = args.p_value
 dtf_features = pd.DataFrame()
+
+## ABSOLUTE FREQUENCY
+for cat in np.unique(y):
+    indices = np.argwhere(y==cat)
+    cat_texts = [doc_content_list[i] for i in indices]
+    cv_fit=cv.fit_transform(cat_texts)
+
+    tokens = cv.get_feature_names()
+    counts = cv_fit.toarray().sum(axis=0)
+
+    dtf_features = dtf_features.append(pd.DataFrame(
+                   {"feature":tokens, "score":counts, "y":cat}))
+    dtf_features = dtf_features.sort_values(["y","score"], 
+                    ascending=[True,False])
 
 ## CHI SQUARED
 # for cat in np.unique(y):
@@ -124,7 +138,7 @@ dtf_features = pd.DataFrame()
 #     dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
 
 # # FEATURE GINI IMPORTANCES (DECISION TREES)
-from sklearn.tree import DecisionTreeClassifier
+# from sklearn.tree import DecisionTreeClassifier
 # for cat in np.unique(y):
 #     tree = DecisionTreeClassifier().fit(X_train, y==cat)
 #     p = tree.feature_importances_
@@ -135,17 +149,17 @@ from sklearn.tree import DecisionTreeClassifier
 #                     ascending=[True,False])
 #     dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
 
-## FEATURE PERMUTATION IMPORTANCES
-from sklearn.inspection import permutation_importance
-for cat in np.unique(y):
-    tree = DecisionTreeClassifier().fit(X_train, y==cat)
-    p = permutation_importance(tree, X_train.toarray(),y==cat, n_repeats=5, random_state=42)
-    print('min perm: ', np.min(p), 'max perm: ', np.max(p), 'mean perm: ', np.mean(p), 'median perm: ', np.median(p))
-    dtf_features = dtf_features.append(pd.DataFrame(
-                    {"feature":X_names, "score":p, "y":cat}))
-    dtf_features = dtf_features.sort_values(["y","score"], 
-                    ascending=[True,False])
-    dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
+# ## FEATURE PERMUTATION IMPORTANCES
+# from sklearn.inspection import permutation_importance
+# for cat in np.unique(y):
+#     tree = DecisionTreeClassifier().fit(X_train, y==cat)
+#     p = permutation_importance(tree, X_train.toarray(),y==cat, n_repeats=5, random_state=42)
+#     print('min perm: ', np.min(p), 'max perm: ', np.max(p), 'mean perm: ', np.mean(p), 'median perm: ', np.median(p))
+#     dtf_features = dtf_features.append(pd.DataFrame(
+#                     {"feature":X_names, "score":p, "y":cat}))
+#     dtf_features = dtf_features.sort_values(["y","score"], 
+#                     ascending=[True,False])
+#     dtf_features = dtf_features[dtf_features["score"]>p_value_limit]
 
 X_names = dtf_features["feature"].unique().tolist()
 for cat in np.unique(y):
