@@ -109,7 +109,6 @@ dtf_features = pd.DataFrame()
 for cat in np.unique(y):
     indices = np.argwhere(y==cat)
     indices = np.concatenate(indices)
-    print(indices)
     cat_texts = [doc_content_list[i] for i in indices]
     cv_fit=cv.fit_transform(cat_texts)
 
