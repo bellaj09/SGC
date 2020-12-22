@@ -29,7 +29,7 @@ parser.add_argument('--tokeniser', type=str, default='treebank',
 parser.add_argument('--lemmatiser', type=str, default='bio',
                     choices=['wordnet','bio','none'],
                     help='lemmatisation algorithm')
-parser.add_argument('--win_size', type=int, default=20,
+parser.add_argument('--win_size', type=int, default=15,
                     help='context window size for PMI scoring')
 parser.add_argument('--embedding_dim', type=int, default=300,
                     help='word and document embedding size.')       
@@ -220,7 +220,7 @@ with open(w2v_words, 'r') as f_words:
     rw = csv.reader(f_words, delimiter="\t", quotechar='"')
     with open(w2v_embeddings,'r') as f_embeds:
         re = csv.reader(f_embeds, delimiter="\t", quotechar='"')
-        for i, word in enumerate(rd):
+        for i, word in enumerate(re):
             word_vector_map[word] = re[i] # creating dictionary of word:embedding
 
 # split training and validation using the i = 0 subset
