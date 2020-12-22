@@ -108,6 +108,7 @@ dtf_features = pd.DataFrame()
 ## ABSOLUTE FREQUENCY
 for cat in np.unique(y):
     indices = np.argwhere(y==cat)
+    print(indices)
     cat_texts = [doc_content_list[i] for i in indices]
     cv_fit=cv.fit_transform(cat_texts)
 
