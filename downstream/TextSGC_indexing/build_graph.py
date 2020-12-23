@@ -18,6 +18,7 @@ import itertools
 import h5py 
 import pandas as pd
 import time
+from gensim.models import Word2Vec
 
 parser = argparse.ArgumentParser(description='Build Document Graph')
 parser.add_argument('--dataset', type=str, default='20ng',
@@ -381,7 +382,7 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
                          
                 similarity = 1.0 - cosine(vector_i, vector_j)
                 similarity = similarity + pmi
-                
+
                 row.append(word_id_map[i])
                 col.append(word_id_map[j])
                 weight.append(similarity)
