@@ -235,7 +235,7 @@ with open('data/corpus/' + dataset + '.' + tokeniser  + '.' + lemmatiser + '_voc
 ## WORD2VEC - just pretrained
 from gensim.models import KeyedVectors
 finetuned_model = KeyedVectors.load_word2vec_format("GoogleNews-vectors-negative300.bin", binary=True)
-word_vector_map = {word:finetuned_model[word] for word in vocab}
+word_vector_map = {word:finetuned_model[str(word)] for word in vocab if word in vocab}
 #word_vector_map = list(finetuned_model.wv.vocab)
 
 # split training and validation using the i = 0 subset
