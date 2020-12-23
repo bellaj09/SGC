@@ -38,6 +38,8 @@ parser.add_argument('--p_value', type=float, default=0.90,
                     help='threshhold pvalue for chi square feature selection')                                        
 args = parser.parse_args()
 
+torch.cuda.set_device(1)
+
 # build corpus
 dataset = args.dataset
 tokeniser = args.tokeniser
