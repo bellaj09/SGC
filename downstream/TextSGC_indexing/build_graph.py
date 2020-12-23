@@ -19,6 +19,7 @@ import h5py
 import pandas as pd
 import time
 from gensim.models import Word2Vec
+import torch
 
 parser = argparse.ArgumentParser(description='Build Document Graph')
 parser.add_argument('--dataset', type=str, default='20ng',
