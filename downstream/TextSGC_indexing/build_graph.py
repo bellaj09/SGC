@@ -226,8 +226,12 @@ with open('data/corpus/' + dataset + '.' + tokeniser  + '.' + lemmatiser + '_voc
 #             word_vector_map[word] = embeds[i] # creating dictionary of word:embedding
 
 ## WORD2VEC - pretrained and finetuned
-finetuned_model = Word2Vec.load('data/finetuned_w2v_model.bin')
-word_vector_map = list(finetuned_model.wv.vocab) 
+# finetuned_model = Word2Vec.load('data/finetuned_w2v_model.bin')
+# word_vector_map = list(finetuned_model.wv.vocab) 
+
+## WORD2VEC - just pretrained
+finetuned_model = Word2Vec.load_word2vec_format('GoogleNews-vectors-negative300.bin', binary=True, norm_only=True)
+word_vector_map = list(finetuned_model.wv.vocab)
 
 # split training and validation using the i = 0 subset
 idx = list(range(len(train_val_labels)))
