@@ -373,8 +373,8 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
                 # similarity = 1.0 - cosine(vector_i, vector_j)
 
                 ### WORD2VEC
-                vector_i = np.array(word_vector_map[i])
-                vector_j = np.array(word_vector_map[j])       
+                # vector_i = np.array(word_vector_map[i])
+                # vector_j = np.array(word_vector_map[j])       
 
                 ### FINETUNED PRETRAINED WORD2VEC
                 vector_i = np.array(finetuned_model[i])
