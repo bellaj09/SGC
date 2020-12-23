@@ -83,11 +83,11 @@ print(finetuned_model.wv.most_similar(positive=["infection"]))
 
 import csv        
 
-words = list(finetuned_model.wv.vocab)  
+# words = list(finetuned_model.wv.vocab)  
 
-with open('data/ftword2vec_vocab.tsv', 'w', newline='') as f_output:
-    tsv_output = csv.writer(f_output, delimiter='\n')
-    tsv_output.writerow(words)
+# with open('data/ftword2vec_vocab.tsv', 'w', newline='') as f_output:
+#     tsv_output = csv.writer(f_output, delimiter='\n')
+#     tsv_output.writerow(words)
 
 vectors = finetuned_model[finetuned_model.wv.vocab]
 with open('data/ftword2vec_vectors.tsv', 'w', newline='') as f_output:
