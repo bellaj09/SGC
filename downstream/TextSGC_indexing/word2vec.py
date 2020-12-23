@@ -92,4 +92,6 @@ import csv
 vectors = finetuned_model[finetuned_model.wv.vocab]
 with open('data/ftword2vec_vectors.tsv', 'w', newline='') as f_output:
     tsv_output = csv.writer(f_output, delimiter='\n')
-    tsv_output.writerow(vectors)
+    for v in vectors:
+        tsv_output.writerow(v)
+
