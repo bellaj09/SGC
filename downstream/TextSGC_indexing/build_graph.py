@@ -215,7 +215,7 @@ with open('data/corpus/' + dataset + '.' + tokeniser  + '.' + lemmatiser + '_voc
 # word_embeddings_dim = args.embedding_dim
 # word_vector_map = h5py.File(args.embedding_path, 'r') # TODO: modify this to use embedding
 
-## WORD2VEC - trained just on corpora
+## WORD2VEC - trained just on the three corpora
 # import csv
 # w2v_words = 'data/word2vec_vocab.tsv'
 # w2v_embeddings = 'data/word2vec_vectors.tsv'
@@ -237,8 +237,6 @@ model_vocab = list(finetuned_model.wv.vocab)
 for word in progress_bar:
     if word in model_vocab:
         word_vector_map[word] = finetuned_model[str(word)]
-word_vector_map = list(finetuned_model.wv.vocab)
-
 
 ## WORD2VEC - just pretrained
 # from gensim.models import KeyedVectors
