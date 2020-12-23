@@ -235,7 +235,8 @@ with open('data/corpus/' + dataset + '.' + tokeniser  + '.' + lemmatiser + '_voc
 ## WORD2VEC - just pretrained
 from gensim.models import KeyedVectors
 finetuned_model = KeyedVectors.load_word2vec_format("GoogleNews-vectors-negative300.bin", binary=True)
-word_vector_map = list(finetuned_model.wv.vocab)
+word_vector_map = {word:finetuned_model[word] for word in vocab}
+#word_vector_map = list(finetuned_model.wv.vocab)
 
 # split training and validation using the i = 0 subset
 idx = list(range(len(train_val_labels)))
@@ -386,8 +387,8 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
                 # vector_j = np.array(word_vector_map[j])       
 
                 ### FINETUNED PRETRAINED WORD2VEC
-                vector_i = np.array(finetuned_model[i])
-                vector_j = np.array(finetuned_model[j])
+                vector_i = np.array(word_vector_map[i])
+                vector_j = np.array(word_vector_map[j])
                          
                 similarity = 1.0 - cosine(vector_i, vector_j)
                 similarity = similarity + pmi
