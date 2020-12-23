@@ -75,7 +75,7 @@
 
 # model_2.save('data/finetuned_w2v_model.bin')
 from gensim.models import KeyedVectors
-finetuned_model = KeyedVectors.load_word2vec_format('finetuned_w2v_model.bin', binary=True)
+finetuned_model = KeyedVectors.load_word2vec_format('data/finetuned_w2v_model.bin', binary=True)
 print('most similar words to INFECTION')
 print(finetuned_model.wv.most_similar(positive=["infection"]))
 
@@ -83,11 +83,11 @@ import csv
 
 words = list(finetuned_model.wv.vocab)  
 
-with open('data/word2vec_vocab.tsv', 'w', newline='') as f_output:
+with open('data/ftword2vec_vocab.tsv', 'w', newline='') as f_output:
     tsv_output = csv.writer(f_output, delimiter='\n')
     tsv_output.writerow(words)
 
 vectors = finetuned_model[finetuned_model.wv.vocab]
-with open('data/word2vec_vectors.tsv', 'w', newline='') as f_output:
+with open('data/ftword2vec_vectors.tsv', 'w', newline='') as f_output:
     tsv_output = csv.writer(f_output, delimiter='\n')
     tsv_output.writerow(vectors)
