@@ -229,12 +229,7 @@ with open('data/corpus/' + dataset + '.' + tokeniser  + '.' + lemmatiser + '_voc
 #             word_vector_map[word] = embeds[i] # creating dictionary of word:embedding
 
 ## WORD2VEC - pretrained and finetuned
-# finetuned_model = Word2Vec.load('data/finetuned_w2v_model.bin')
-# word_vector_map = list(finetuned_model.wv.vocab) 
-
-## WORD2VEC - just pretrained
-from gensim.models import KeyedVectors
-finetuned_model = KeyedVectors.load_word2vec_format("GoogleNews-vectors-negative300.bin", binary=True)
+finetuned_model = Word2Vec.load('data/finetuned_w2v_model.bin')
 progress_bar = tqdm(vocab)
 progress_bar.set_postfix_str('collecting embeddings for vocab')
 word_vector_map = {}
@@ -242,6 +237,19 @@ model_vocab = list(finetuned_model.wv.vocab)
 for word in progress_bar:
     if word in model_vocab:
         word_vector_map[word] = finetuned_model[str(word)]
+word_vector_map = list(finetuned_model.wv.vocab)
+
+
+## WORD2VEC - just pretrained
+# from gensim.models import KeyedVectors
+# finetuned_model = KeyedVectors.load_word2vec_format("GoogleNews-vectors-negative300.bin", binary=True)
+# progress_bar = tqdm(vocab)
+# progress_bar.set_postfix_str('collecting embeddings for vocab')
+# word_vector_map = {}
+# model_vocab = list(finetuned_model.wv.vocab) 
+# for word in progress_bar:
+#     if word in model_vocab:
+#         word_vector_map[word] = finetuned_model[str(word)]
 #word_vector_map = list(finetuned_model.wv.vocab)
 
 # split training and validation using the i = 0 subset
