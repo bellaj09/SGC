@@ -56,4 +56,21 @@ with open('data/word2vec_vectors.tsv', 'w', newline='') as f_output:
     tsv_output.writerow(vectors)
 
 print('most similar words to INFECTION')
-model.wv.most_similar(positive=["infection"])
+print(model.wv.most_similar(positive=["infection"]))
+
+from gensim.models import KeyedVectors
+
+model_2 = Word2Vec(size=300, min_count=1)
+model_2.build_vocab(doc_content_list)
+total_examples = model_2.corpus_count
+print(total_examples)
+
+ptmodel = KeyedVectors.load_word2vec_format("SGC/GoogleNews-vectors-negative300.bin", binary=True)
+print('Updating with Google News vocab')
+model_2.build_vocab([list(ptmodel.vocab.keys())], update=True)
+print('Finished updating. Intersecting vectors....')
+model_2.intersect_word2vec_format("SGC/GoogleNews-vectors-negative300.bin", binary=True, lockf=1.0)
+print('Training new model')
+model_2.train(doc_content_list, total_examples=total_examples, epochs=model_2.iter)
+
+model_2.save('data/finetuned_w2v_model.bin')
