@@ -77,7 +77,7 @@
 from gensim.models import KeyedVectors
 from gensim.models import Word2Vec
 
-finetuned_model = Word2Vec.load('data/finetuned_w2v_model.bin', binary=True)
+finetuned_model = Word2Vec.load('data/finetuned_w2v_model.bin')
 print('most similar words to INFECTION')
 print(finetuned_model.wv.most_similar(positive=["infection"]))
 
