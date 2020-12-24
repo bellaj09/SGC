@@ -403,10 +403,12 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
                 # vector_j = np.array(word_vector_map[j])
     
                 similarity = 1.0 - cosine(vector_i, vector_j)
-                pmi = similarity + pmi
                 
-                # if similarity >= 0.3: # if very similar
-                #     pmi = 2*similarity + pmi
+                
+                if similarity >= 0.3: # if very similar
+                    pmi = 2*similarity + pmi
+                else:
+                    pmi = similarity + pmi
 
             row.append(word_id_map[i])
             col.append(word_id_map[j])
