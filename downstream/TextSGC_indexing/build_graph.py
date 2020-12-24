@@ -388,8 +388,6 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
             if pmi <= 0: # only append weights if words frequently co-occur
                 continue
 
-            similarity = pmi
-
             if i in word_vector_map and j in word_vector_map:
                 ### BIOBERT
                 vector_i = np.array(word_vector_map[i]['embedding'][:])
@@ -405,11 +403,11 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
                 # vector_j = np.array(word_vector_map[j])
     
                 similarity = 1.0 - cosine(vector_i, vector_j)
-                similarity = similarity + pmi
+                pmi = similarity + pmi
 
             row.append(word_id_map[i])
             col.append(word_id_map[j])
-            weight.append(similarity)
+            weight.append(pmi)
             
 
     return row, col, weight
