@@ -105,14 +105,15 @@ corp_vocab = list(corp_vocab)
 
 print('length of corp vocab: ', len(corp_vocab))
 
-vectors = []
 filt_vocab = []
 for w in corp_vocab:
     if w in full_vocab:
         filt_vocab.append(str(w))
-        vectors.append(finetuned_model[w])
 
 print('number of corpus words appended: ', len(filt_vocab))
+
+vectors = finetuned_model[corp_vocab]
+
 print('number of vectors appended: ', len(vectors))
 
 with open('data/ftword2vec_corp_vocab.tsv', 'w', newline='') as f_output:
