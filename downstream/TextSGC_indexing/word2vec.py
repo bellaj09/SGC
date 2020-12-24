@@ -137,6 +137,9 @@ for arr in finetuned_model.wv.most_similar(positive=["infect"]):
     corp_vocab.append(word)
     vectors.append(finetuned_model[word])
 
+corp_vocab.append('infect')
+vectors.append(finetuned_model['infect'])
+
 with open('data/ftword2vec_infect_vocab.tsv', 'w', newline='') as f_output:
     tsv_output = csv.writer(f_output, delimiter='\n')
     tsv_output.writerow(corp_vocab)
