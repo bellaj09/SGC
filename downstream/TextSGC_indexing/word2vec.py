@@ -74,6 +74,7 @@
 # model_2.train(doc_content_list, total_examples=total_examples, epochs=model_2.iter)
 
 # model_2.save('data/finetuned_w2v_model.bin')
+
 from gensim.models import KeyedVectors
 from gensim.models import Word2Vec
 
@@ -87,7 +88,7 @@ print('finetuned vocab length is: ', len(full_vocab))
 
 import csv
 
-# get two tsv's of the corpora's vocab and their vectors 
+# get tsv's of the closest words to 
 corp_vocab = []
 
 dataset = ['ohsumed','covid_19_production','pubmed']
@@ -120,6 +121,5 @@ with open('data/ftword2vec_corp_vocab.tsv', 'w', newline='') as f_output:
 
 with open('data/ftword2vec_corp_vectors.tsv', 'w', newline='') as f_output:
     tsv_output = csv.writer(f_output, delimiter='\n')
-    for v in vectors:
-        tsv_output.writerow(v)
+    tsv_output.writerow(vectors)
 
