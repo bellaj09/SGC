@@ -93,7 +93,7 @@ lemmatiser = 'bio'
 for d in dataset:
     with open('data/corpus/' + d + '.' + tokeniser  + '.' + lemmatiser + '_vocab.txt', 'r') as f:
         lines = f.readlines()
-        for l in line:
+        for l in lines:
             corp_vocab.append(str(l))
 
 corp_vocab = list(corp_vocab)
