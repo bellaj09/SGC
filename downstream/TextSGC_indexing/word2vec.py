@@ -131,7 +131,7 @@ print(finetuned_model.wv.most_similar(positive=["infect"]))
 
 corp_vocab = []
 vectors = []
-
+import csv
 for arr in finetuned_model.wv.most_similar(positive=["infect"]):
     word = str(arr[0])
     corp_vocab.append(word)
