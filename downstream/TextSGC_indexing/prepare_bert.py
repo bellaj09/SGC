@@ -24,5 +24,6 @@ with open('data/corpus/'+ dataset + '_trainbiobert.txt', 'w') as f:
             s = re.sub(r'[^a-zA-Z0-9  -]',r'',s)
             sent[i] = s
         sent.append('   ') # empty line at end of doc.
+        sent.insert('   ', 0)
         f.write('\n'.join(sent)) # write each sentence on a new line
         #f.write(" \n") # empty line at end of doc.
