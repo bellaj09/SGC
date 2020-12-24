@@ -102,11 +102,13 @@ for d in dataset:
 
 corp_vocab = list(corp_vocab)
 
+print('length of corp vocab: ', len(corp_vocab))
+
 vectors = []
 filt_vocab = []
 for w in corp_vocab:
     if w in full_vocab:
-        filt_vocab.append(str(filt_vocab))
+        filt_vocab.append(str(w))
         vectors.append(finetuned_model[w])
 
 print('number of corpus words appended: ', len(filt_vocab))
