@@ -120,7 +120,7 @@ with open('data/ftword2vec_corp_vocab.tsv', 'w', newline='') as f_output:
     tsv_output = csv.writer(f_output, delimiter='\n')
     tsv_output.writerow(filt_vocab)
 
-with open('data/ftword2vec_corp_vectors.tsv', 'w', newline='') as f_output:
-    tsv_output = csv.writer(f_output, delimiter='\n')
-    tsv_output.writerow(vectors)
-
+with open('data/ftword2vec_corp_vectors.tsv', 'w', newline='\n') as f_output:
+    tsv_output = csv.writer(f_output, delimiter='\t',lineterminator='\n')
+    for v in vectors:
+        tsv_output.writerow(v)
