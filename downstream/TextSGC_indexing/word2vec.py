@@ -91,7 +91,7 @@ tokeniser = 'treebank'
 lemmatiser = 'bio'
 
 for d in dataset:
-    with open('data/corpus/' + d + '.' + tokeniser  + '.' + lemmatiser + '_vocab.txt', 'w') as f:
+    with open('data/corpus/' + d + '.' + tokeniser  + '.' + lemmatiser + '_vocab.txt', 'r') as f:
         lines = f.readlines()
         for l in line:
             corp_vocab.append(str(l))
