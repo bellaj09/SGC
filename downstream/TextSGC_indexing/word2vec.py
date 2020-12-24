@@ -81,6 +81,10 @@ finetuned_model = Word2Vec.load('data/finetuned_w2v_model.bin')
 print('most similar words to INFECTION')
 print(finetuned_model.wv.most_similar(positive=["infection"]))
 
+full_vocab = list(finetuned_model.wv.vocab)
+
+print('finetuned vocab length is: ', len(full_vocab))
+
 import csv
 
 # get two tsv's of the corpora's vocab and their vectors 
@@ -98,11 +102,19 @@ for d in dataset:
 
 corp_vocab = list(corp_vocab)
 
+vectors = []
+filt_vocab = []
+for w in corp_vocab:
+    if w in full_vocab:
+        filt_vocab.append(str(filt_vocab))
+        vectors.append(finetuned_model[w])
+
+print('number of corpus words appended: ', len(filt_vocab))
+print('number of vectors appended: ', len(vectors))
+
 with open('data/ftword2vec_corp_vocab.tsv', 'w', newline='') as f_output:
     tsv_output = csv.writer(f_output, delimiter='\n')
-    tsv_output.writerow(corp_vocab)
-
-vectors = finetuned_model[corp_vocab]
+    tsv_output.writerow(filt_vocab)
 
 with open('data/ftword2vec_corp_vectors.tsv', 'w', newline='') as f_output:
     tsv_output = csv.writer(f_output, delimiter='\n')
