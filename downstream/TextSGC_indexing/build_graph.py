@@ -384,6 +384,11 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
             word_freq_j = word_window_freq[j]
             pmi = log((1.0 * count / num_window) /
                     (1.0 * word_freq_i * word_freq_j/(num_window * num_window)))
+            
+            if pmi <= 0: # only append weights if words frequently co-occur
+                continue
+
+            similarity = pmi
 
             if i in word_vector_map and j in word_vector_map:
                 ### BIOBERT
@@ -398,16 +403,13 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
                 ### FINETUNED PRETRAINED WORD2VEC
                 # vector_i = np.array(word_vector_map[i])
                 # vector_j = np.array(word_vector_map[j])
-
-                if pmi <= 0: # only append weights if words frequently co-occur
-                    continue
     
                 similarity = 1.0 - cosine(vector_i, vector_j)
                 similarity = similarity + pmi
 
-                row.append(word_id_map[i])
-                col.append(word_id_map[j])
-                weight.append(similarity)
+            row.append(word_id_map[i])
+            col.append(word_id_map[j])
+            weight.append(similarity)
             
 
     return row, col, weight
