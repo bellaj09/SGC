@@ -44,7 +44,7 @@ else:
     device = torch.device("cpu")
 
 # Read Ohsumed dataset
-ohsumed_df = pd.read_csv('ohsumed0.txt', header=None, delimiter='\t')
+ohsumed_df = pd.read_csv('covid_19_production.txt', header=None, delimiter='\t')
 
 for i in ohsumed_df.index: 
     ohsumed_df.loc[i,0] = re.sub('data/','', ohsumed_df.loc[i,0])
@@ -169,8 +169,8 @@ from transformers import BertForSequenceClassification, AdamW, BertConfig
 # Load BertForSequenceClassification, the pretrained BERT model with a single 
 # linear classification layer on top. 
 model = BertForSequenceClassification.from_pretrained(
-    "dmis-lab/biobert-large-cased-v1.1", # Use the 12-layer BERT model, with an uncased vocab.
-    num_labels = 23, # The number of output labels--2 for binary classification.
+    "tokenised_model_save_covid/", # Use the 12-layer BERT model, with an uncased vocab.
+    num_labels = 32, # The number of output labels--2 for binary classification.
                     # You can increase this for multi-class tasks.   
     output_attentions = False, # Whether the model returns attentions weights.
     output_hidden_states = False, # Whether the model returns all hidden-states.
@@ -471,7 +471,7 @@ df_stats
 
 # Saving best-practices: if you use defaults names for the model, you can reload it using from_pretrained()
 
-output_dir = './tokenised_model_save/'
+output_dir = './tokenised_model_save_covid/'
 
 # Create output directory if needed
 if not os.path.exists(output_dir):
@@ -486,5 +486,5 @@ model_to_save.save_pretrained(output_dir)
 tokenizer.save_pretrained(output_dir)
 
 # Good practice: save your training arguments together with the trained model
-torch.save(args, os.path.join(output_dir, 'training_args.bin'))
+#torch.save(args, os.path.join(output_dir, 'training_args.bin'))
 
