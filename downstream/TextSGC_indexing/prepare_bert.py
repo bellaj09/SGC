@@ -7,6 +7,10 @@ parser.add_argument('--dataset', type=str, default='20ng',
                     choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr', 'yelp', 'ag_news', 'covid_19_production','pubmed'],
                     help='dataset name')
 
+args = parser.parse_args()
+
+dataset = args.dataset
+
 doc_content_list = []
 f = open('../data/corpus/' + dataset + '.txt', 'rb')
 for line in f.readlines():
