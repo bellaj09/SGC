@@ -86,10 +86,17 @@ import csv
 # get two tsv's of the corpora's vocab and their vectors 
 corp_vocab = []
 
-with open('data/corpus/' + dataset + '.' + tokeniser  + '.' + lemmatiser + '_vocab.txt', 'w') as f:
-    lines = f.readlines()
-    for l in line:
-        corp_vocab.append(str(l))
+dataset = ['ohsumed','covid_19_production','pubmed']
+tokeniser = 'treebank'
+lemmatiser = 'bio'
+
+for d in dataset:
+    with open('data/corpus/' + d + '.' + tokeniser  + '.' + lemmatiser + '_vocab.txt', 'w') as f:
+        lines = f.readlines()
+        for l in line:
+            corp_vocab.append(str(l))
+
+corp_vocab = list(corp_vocab)
 
 with open('data/ftword2vec_corp_vocab.tsv', 'w', newline='') as f_output:
     tsv_output = csv.writer(f_output, delimiter='\n')
