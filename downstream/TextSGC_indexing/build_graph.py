@@ -211,9 +211,9 @@ with open('data/corpus/' + dataset + '.' + tokeniser  + '.' + lemmatiser + '_voc
 
 ## BIOBERT
 
-# args.embedding_path = 'data/corpus/{}_ft-biobert-large_embeddings.h5'.format(dataset) 
-# word_embeddings_dim = args.embedding_dim
-# word_vector_map = h5py.File(args.embedding_path, 'r') # TODO: modify this to use embedding
+args.embedding_path = 'data/corpus/{}_ft-biobert-large_embeddings.h5'.format(dataset) 
+word_embeddings_dim = args.embedding_dim
+word_vector_map = h5py.File(args.embedding_path, 'r') # TODO: modify this to use embedding
 
 ## WORD2VEC - trained just on the three corpora
 # import csv
@@ -229,14 +229,14 @@ with open('data/corpus/' + dataset + '.' + tokeniser  + '.' + lemmatiser + '_voc
 #             word_vector_map[word] = embeds[i] # creating dictionary of word:embedding
 
 ## WORD2VEC - pretrained and finetuned
-finetuned_model = Word2Vec.load('data/finetuned_w2v_model.bin')
-progress_bar = tqdm(vocab)
-progress_bar.set_postfix_str('collecting embeddings for vocab')
-word_vector_map = {}
-model_vocab = list(finetuned_model.wv.vocab) 
-for word in progress_bar:
-    if word in model_vocab:
-        word_vector_map[word] = finetuned_model[str(word)]
+# finetuned_model = Word2Vec.load('data/finetuned_w2v_model.bin')
+# progress_bar = tqdm(vocab)
+# progress_bar.set_postfix_str('collecting embeddings for vocab')
+# word_vector_map = {}
+# model_vocab = list(finetuned_model.wv.vocab) 
+# for word in progress_bar:
+#     if word in model_vocab:
+#         word_vector_map[word] = finetuned_model[str(word)]
 
 ## WORD2VEC - just pretrained
 # from gensim.models import KeyedVectors
@@ -387,17 +387,17 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
 
             if i in word_vector_map and j in word_vector_map:
                 ### BIOBERT
-                # vector_i = np.array(word_vector_map[i]['embedding'][:])
-                # vector_j = np.array(word_vector_map[j]['embedding'][:])
-                # similarity = 1.0 - cosine(vector_i, vector_j)
+                vector_i = np.array(word_vector_map[i]['embedding'][:])
+                vector_j = np.array(word_vector_map[j]['embedding'][:])
+                similarity = 1.0 - cosine(vector_i, vector_j)
 
                 ### WORD2VEC - just on three corpora
                 # vector_i = np.array(word_vector_map[i])
                 # vector_j = np.array(word_vector_map[j])       
 
                 ### FINETUNED PRETRAINED WORD2VEC
-                vector_i = np.array(word_vector_map[i])
-                vector_j = np.array(word_vector_map[j])
+                # vector_i = np.array(word_vector_map[i])
+                # vector_j = np.array(word_vector_map[j])
 
                 if pmi <= 0: # only append weights if words frequently co-occur
                     continue
@@ -494,3 +494,24 @@ export_graph(concat_graph(B, C, D), node_size, phase="BCD")
 export_graph(concat_graph(B, C), node_size, phase="BC")
 export_graph(concat_graph(B, D), node_size, phase="BD")
 export_graph(B, node_size, phase="B")
+
+# # get tsv's of the closest words to 'infect'
+# print('most similar words to INFECT')
+# print(finetuned_model.wv.most_similar(positive=["infect"]))
+
+# corp_vocab = []
+# vectors = []
+
+# for arr in finetuned_model.wv.most_similar(positive=["infect"]):
+#     word = str(arr[0])
+#     corp_vocab.append(word)
+#     vectors.append(finetuned_model[word])
+
+# with open('data/ftword2vec_infect_vocab.tsv', 'w', newline='') as f_output:
+#     tsv_output = csv.writer(f_output, delimiter='\n')
+#     tsv_output.writerow(corp_vocab)
+
+# with open('data/ftword2vec_infect_vectors.tsv', 'w', newline='') as f_output:
+#     tsv_output = csv.writer(f_output, delimiter='\n')
+#     for v in vectors:
+#         tsv_output.writerow(v)
