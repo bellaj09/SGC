@@ -79,48 +79,69 @@ from gensim.models import KeyedVectors
 from gensim.models import Word2Vec
 
 finetuned_model = Word2Vec.load('data/finetuned_w2v_model.bin')
-print('most similar words to INFECTION')
-print(finetuned_model.wv.most_similar(positive=["infection"]))
+# print('most similar words to INFECTION')
+# print(finetuned_model.wv.most_similar(positive=["infection"]))
 
-full_vocab = list(finetuned_model.wv.vocab)
+# full_vocab = list(finetuned_model.wv.vocab)
 
-print('finetuned vocab length is: ', len(full_vocab))
+# print('finetuned vocab length is: ', len(full_vocab))
 
-import csv
+# import csv
 
-# get tsv's of the closest words to 
+# # get tsv's of the closest words to 
+# corp_vocab = []
+
+# dataset = ['ohsumed','covid_19_production','pubmed']
+# tokeniser = 'treebank'
+# lemmatiser = 'bio'
+
+# for d in dataset:
+#     with open('data/corpus/' + d + '.' + tokeniser  + '.' + lemmatiser + '_vocab.txt', 'r') as f:
+#         lines = f.readlines()
+#         for l in lines:
+#             corp_vocab.append(str(l).strip('\n'))
+
+# corp_vocab = list(corp_vocab)
+
+# print('length of corp vocab: ', len(corp_vocab))
+
+# filt_vocab = []
+# for w in corp_vocab:
+#     if w in full_vocab:
+#         filt_vocab.append(str(w))
+
+# print('number of corpus words appended: ', len(filt_vocab))
+
+# vectors = finetuned_model[corp_vocab]
+
+# print('number of vectors appended: ', len(vectors))
+
+# with open('data/ftword2vec_corp_vocab.tsv', 'w', newline='') as f_output:
+#     tsv_output = csv.writer(f_output, delimiter='\n')
+#     tsv_output.writerow(filt_vocab)
+
+# with open('data/ftword2vec_corp_vectors.tsv', 'w', newline='\n') as f_output:
+#     tsv_output = csv.writer(f_output, delimiter='\t',lineterminator='\n')
+#     for v in vectors:
+#         tsv_output.writerow(v)
+
+# get tsv's of the closest words to 'infect'
+print('most similar words to INFECT')
+print(finetuned_model.wv.most_similar(positive=["infect"]))
+
 corp_vocab = []
+vectors = []
 
-dataset = ['ohsumed','covid_19_production','pubmed']
-tokeniser = 'treebank'
-lemmatiser = 'bio'
+for arr in finetuned_model.wv.most_similar(positive=["infect"]):
+    word = str(arr[0])
+    corp_vocab.append(word)
+    vectors.append(finetuned_model[word])
 
-for d in dataset:
-    with open('data/corpus/' + d + '.' + tokeniser  + '.' + lemmatiser + '_vocab.txt', 'r') as f:
-        lines = f.readlines()
-        for l in lines:
-            corp_vocab.append(str(l).strip('\n'))
-
-corp_vocab = list(corp_vocab)
-
-print('length of corp vocab: ', len(corp_vocab))
-
-filt_vocab = []
-for w in corp_vocab:
-    if w in full_vocab:
-        filt_vocab.append(str(w))
-
-print('number of corpus words appended: ', len(filt_vocab))
-
-vectors = finetuned_model[corp_vocab]
-
-print('number of vectors appended: ', len(vectors))
-
-with open('data/ftword2vec_corp_vocab.tsv', 'w', newline='') as f_output:
+with open('data/ftword2vec_infect_vocab.tsv', 'w', newline='') as f_output:
     tsv_output = csv.writer(f_output, delimiter='\n')
-    tsv_output.writerow(filt_vocab)
+    tsv_output.writerow(corp_vocab)
 
-with open('data/ftword2vec_corp_vectors.tsv', 'w', newline='\n') as f_output:
+with open('data/ftword2vec_infect_vectors.tsv', 'w', newline='') as f_output:
     tsv_output = csv.writer(f_output, delimiter='\t',lineterminator='\n')
     for v in vectors:
         tsv_output.writerow(v)
