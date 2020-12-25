@@ -72,7 +72,7 @@ for i in ohsumed_df.index:
     text = f.read()
     text = text.strip().lower()
     text = re.sub(r'[^a-zA-Z  -]',r'',text) # all numbers, punctuation and special characters can just disappear, except for hyphen
-    text = TreebankWordTokenizer().tokenize(doc)
+    text = TreebankWordTokenizer().tokenize(text)
     all_texts.append(text) # tokenised text
     all_labels.append(ohsumed_df.loc[i,2])
 
