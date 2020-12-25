@@ -1,3 +1,14 @@
+# Load tokenizer 
+# Go through vocab.txt, check if in the tokenizer vocab, if not, append. 
+# Load the pretrained biobert 
+# Train to classify the tokens in clean.txt
+# Save the trained model
+
+# Load the trained model
+# Extract embeddings for each token from the hidden layers 
+
+# Repeat training for all three corpora
+
 import torch
 torch.cuda.empty_cache()
 
@@ -44,7 +55,7 @@ else:
     device = torch.device("cpu")
 
 # Read Ohsumed dataset
-ohsumed_df = pd.read_csv('covid_19_production.txt', header=None, delimiter='\t')
+ohsumed_df = pd.read_csv('ohsumed0.txt', header=None, delimiter='\t')
 
 for i in ohsumed_df.index: 
     ohsumed_df.loc[i,0] = re.sub('data/','', ohsumed_df.loc[i,0])
@@ -62,10 +73,18 @@ for i in ohsumed_df.index:
     all_texts.append(text)
     all_labels.append(ohsumed_df.loc[i,2])
 
-tokenizer = BertTokenizer.from_pretrained('dmis-lab/biobert-large-cased-v1.1', do_lower_case=True)
+# Load the cleaned vocab -> tokens that are never split
+corp_vocab = []
+vocab_path = '../../TextSGC_indexing/data/corpus/ohsumed.treebank.bio_vocab.txt'
+with open(vocab_path,'r') as f:
+    lines = f.readlines()
+    for l in lines:
+        corp_vocab.append(str(l).strip('\n'))
+
+tokenizer = BertTokenizer.from_pretrained('dmis-lab/biobert-large-cased-v1.1', do_lower_case=True,never_split=corp_vocab)
 
 # Print the original sentence.
-print(' Original: ', all_texts[0])
+print('Original: ', all_texts[0])
 
 # Print the sentence split into tokens.
 print('Tokenized: ', tokenizer.tokenize(all_texts[0]))
@@ -169,8 +188,8 @@ from transformers import BertForSequenceClassification, AdamW, BertConfig
 # Load BertForSequenceClassification, the pretrained BERT model with a single 
 # linear classification layer on top. 
 model = BertForSequenceClassification.from_pretrained(
-    "tokenised_model_save_covid/", # Use the 12-layer BERT model, with an uncased vocab.
-    num_labels = 32, # The number of output labels--2 for binary classification.
+    "dmis-lab/biobert-large-cased-v1.1", # Use the 12-layer BERT model, with an uncased vocab.
+    num_labels = 23, # The number of output labels--2 for binary classification.
                     # You can increase this for multi-class tasks.   
     output_attentions = False, # Whether the model returns attentions weights.
     output_hidden_states = False, # Whether the model returns all hidden-states.
@@ -471,7 +490,7 @@ df_stats
 
 # Saving best-practices: if you use defaults names for the model, you can reload it using from_pretrained()
 
-output_dir = './tokenised_model_save_covid/'
+output_dir = './tuned_biobert_ohsumed/'
 
 # Create output directory if needed
 if not os.path.exists(output_dir):
