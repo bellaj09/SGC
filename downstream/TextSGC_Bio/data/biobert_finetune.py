@@ -38,6 +38,8 @@ import tensorflow as tf
 import time
 import datetime
 import random
+import subprocess
+import nltk
 
 # Set device to GPU if available
 if torch.cuda.is_available():    
@@ -72,6 +74,26 @@ for i in ohsumed_df.index:
     text = re.sub(r'[^a-zA-Z  -]',r'',text) # all numbers, punctuation and special characters can just disappear, except for hyphen
     all_texts.append(text)
     all_labels.append(ohsumed_df.loc[i,2])
+
+# BIOLemmatisation
+pos_set = []
+doc_lens = []
+# Loop through clean_words, POS tag and biolemmatize
+for doc in all_texts: 
+    doc_lens.append(len(doc)) # track number of tokens in each doc
+    for tags in nltk.pos_tag(doc):
+        pos_set.append(tags) # compile one big list of all tagged tokens
+tagged_df = pd.DataFrame(pos_set)
+tagged_df.to_csv('../tagged_string.txt',sep = '\t',header = False, index = False)
+subprocess.run(["java -Xmx1G -jar ../biolemmatizer-core-1.2-jar-with-dependencies.jar -l -i '../tagged_string.txt' -o '../biolemmatizer_output.txt'"], shell=True)
+lem_df = pd.read_csv('../biolemmatizer_output.txt', header=None, sep='\t')
+all_tokens = lem_df[2].to_list()
+current_i = 0
+all_texts = [] # Replace clean_words
+for length in doc_lens:
+    current_string = all_tokens[current_i:current_i+length]
+    all_texts.append(current_string)
+    current_i = current_i + length
 
 # Load the cleaned vocab -> tokens that are never split
 corp_vocab = []
