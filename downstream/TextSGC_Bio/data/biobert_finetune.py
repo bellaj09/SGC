@@ -11,7 +11,7 @@
 
 import torch
 torch.cuda.empty_cache()
-
+from nltk.tokenize.treebank import TreebankWordTokenizer
 import argparse
 from transformers import (
     AutoConfig,
@@ -72,7 +72,8 @@ for i in ohsumed_df.index:
     text = f.read()
     text = text.strip().lower()
     text = re.sub(r'[^a-zA-Z  -]',r'',text) # all numbers, punctuation and special characters can just disappear, except for hyphen
-    all_texts.append(text)
+    text = TreebankWordTokenizer().tokenize(doc)
+    all_texts.append(text) # tokenised text
     all_labels.append(ohsumed_df.loc[i,2])
 
 # BIOLemmatisation
@@ -89,9 +90,10 @@ subprocess.run(["java -Xmx1G -jar ../biolemmatizer-core-1.2-jar-with-dependencie
 lem_df = pd.read_csv('../biolemmatizer_output.txt', header=None, sep='\t')
 all_tokens = lem_df[2].to_list()
 current_i = 0
-all_texts = [] # Replace clean_words
+all_texts = [] # Replace all_texts
 for length in doc_lens:
     current_string = all_tokens[current_i:current_i+length]
+    current_string = ' '.join(current_string) # write the words, separated by spaces
     all_texts.append(current_string)
     current_i = current_i + length
 
