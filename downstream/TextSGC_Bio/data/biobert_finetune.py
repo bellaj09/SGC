@@ -93,6 +93,7 @@ current_i = 0
 all_texts = [] # Replace all_texts
 for length in doc_lens:
     current_string = all_tokens[current_i:current_i+length]
+    current_string = [str(t) for t in current_string]
     current_string = ' '.join(current_string) # write the words, separated by spaces
     all_texts.append(current_string)
     current_i = current_i + length
