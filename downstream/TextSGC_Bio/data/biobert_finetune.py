@@ -83,7 +83,7 @@ for i in ohsumed_df.index:
         print(paired_list)
 
     for pair in paired_list:
-        pair = re.sub("."," ",pair) # replace full stop with space because sentences are stuck together
+        pair = re.sub(r'[.]'," ",pair) # replace full stop with space because sentences are stuck together
         pair = re.sub(r'[^a-zA-Z  -]',r'',pair)
         pair = TreebankWordTokenizer().tokenize(pair)
         all_texts.append(pair) # append the tokenised pair of sentences
