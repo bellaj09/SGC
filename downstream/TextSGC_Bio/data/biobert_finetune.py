@@ -151,7 +151,7 @@ for sent in all_texts:
 
 print('Max sentence length: ', max_len)
 
-max_len = 512 # setting to the max length.
+max_len = 390 # setting to the max length.
 
 # Tokenize all of the sentences and map the tokens to their word IDs.
 input_ids = []
@@ -212,7 +212,7 @@ from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 # The DataLoader needs to know our batch size for training, so we specify it 
 # here. For fine-tuning BERT on a specific task, the authors recommend a batch 
 # size of 16 or 32.
-batch_size = 2
+batch_size = 8
 
 # Create the DataLoaders for our training and validation sets.
 # We'll take training samples in random order. 
