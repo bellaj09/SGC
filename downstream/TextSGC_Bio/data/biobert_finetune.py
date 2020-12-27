@@ -58,12 +58,23 @@ else:
     device = torch.device("cpu")
 
 # Read Ohsumed dataset
-ohsumed_df = pd.read_csv('ohsumed0.txt', header=None, delimiter='\t')
+ohsumed_df = pd.read_csv('covid_19_production0.txt', header=None, delimiter='\t')
+
+label_names = set()
 
 for i in ohsumed_df.index: 
     ohsumed_df.loc[i,0] = re.sub('data/','', ohsumed_df.loc[i,0])
-    ohsumed_df.loc[i,2] = re.sub('C','', ohsumed_df.loc[i,2])
-    ohsumed_df.loc[i,2] = int(ohsumed_df.loc[i,2])-1
+    label_names.add(ohsumed_df.loc[i,2]) # add the class label
+
+# convert class labels to id's
+label_names = list(label_names)
+label_names_to_index = {name:i for i, name in enumerate(label_names)}
+print('dict label names to index: ', label_names_to_index)
+index_to_label_name = {i:name for i, name in enumerate(label_names)}
+
+for i in ohsumed_df.index: 
+    ohsumed_df.loc[i,2] = label_names_to_index[ohsumed_df.loc[i,2]] # convert all label names in column to the index
+
 
 all_texts = []
 all_labels = []
@@ -93,7 +104,7 @@ for i in ohsumed_df.index:
         # all_labels should be a label for each sentence pair
 
 print('first sentence pair', all_texts[0])
-print('first label:', all_labels[0])
+print('first label:', all_labels[0], index_to_label_name[all_labels[0]])
     
 
 # BIOLemmatisation
@@ -133,7 +144,7 @@ for length in doc_lens:
 
 # Load the cleaned vocab -> tokens that are never split
 corp_vocab = []
-vocab_path = '../../TextSGC_indexing/data/corpus/ohsumed.treebank.bio_vocab.txt'
+vocab_path = '../../TextSGC_indexing/data/corpus/covid_19_production.treebank.bio_vocab.txt'
 with open(vocab_path,'r') as f:
     lines = f.readlines()
     for l in lines:
@@ -548,7 +559,7 @@ df_stats
 
 # Saving best-practices: if you use defaults names for the model, you can reload it using from_pretrained()
 
-output_dir = './tuned_biobert_ohsumed/'
+output_dir = './tuned_biobert_covid/'
 
 # Create output directory if needed
 if not os.path.exists(output_dir):
