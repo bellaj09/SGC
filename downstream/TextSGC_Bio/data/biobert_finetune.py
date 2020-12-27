@@ -40,6 +40,7 @@ import datetime
 import random
 import subprocess
 import nltk
+from nltk.tokenize import sent_tokenize
 
 # Set device to GPU if available
 if torch.cuda.is_available():    
@@ -71,10 +72,26 @@ for i in ohsumed_df.index:
     f = open(ohsumed_df.loc[i,0],'r')
     text = f.read()
     text = text.strip().lower()
-    text = re.sub(r'[^a-zA-Z  -]',r'',text) # all numbers, punctuation and special characters can just disappear, except for hyphen
-    text = TreebankWordTokenizer().tokenize(text)
-    all_texts.append(text) # tokenised text
-    all_labels.append(ohsumed_df.loc[i,2])
+    sentences = sent_tokenize(text)
+
+    # Pair up the sentences in the document
+    sent_list = sent_tokenize(text)
+    list_length = len(sent_list)
+    paired_list = [sent_list[i] + sent_list[i+1] for i in range(0, list_length-1, 2)]
+    if list_length % 2 == 1:
+        paired_list.append(sent_list[list_length-1])
+    
+    for j, pair in paired_list:
+        text = re.sub("."," ",pair) # replace full stop with space because sentences are stuck together
+        text = re.sub(r'[^a-zA-Z  -]',r'',text)
+        text = TreebankWordTokenizer().tokenize(text)
+        all_texts.append(text) # append the tokenised pair of sentences
+        all_labels.append(ohsumed_df.loc[i,2]) # append the label as well 
+
+        # all_texts should be a list of sentence pairs
+        # all_labels should be a label for each sentence pair
+        
+    
 
 # BIOLemmatisation
 pos_set = []
