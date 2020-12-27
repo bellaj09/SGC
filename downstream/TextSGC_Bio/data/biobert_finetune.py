@@ -90,7 +90,9 @@ for i in ohsumed_df.index:
 
         # all_texts should be a list of sentence pairs
         # all_labels should be a label for each sentence pair
-        
+
+print('first sentence pair': all_texts[0])
+print('first label:', all_labels[0])
     
 
 # BIOLemmatisation
@@ -102,6 +104,7 @@ for doc in all_texts:
     for tags in nltk.pos_tag(doc):
         pos_set.append(tags) # compile one big list of all tagged tokens
 tagged_df = pd.DataFrame(pos_set)
+tagged_df.head()
 tagged_df.to_csv('../tagged_string.txt',sep = '\t',header = False, index = False)
 subprocess.run(["java -Xmx1G -jar ../biolemmatizer-core-1.2-jar-with-dependencies.jar -l -i '../tagged_string.txt' -o '../biolemmatizer_output.txt'"], shell=True)
 lem_df = pd.read_csv('../biolemmatizer_output.txt', header=None, sep='\t')
