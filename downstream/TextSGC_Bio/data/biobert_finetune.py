@@ -72,8 +72,6 @@ for i in ohsumed_df.index:
     f = open(ohsumed_df.loc[i,0],'r')
     text = f.read()
     text = text.strip().lower()
-    sentences = sent_tokenize(text)
-
     # Pair up the sentences in the document
     sent_list = sent_tokenize(text)
     list_length = len(sent_list)
@@ -81,11 +79,14 @@ for i in ohsumed_df.index:
     if list_length % 2 == 1:
         paired_list.append(sent_list[list_length-1])
     
+    if i == 0:
+        print(paired_list)
+
     for pair in paired_list:
-        text = re.sub("."," ",pair) # replace full stop with space because sentences are stuck together
-        text = re.sub(r'[^a-zA-Z  -]',r'',text)
-        text = TreebankWordTokenizer().tokenize(text)
-        all_texts.append(text) # append the tokenised pair of sentences
+        pair = re.sub("."," ",pair) # replace full stop with space because sentences are stuck together
+        pair = re.sub(r'[^a-zA-Z  -]',r'',pair)
+        pair = TreebankWordTokenizer().tokenize(pair)
+        all_texts.append(pair) # append the tokenised pair of sentences
         all_labels.append(ohsumed_df.loc[i,2]) # append the label as well 
 
         # all_texts should be a list of sentence pairs
