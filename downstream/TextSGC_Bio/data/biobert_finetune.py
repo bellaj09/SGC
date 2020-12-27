@@ -163,7 +163,7 @@ for sent in all_texts:
 
 print('Max sentence length: ', max_len)
 
-max_len = 390 # setting to the max length.
+max_len = 150 # setting to the max length.
 
 # Tokenize all of the sentences and map the tokens to their word IDs.
 input_ids = []
