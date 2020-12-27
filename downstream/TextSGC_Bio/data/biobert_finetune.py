@@ -108,7 +108,7 @@ for doc in all_texts:
 doc_lens = np.array(doc_lens)
 print('max sent length:', np.max(doc_lens))
 print('mean sent length:', np.mean(doc_lens))
-print('number of sentences longer than 30:', np.count_nonzero(doc_lens > 60))
+print('number of sentences longer than 100:', np.count_nonzero(doc_lens > 100))
 tagged_df = pd.DataFrame(pos_set)
 tagged_df.head()
 tagged_df.to_csv('../tagged_string.txt',sep = '\t',header = False, index = False)
