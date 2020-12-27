@@ -91,7 +91,7 @@ for i in ohsumed_df.index:
         # all_texts should be a list of sentence pairs
         # all_labels should be a label for each sentence pair
 
-print('first sentence pair': all_texts[0])
+print('first sentence pair', all_texts[0])
 print('first label:', all_labels[0])
     
 
