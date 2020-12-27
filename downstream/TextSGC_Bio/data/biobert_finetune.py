@@ -80,7 +80,7 @@ all_texts = []
 all_labels = []
 
 for i in ohsumed_df.index:
-    f = open(ohsumed_df.loc[i,0],'r')
+    f = open(ohsumed_df.loc[i,0]+'.txt','r')
     text = f.read()
     text = text.strip().lower()
     # Pair up the sentences in the document
