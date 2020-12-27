@@ -99,11 +99,15 @@ print('first label:', all_labels[0])
 # BIOLemmatisation
 pos_set = []
 doc_lens = []
+
 # Loop through clean_words, POS tag and biolemmatize
 for doc in all_texts: 
     doc_lens.append(len(doc)) # track number of tokens in each doc
     for tags in nltk.pos_tag(doc):
         pos_set.append(tags) # compile one big list of all tagged tokens
+print('max sent length:', np.max(doc_lens))
+print('mean sent length:', np.mean(doc_lens))
+print('number of sentences longer than 30:', np.count_nonzero(doc_lens > 60))
 tagged_df = pd.DataFrame(pos_set)
 tagged_df.head()
 tagged_df.to_csv('../tagged_string.txt',sep = '\t',header = False, index = False)
