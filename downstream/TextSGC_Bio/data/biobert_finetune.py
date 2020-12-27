@@ -105,6 +105,7 @@ for doc in all_texts:
     doc_lens.append(len(doc)) # track number of tokens in each doc
     for tags in nltk.pos_tag(doc):
         pos_set.append(tags) # compile one big list of all tagged tokens
+doc_lens = np.array(doc_lens)
 print('max sent length:', np.max(doc_lens))
 print('mean sent length:', np.mean(doc_lens))
 print('number of sentences longer than 30:', np.count_nonzero(doc_lens > 60))
