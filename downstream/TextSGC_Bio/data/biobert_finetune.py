@@ -63,8 +63,17 @@ ohsumed_df = pd.read_csv('pubmed0.txt', header=None, delimiter='\t')
 label_names = set()
 
 for i in ohsumed_df.index: 
-    ohsumed_df.loc[i,0] = re.sub('data/','', ohsumed_df.loc[i,0])
+    #ohsumed_df.loc[i,0] = re.sub('data/','', ohsumed_df.loc[i,0])
     label_names.add(ohsumed_df.loc[i,2]) # add the class label
+
+# Get the texts from the corpus txt
+doc_content_list = []
+f = open('corpus/pubmed.txt', 'rb')
+for line in f.readlines():
+    doc_content_list.append(line.strip().decode('latin1'))
+f.close()
+print('length of corpus doc_content_list: ', len(doc_content_list))
+print('length of df: ', len(ohsumed_df))
 
 # convert class labels to id's
 label_names = list(label_names)
@@ -74,14 +83,15 @@ index_to_label_name = {i:name for i, name in enumerate(label_names)}
 
 for i in ohsumed_df.index: 
     ohsumed_df.loc[i,2] = label_names_to_index[ohsumed_df.loc[i,2]] # convert all label names in column to the index
-
+    ohsumed_df.loc[i,0] = doc_content_list[i]
 
 all_texts = []
 all_labels = []
 
 for i in ohsumed_df.index:
-    f = open(ohsumed_df.loc[i,0]+'.txt','r')
-    text = f.read()
+    # f = open(ohsumed_df.loc[i,0]+'.txt','r')
+    # text = f.read()
+    text = ohsumed_df.loc[i,0]
     text = text.strip().lower()
     # Pair up the sentences in the document
     sent_list = sent_tokenize(text)
@@ -144,7 +154,7 @@ for length in doc_lens:
 
 # Load the cleaned vocab -> tokens that are never split
 corp_vocab = []
-vocab_path = '../../TextSGC_indexing/data/corpus/pubmed.treebank.bio_vocab.txt'
+vocab_path = 'corpus/pubmed.treebank.bio_vocab.txt'
 with open(vocab_path,'r') as f:
     lines = f.readlines()
     for l in lines:
