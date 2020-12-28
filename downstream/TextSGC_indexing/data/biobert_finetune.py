@@ -68,7 +68,7 @@ for i in ohsumed_df.index:
 
 # Get the texts from the corpus txt
 doc_content_list = []
-f = open('corpus/pubmed.txt', 'rb')
+f = open('../../data/corpus/pubmed.txt', 'rb')
 for line in f.readlines():
     doc_content_list.append(line.strip().decode('latin1'))
 f.close()
