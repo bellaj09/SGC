@@ -1,5 +1,5 @@
 Deep Learning
-Brain Machine Interfaces
-Virtual Reality
 Human Connectome
+Virtual Reality
+Brain Machine Interfaces
 Covid19
