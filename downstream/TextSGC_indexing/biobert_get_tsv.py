@@ -7,7 +7,7 @@ word_vector_map = h5py.File(embedding_path, 'r')
 
 ### Closest words to infect
 
-closest_words = ['infect', 'influent', 'infective', 'coinfect', 'infector','infecting','influenza','infected','infectivty','infectious','infection']
+closest_words = ['infect', 'influent', 'infective', 'coinfect', 'infector','infecting','influenza','infected','infectivity','infectious','infection']
 corp_vocab = []
 vectors = []
 
