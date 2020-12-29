@@ -10,7 +10,7 @@ vectors = []
 
 for word in word_vector_map:
     corp_vocab.append(str(word))
-    vectors = np.array(word_vector_map[word]['embedding'][:])
+    vectors.append(np.array(word_vector_map[word]['embedding'][:]))
 
 with open('data/ftbiobert_all_vocab.tsv', 'w', newline='') as f_output:
     tsv_output = csv.writer(f_output, delimiter='\n')
