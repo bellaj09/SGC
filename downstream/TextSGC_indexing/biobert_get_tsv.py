@@ -1,7 +1,7 @@
 import h5py 
 import csv
 
-embedding_path = 'data/corpus/all_corpora_ft-biobert-large_embeddings.h5'.format(dataset) 
+embedding_path = 'data/corpus/all_corpora_ft-biobert-large_embeddings.h5'
 word_vector_map = h5py.File(embedding_path, 'r')
 
 corp_vocab = []
