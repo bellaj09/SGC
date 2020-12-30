@@ -20,6 +20,7 @@ import pandas as pd
 import time
 from gensim.models import Word2Vec
 import torch
+from sklearn.preprocessing import StandardScaler
 
 parser = argparse.ArgumentParser(description='Build Document Graph')
 parser.add_argument('--dataset', type=str, default='20ng',
@@ -413,7 +414,6 @@ def build_word_word_graph(num_window, word_id_map, word_window_freq, word_pair_c
             row.append(word_id_map[i])
             col.append(word_id_map[j])
             weight.append(pmi)
-            
 
     return row, col, weight
 
@@ -462,6 +462,22 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
                     col.append(doc_id)
                     weight.append(w)
                 else: raise ValueError("wrong phase")
+
+    ########### TFIDF FEATURE SCALING #########
+
+    # Standardisation
+    print('max TFIDF: ', np.max(weight))
+    print('min TFIDF: ', np.min(weight))
+    print('mean TFIDF: ', np.mean(weight))
+
+    scaler = StandardScaler()
+    weight = scaler.fit_transform(weight)
+    
+    print('AFTER STANDARDISING: ')
+    print('max std TFIDF: ', np.max(weight))
+    print('min std TFIDF: ', np.min(weight))
+    print('mean std TFIDF: ', np.mean(weight))   
+
     return row, col, weight
 
 def concat_graph(*args):
