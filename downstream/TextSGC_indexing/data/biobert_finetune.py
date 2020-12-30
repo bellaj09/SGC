@@ -184,7 +184,7 @@ for sent in all_texts:
 
 print('Max sentence length: ', max_len)
 
-max_len = 150 # setting to the max length.
+max_len = 120 # setting to the max length. # Ohsumed = 120, 
 
 # Tokenize all of the sentences and map the tokens to their word IDs.
 input_ids = []
@@ -267,7 +267,7 @@ from transformers import BertForSequenceClassification, AdamW, BertConfig
 # Load BertForSequenceClassification, the pretrained BERT model with a single 
 # linear classification layer on top. 
 model = BertForSequenceClassification.from_pretrained(
-    'tuned_biobert_ohsumed', # use the already trained model, just further train now.
+    '../../TextSGC_Bio/data/tuned_biobert_ohsumed', # use the already trained model, just further train now.
     #"dmis-lab/biobert-large-cased-v1.1", # Use the 12-layer BERT model, with an uncased vocab.
     num_labels = 5, # The number of output labels--2 for binary classification.
                     # You can increase this for multi-class tasks.   
