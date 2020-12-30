@@ -269,7 +269,7 @@ from transformers import BertForSequenceClassification, AdamW, BertConfig
 model = BertForSequenceClassification.from_pretrained(
     '../../TextSGC_Bio/data/tuned_biobert_ohsumed', # use the already trained model, just further train now.
     #"dmis-lab/biobert-large-cased-v1.1", # Use the 12-layer BERT model, with an uncased vocab.
-    num_labels = 5, # The number of output labels--2 for binary classification.
+    num_labels = 23, # The number of output labels--2 for binary classification.
                     # You can increase this for multi-class tasks.   
     output_attentions = False, # Whether the model returns attentions weights.
     output_hidden_states = False, # Whether the model returns all hidden-states.
