@@ -465,18 +465,19 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
 
     ########### TFIDF FEATURE SCALING #########
 
-    # Standardisation
+    # # Standardisation
     print('max TFIDF: ', np.max(weight))
     print('min TFIDF: ', np.min(weight))
     print('mean TFIDF: ', np.mean(weight))
+    print('median TFIDF: ', np.median(weight))
 
-    scaler = StandardScaler()
-    weight = scaler.fit_transform(weight)
-    
-    print('AFTER STANDARDISING: ')
-    print('max std TFIDF: ', np.max(weight))
-    print('min std TFIDF: ', np.min(weight))
-    print('mean std TFIDF: ', np.mean(weight))   
+    # scaler = StandardScaler()
+    # weight = scaler.fit_transform(weight)
+
+    # print('AFTER STANDARDISING: ')
+    # print('max std TFIDF: ', np.max(weight))
+    # print('min std TFIDF: ', np.min(weight))
+    # print('mean std TFIDF: ', np.mean(weight))   
 
     return row, col, weight
 
