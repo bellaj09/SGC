@@ -570,7 +570,7 @@ df_stats
 
 # Saving best-practices: if you use defaults names for the model, you can reload it using from_pretrained()
 
-output_dir = './tuned_biobert_ohsumed2/'
+output_dir = '../../TextSGC_Bio/data/tuned_biobert_ohsumed2/'
 
 # Create output directory if needed
 if not os.path.exists(output_dir):
