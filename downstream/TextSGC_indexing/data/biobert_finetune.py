@@ -267,7 +267,7 @@ from transformers import BertForSequenceClassification, AdamW, BertConfig
 # Load BertForSequenceClassification, the pretrained BERT model with a single 
 # linear classification layer on top. 
 model = BertForSequenceClassification.from_pretrained(
-    'tuned_biobert_ohsumed', # use the already trained model, just further train now.
+    '../../TextSGC_Bio/data/tuned_biobert_ohsumed', # use the already trained model, just further train now.
     #"dmis-lab/biobert-large-cased-v1.1", # Use the 12-layer BERT model, with an uncased vocab.
     num_labels = len(label_names), # The number of output labels--2 for binary classification.
                     # You can increase this for multi-class tasks.   
@@ -570,7 +570,7 @@ df_stats
 
 # Saving best-practices: if you use defaults names for the model, you can reload it using from_pretrained()
 
-output_dir = '../../TextSGC_Bio/data/tuned_biobert_ohsumed2/'
+output_dir = './tuned_biobert_ohsumed2/'
 
 # Create output directory if needed
 if not os.path.exists(output_dir):
