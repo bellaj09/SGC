@@ -58,7 +58,7 @@ else:
     device = torch.device("cpu")
 
 # Read Ohsumed dataset
-ohsumed_df = pd.read_csv('pubmed0.txt', header=None, delimiter='\t')
+ohsumed_df = pd.read_csv('ohsumed0.txt', header=None, delimiter='\t')
 
 label_names = set()
 
@@ -68,7 +68,7 @@ for i in ohsumed_df.index:
 
 # Get the texts from the corpus txt
 doc_content_list = []
-f = open('../../data/corpus/pubmed.txt', 'rb')
+f = open('../../data/corpus/ohsumed.txt', 'rb')
 for line in f.readlines():
     doc_content_list.append(line.strip().decode('latin1'))
 f.close()
@@ -154,7 +154,7 @@ for length in doc_lens:
 
 # Load the cleaned vocab -> tokens that are never split
 corp_vocab = []
-vocab_path = 'corpus/pubmed.treebank.bio_vocab.txt'
+vocab_path = 'corpus/ohsumed.treebank.bio_vocab.txt'
 with open(vocab_path,'r') as f:
     lines = f.readlines()
     for l in lines:
@@ -267,7 +267,7 @@ from transformers import BertForSequenceClassification, AdamW, BertConfig
 # Load BertForSequenceClassification, the pretrained BERT model with a single 
 # linear classification layer on top. 
 model = BertForSequenceClassification.from_pretrained(
-    'tuned_biobert_pubmed', # use the already trained model, just further train now.
+    'tuned_biobert_ohsumed', # use the already trained model, just further train now.
     #"dmis-lab/biobert-large-cased-v1.1", # Use the 12-layer BERT model, with an uncased vocab.
     num_labels = len(label_names), # The number of output labels--2 for binary classification.
                     # You can increase this for multi-class tasks.   
@@ -570,7 +570,7 @@ df_stats
 
 # Saving best-practices: if you use defaults names for the model, you can reload it using from_pretrained()
 
-output_dir = './tuned_biobert_pubmed/'
+output_dir = './tuned_biobert_ohsumed2/'
 
 # Create output directory if needed
 if not os.path.exists(output_dir):
