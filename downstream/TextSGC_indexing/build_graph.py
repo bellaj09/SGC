@@ -21,6 +21,7 @@ import time
 from gensim.models import Word2Vec
 import torch
 from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import Normalizer
 
 parser = argparse.ArgumentParser(description='Build Document Graph')
 parser.add_argument('--dataset', type=str, default='20ng',
@@ -471,13 +472,25 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
     print('mean TFIDF: ', np.mean(weight))
     print('median TFIDF: ', np.median(weight))
 
-    # scaler = StandardScaler()
-    # weight = scaler.fit_transform(weight)
+    weight = np.reshape(weight,(-1,1))
 
-    # print('AFTER STANDARDISING: ')
-    # print('max std TFIDF: ', np.max(weight))
-    # print('min std TFIDF: ', np.min(weight))
-    # print('mean std TFIDF: ', np.mean(weight))   
+    scaler = StandardScaler()
+    weight = scaler.fit_transform(weight)
+
+    # Normalisation 
+    # L2, using mean
+    # weight = Normalizer().fit_transform(weight)
+
+    # L1, using median
+    # weight = Normalizer(norm='l1').fit_transform(weight)
+
+    # # max, using maximum absolute value
+    # weight = Normalizer(norm='max').fit_transform(weight)
+
+    print('AFTER SCALING: ')
+    print('max std TFIDF: ', np.max(weight))
+    print('min std TFIDF: ', np.min(weight))
+    print('mean std TFIDF: ', np.mean(weight))   
 
     return row, col, weight
 
