@@ -462,6 +462,9 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
                 idf = log(1.0 * len(ids) /
                         word_doc_freq[word]) # log( no. docs / no. docs containing the word )
                 w = freq*idf
+
+                w = w*tfidf_chi[word]
+
                 if phase == "B":
                     row.append(doc_id)
                     col.append(word_id)
@@ -488,7 +491,7 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
     # weight = scaler.fit_transform(weight)
 
     #weight = (weight - np.mean(weight)) / (np.std(weight))
-    weight = np.interp(weight, (np.min(weight), np.max(weight)), (0,1))
+    #weight = np.interp(weight, (np.min(weight), np.max(weight)), (0,1))
 
     # Normalisation 
     # L2, using mean
@@ -500,12 +503,12 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
     # # max, using maximum absolute value
     # weight = Normalizer(norm='max').fit_transform(weight)
 
-    weight = np.array(weight,dtype=float)
+    # weight = np.array(weight,dtype=float)
 
-    print('AFTER SCALING: ')
-    print('max std TFIDF: ', np.max(weight))
-    print('min std TFIDF: ', np.min(weight))
-    print('mean std TFIDF: ', np.mean(weight))  
+    # print('AFTER SCALING: ')
+    # print('max std TFIDF: ', np.max(weight))
+    # print('min std TFIDF: ', np.min(weight))
+    # print('mean std TFIDF: ', np.mean(weight))  
 
     # Replace all zero values
     num_zeros = 0
@@ -516,7 +519,7 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
     
     print('number of replaced negatives: ', num_zeros)
 
-    weight = np.absolute(weight)
+    # weight = np.absolute(weight)
 
     return row, col, weight
 
