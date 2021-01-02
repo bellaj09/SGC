@@ -501,11 +501,11 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
     # Replace all zero values
     num_zeros = 0
     for i,w in enumerate(weight):
-        if  w == 0:
+        if  w < 0:
             weight[i] = 0.00001 # replace with small number
             num_zeros += 1
     
-    print('number of replaced zeros: ', num_zeros)
+    print('number of replaced negatives: ', num_zeros)
 
     weight = np.absolute(weight)
 
