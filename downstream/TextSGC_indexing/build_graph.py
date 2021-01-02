@@ -479,7 +479,7 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
     # scaler = StandardScaler()
     # weight = scaler.fit_transform(weight)
 
-    # weight = (weight - np.mean(weight)) / (np.std(weight))
+    weight = (weight - np.mean(weight)) / (np.std(weight))
 
     # Normalisation 
     # L2, using mean
@@ -491,7 +491,7 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
     # # max, using maximum absolute value
     # weight = Normalizer(norm='max').fit_transform(weight)
 
-    # weight = np.array(weight,dtype=float)
+    weight = np.array(weight,dtype=float)
 
     print('AFTER SCALING: ')
     print('max std TFIDF: ', np.max(weight))
