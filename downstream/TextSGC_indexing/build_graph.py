@@ -191,6 +191,8 @@ for word in dic_vocabulary:
     score = np.mean(df["score"].values)
     tfidf_chi[word] = score
 
+print('infect score: ', tfidf_chi['infect'])
+
 feat_sel_time = time.perf_counter()-start
 print("Feature selection time: ", feat_sel_time)
 
