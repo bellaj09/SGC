@@ -480,7 +480,7 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
     # weight = scaler.fit_transform(weight)
 
     #weight = (weight - np.mean(weight)) / (np.std(weight))
-    weight = np.interp(weight, (weight.min(), weight.max()), (0,1))
+    weight = np.interp(weight, (np.min(weight), np.max(weight)), (0,1))
 
     # Normalisation 
     # L2, using mean
