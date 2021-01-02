@@ -487,6 +487,8 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
     # # max, using maximum absolute value
     # weight = Normalizer(norm='max').fit_transform(weight)
 
+    weight = np.array(weight,dtype=float)
+
     print('AFTER SCALING: ')
     print('max std TFIDF: ', np.max(weight))
     print('min std TFIDF: ', np.min(weight))
