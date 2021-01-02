@@ -185,6 +185,12 @@ vectorizer.fit(doc_content_list)
 X_train = vectorizer.transform(doc_content_list)
 dic_vocabulary = vectorizer.vocabulary_
 
+tfidf_chi = {}
+for word in dic_vocabulary:
+    df = dtf_features[dtf_features["feature"]==word]
+    score = np.mean(df["score"].values)
+    tfidf_chi[word] = score
+
 feat_sel_time = time.perf_counter()-start
 print("Feature selection time: ", feat_sel_time)
 
