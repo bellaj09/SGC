@@ -479,7 +479,7 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
     # scaler = StandardScaler()
     # weight = scaler.fit_transform(weight)
 
-    weight = (weight - np.mean(weight)) / (np.std(weight))
+    # weight = (weight - np.mean(weight)) / (np.std(weight))
 
     # Normalisation 
     # L2, using mean
@@ -491,12 +491,20 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
     # # max, using maximum absolute value
     # weight = Normalizer(norm='max').fit_transform(weight)
 
-    #weight = np.array(weight,dtype=float)
+    # weight = np.array(weight,dtype=float)
 
     print('AFTER SCALING: ')
     print('max std TFIDF: ', np.max(weight))
     print('min std TFIDF: ', np.min(weight))
-    print('mean std TFIDF: ', np.mean(weight))   
+    print('mean std TFIDF: ', np.mean(weight))  
+
+    # Replace all zero values
+    num_zeros = 0
+    for i,w in enumerate(weight):
+        if  w == 0:
+            weight[i] = 0.00001 # replace with small number
+            num_zeros += 1
+    print('number of replaced zeros: ', num_zeros)
 
     return row, col, weight
 
