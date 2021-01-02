@@ -479,7 +479,8 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
     # scaler = StandardScaler()
     # weight = scaler.fit_transform(weight)
 
-    weight = (weight - np.mean(weight)) / (np.std(weight))
+    #weight = (weight - np.mean(weight)) / (np.std(weight))
+    weight = np.interp(weight, (weight.min(), weight.max()), (0,1))
 
     # Normalisation 
     # L2, using mean
@@ -502,7 +503,7 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
     num_zeros = 0
     for i,w in enumerate(weight):
         if  w == 0:
-            weight[i] = 0.00001 # replace with small number
+            weight[i] = 0.0000000001 # replace with small number
             num_zeros += 1
     
     print('number of replaced negatives: ', num_zeros)
