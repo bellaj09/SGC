@@ -469,7 +469,7 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
                 
                 #w = freq*idf
 
-                w = (1 + log(1+log(freq))) / (0.8 + 0.2*(doc_len/avg_len)) # pivoted normalised tfidf
+                w = (1 + log(1+log(freq))) / (0.6 + 0.4*(doc_len/avg_len)) # pivoted normalised tfidf
 
                 # w = w*tfidf_chi[word] # Feature importance weighting
 
