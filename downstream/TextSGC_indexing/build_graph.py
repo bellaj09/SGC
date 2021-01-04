@@ -201,10 +201,14 @@ print("Feature selection time: ", feat_sel_time)
 word_freq = Counter()
 progress_bar = tqdm(doc_content_list)
 progress_bar.set_postfix_str("building vocabulary")
+doc_lens = []
 for doc_words in progress_bar:
     words = doc_words.split()
     words = [w for w in words if w in dic_vocabulary] # restrict to just the selected words
+    doc_lens.append(len(words))
     word_freq.update(words)
+avg_len = np.mean(doc_lens)
+print('average document length: ', avg_len)
 
 vocab, _ = zip(*word_freq.most_common())
 # put words after documents
@@ -452,6 +456,7 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
     weight = []
     for i, doc_id in enumerate(ids):
         doc_words = doc_words_list[doc_id]
+        doc_len = doc_lens[doc_id]
         words = set(doc_words.split())
         doc_word_set = set()
         for word in words:
@@ -461,9 +466,12 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
                 freq = doc_word_freq[key] # how many times the word appears in each document
                 idf = log(1.0 * len(ids) /
                         word_doc_freq[word]) # log( no. docs / no. docs containing the word )
-                w = freq*idf
+                
+                #w = freq*idf
 
-                w = w*tfidf_chi[word]
+                w = (1 + log(1+log(freq))) / (0.8 + 0.2*(doc_len/avg_len)) # pivoted normalised tfidf
+
+                # w = w*tfidf_chi[word] # Feature importance weighting
 
                 if phase == "B":
                     row.append(doc_id)
@@ -478,10 +486,10 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
     ########### TFIDF FEATURE SCALING #########
 
     # # Standardisation
-    print('max TFIDF: ', np.max(weight))
-    print('min TFIDF: ', np.min(weight))
-    print('mean TFIDF: ', np.mean(weight))
-    print('median TFIDF: ', np.median(weight))
+    # print('max TFIDF: ', np.max(weight))
+    # print('min TFIDF: ', np.min(weight))
+    # print('mean TFIDF: ', np.mean(weight))
+    # print('median TFIDF: ', np.median(weight))
 
     ### SKLEARN standardisation
 
@@ -491,6 +499,7 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
     # weight = scaler.fit_transform(weight)
 
     #weight = (weight - np.mean(weight)) / (np.std(weight))
+
     #weight = np.interp(weight, (np.min(weight), np.max(weight)), (0,1))
 
     # Normalisation 
@@ -511,13 +520,13 @@ def build_doc_word_graph(ids, doc_words_list, doc_word_freq, word_doc_freq, phas
     # print('mean std TFIDF: ', np.mean(weight))  
 
     # Replace all zero values
-    num_zeros = 0
-    for i,w in enumerate(weight):
-        if  w == 0:
-            weight[i] = 0.0000000001 # replace with small number
-            num_zeros += 1
+    # num_zeros = 0
+    # for i,w in enumerate(weight):
+    #     if  w == 0:
+    #         weight[i] = 0.0000000001 # replace with small number
+    #         num_zeros += 1
     
-    print('number of replaced negatives: ', num_zeros)
+    # print('number of replaced negatives: ', num_zeros)
 
     # weight = np.absolute(weight)
 
