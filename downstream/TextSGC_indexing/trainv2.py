@@ -67,9 +67,10 @@ for i in range(5):
 
     total_train_labels = len(label_dict["train"])
     class_weights = []
+    ones = torch.ones(total_train_labels)
 
     for c in label_dict["train"].unique().tolist(): 
-        match = torch.where(label_dict["train"]==c, 1, 0)
+        match = torch.where(label_dict["train"]==c, ones, 0)
         match = torch.nonzero(match, as_tuple=True)
         num = len(match)
         class_weights.append(num/total_train_labels)
