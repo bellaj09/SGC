@@ -72,7 +72,7 @@ for i in range(5):
         for c in label_dict["train"].unique().tolist(): 
             num = np.count_nonzero(labels == c)
             class_weights.append(num)
-        class_weights = np.max. / np.array(class_weights)
+        class_weights = np.max * np.reciprocal(np.array(class_weights))
         print('class weights ', class_weights)
         weights = torch.Tensor(class_weights).cuda()
         #writer = SummaryWriter()
@@ -123,7 +123,7 @@ for i in range(5):
         for c in label.unique().tolist(): 
             num = np.count_nonzero(labels == c)
             class_weights.append(num)
-        class_weights = np.max. / np.array(class_weights)
+        class_weights = np.max * np.reciprocal(np.array(class_weights))
         print('class weights ', class_weights)
         weights = torch.Tensor(class_weights).cuda()
         ################################################
