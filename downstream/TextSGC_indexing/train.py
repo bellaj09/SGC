@@ -51,6 +51,18 @@ def train_linear(model, feat_dict, weight_decay, binary=False,i=0):
             label_dict[k] = torch.Tensor(v).to(args.device)
         else:
             label_dict[k] = torch.LongTensor(v).to(args.device)
+
+    ######### For weighted cross entropy #######
+    
+    total_train_labels = len(label_dict["train"])
+    class_weights = []
+    labels = label_dict["train"].cpu().numpy()
+
+    for c in label_dict["train"].unique().tolist(): 
+        num = np.count_nonzero(labels == c)
+        class_weights.append(num/total_train_labels)
+    ################################################
+
     features = torch.arange(sp_adj.shape[0]).to(args.device)
 
     adj = sparse_to_torch_sparse(sp_adj, device=args.device)
@@ -70,7 +82,8 @@ def train_linear(model, feat_dict, weight_decay, binary=False,i=0):
             optimizer.zero_grad()
             output = model(feat_dict["train"].cuda()).squeeze()
             l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
-            loss = criterion(act(output), label_dict["train"].cuda())+l2_reg
+            # loss = criterion(act(output), label_dict["train"].cuda())+l2_reg # Reference
+            loss = criterion(act(output), label_dict["train"].cuda(), weight=torch.FloatTensor(class_weights).cuda())+l2_reg # Weighted cross entropy
             loss.backward()
             return loss
 
