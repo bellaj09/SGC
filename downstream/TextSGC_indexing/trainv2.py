@@ -69,9 +69,10 @@ for i in range(5):
     class_weights = []
 
     for c in label_dict["train"].unique().tolist(): 
-        num = len(torch.count_nonzero(label_dict["train"]==c))
+        match = torch.where(label_dict["train"]==c, 1, 0)
+        match = torch.nonzero(match, as_tuple=True)
+        num = len(match)
         class_weights.append(num/total_train_labels)
-    
     print('class weights: ', class_weights)
 
     def train_linear(model, feat_dict, weight_decay, binary=False):
