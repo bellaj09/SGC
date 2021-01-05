@@ -97,7 +97,7 @@ for i in range(5):
                 optimizer.zero_grad()
                 output = model(feat_dict["train"].cuda()).squeeze()
                 l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
-                loss = criterion(act(output), label_dict["train"].cuda())+l2_reg # sigmoid activation function
+                loss = criterion(act(output), label_dict["train"].cuda(), weight=class_weights)+l2_reg # sigmoid activation function
                 #writer.add_scalar("Loss/train", loss, epoch)
                 loss.backward()
                 return loss
