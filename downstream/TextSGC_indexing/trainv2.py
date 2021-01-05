@@ -69,12 +69,11 @@ for i in range(5):
         total_train_labels = len(label_dict["train"])
         class_weights = []
         labels = label_dict["train"].cpu().numpy()
-        print('num of unique labels', len(label_dict["train"].unique().tolist()))
-        print(label_dict["train"].unique().tolist())
         for c in label_dict["train"].unique().tolist(): 
             num = np.count_nonzero(labels == c)
-            class_weights.append(1 - (num/total_train_labels))
-        print('length of class_weights', len(class_weights))
+            class_weights.append(num)
+        class_weights = class_weights / np.max(class_weights)
+        print('class weights ', class_weights)
         #writer = SummaryWriter()
         if not binary:
             act = partial(F.log_softmax, dim=1)
@@ -97,7 +96,7 @@ for i in range(5):
                 optimizer.zero_grad()
                 output = model(feat_dict["train"].cuda()).squeeze()
                 l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
-                loss = criterion(act(output), label_dict["train"].cuda(), weight=torch.FloatTensor(class_weights).cuda())+l2_reg # sigmoid activation function with the weighted cross entropy
+                loss = criterion(act(output), label_dict["train"].cuda(), weight=torch.Tensor(class_weights).cuda())+l2_reg # sigmoid activation function with the weighted cross entropy
                 #writer.add_scalar("Loss/train", loss, epoch)
                 loss.backward()
                 return loss
