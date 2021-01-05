@@ -71,7 +71,7 @@ for i in range(5):
         labels = label_dict["train"].cpu().numpy()
         for c in label_dict["train"].unique().tolist(): 
             num = np.count_nonzero(labels == c)
-            class_weights.append(num)
+            class_weights.append(float(num))
         max_weight = np.max(class_weights)
         print('class counts', class_weights)
         print('max class count', max_weight)
