@@ -96,7 +96,7 @@ for i in range(5):
                 optimizer.zero_grad()
                 output = model(feat_dict["train"].cuda()).squeeze()
                 l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
-                loss = criterion(act(output), label_dict["train"].cuda(), weight=torch.FloatTensor(class_weights))+l2_reg # sigmoid activation function with the weighted cross entropy
+                loss = criterion(act(output), label_dict["train"].cuda(), weight=torch.FloatTensor(class_weights).cuda())+l2_reg # sigmoid activation function with the weighted cross entropy
                 #writer.add_scalar("Loss/train", loss, epoch)
                 loss.backward()
                 return loss
