@@ -72,8 +72,7 @@ for i in range(5):
     for c in label_dict["train"].unique().tolist(): 
         num = np.count_nonzero(labels == c)
         class_weights.append(num/total_train_labels)
-    print('class weights: ', class_weights)
-
+    
     def train_linear(model, feat_dict, weight_decay, binary=False):
         #writer = SummaryWriter()
         if not binary:
@@ -97,7 +96,7 @@ for i in range(5):
                 optimizer.zero_grad()
                 output = model(feat_dict["train"].cuda()).squeeze()
                 l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
-                loss = criterion(act(output), label_dict["train"].cuda(), weight=class_weights)+l2_reg # sigmoid activation function
+                loss = criterion(act(output), label_dict["train"].cuda(), weight=torch.FloatTensor(class_weights))+l2_reg # sigmoid activation function with the weighted cross entropy
                 #writer.add_scalar("Loss/train", loss, epoch)
                 loss.backward()
                 return loss
