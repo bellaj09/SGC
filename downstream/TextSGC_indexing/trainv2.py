@@ -86,6 +86,8 @@ for i in range(5):
         best_val_acc = 0
         plateau = 0
         start = time.perf_counter()
+        weights = torch.Tensor(class_weights).cuda()
+        print('weights shape', weights.shape)
         for epoch in range(args.epochs):
             # DataLoader - split feat_dict into batches. 
             # for each batch: 
@@ -96,7 +98,7 @@ for i in range(5):
                 optimizer.zero_grad()
                 output = model(feat_dict["train"].cuda()).squeeze()
                 l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
-                loss = criterion(act(output), label_dict["train"].cuda(), weight=torch.Tensor(class_weights).cuda())+l2_reg # sigmoid activation function with the weighted cross entropy
+                loss = criterion(act(output), label_dict["train"].cuda(), weight=weights)+l2_reg # sigmoid activation function with the weighted cross entropy
                 #writer.add_scalar("Loss/train", loss, epoch)
                 loss.backward()
                 return loss
@@ -106,6 +108,7 @@ for i in range(5):
                             label_dict["val"].cuda(), binary)     
         #writer.flush()
         #writer.close()
+        print('training ok')
         return val_res['accuracy'], model, train_time
 
     def eval_linear(model, features, label, binary=False):
