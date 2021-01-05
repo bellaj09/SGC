@@ -98,7 +98,7 @@ for i in range(5):
                 optimizer.zero_grad()
                 output = model(feat_dict["train"].cuda()).squeeze()
                 l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
-                if i == 5: 
+                if i == 4: 
                     loss = criterion(act(output), label_dict["train"].cuda())+l2_reg
                 else: 
                     loss = criterion(act(output), label_dict["train"].cuda(), weight=weights)+l2_reg # sigmoid activation function with the weighted cross entropy
@@ -137,7 +137,7 @@ for i in range(5):
 
         with torch.no_grad():
             output = model(features).squeeze()
-            if i == 5: 
+            if i == 4: 
                 loss = criterion(act(output), label)
             else: 
                 loss = criterion(act(output), label, weight=weights)
