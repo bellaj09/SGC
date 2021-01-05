@@ -88,7 +88,6 @@ for i in range(5):
         plateau = 0
         start = time.perf_counter()
         
-        print('weights shape', weights.shape)
         for epoch in range(args.epochs):
             # DataLoader - split feat_dict into batches. 
             # for each batch: 
@@ -139,9 +138,9 @@ for i in range(5):
         with torch.no_grad():
             output = model(features).squeeze()
             if i == 5: 
-                loss = criterion(act(output), label_dict["train"].cuda())+l2_reg
+                loss = criterion(act(output), label.cuda())+l2_reg
             else: 
-                loss = criterion(act(output), label_dict["train"].cuda(), weight=weights)+l2_reg
+                loss = criterion(act(output), label.cuda(), weight=weights)+l2_reg
             if not binary: predict_class = output.max(1)[1]
             else: predict_class = act(output).gt(0.5).float()
             correct = torch.eq(predict_class, label).long().sum().item()
