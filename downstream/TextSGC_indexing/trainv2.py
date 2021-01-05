@@ -69,7 +69,7 @@ for i in range(5):
     class_weights = []
 
     for c in label_dict["train"].unique().tolist(): 
-        num = len(np.count_nonzero(label_dict["train"]==c))
+        num = len(torch.count_nonzero(label_dict["train"]==c))
         class_weights.append(num/total_train_labels)
     
     print('class weights: ', class_weights)
