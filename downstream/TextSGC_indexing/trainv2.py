@@ -67,8 +67,8 @@ for i in range(5):
 
     total_train_labels = len(label_dict["train"])
     class_weights = []
-    ones = torch.ones(total_train_labels)
-    zeros = torch.zeros(total_train_labels)
+    ones = torch.ones(total_train_labels).cuda()
+    zeros = torch.zeros(total_train_labels).cuda()
 
     for c in label_dict["train"].unique().tolist(): 
         match = torch.where(label_dict["train"]==c, ones, zeros)
