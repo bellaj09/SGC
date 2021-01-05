@@ -73,11 +73,7 @@ for i in range(5):
             num = np.count_nonzero(labels == c)
             class_weights.append(float(num))
         max_weight = np.max(class_weights)
-        print('class counts', class_weights)
-        print('max class count', max_weight)
-        print('reciprocals', np.reciprocal(class_weights))
         class_weights =  max_weight * np.reciprocal(class_weights)
-        print('class weights ', class_weights)
         weights = torch.Tensor(class_weights).cuda()
         #writer = SummaryWriter()
         if not binary:
@@ -122,14 +118,14 @@ for i in range(5):
         model.eval()
 
         ######### For weighted cross entropy #######
+        total_train_labels = len(label)
         class_weights = []
         labels = label.cpu().numpy()
         for c in label.unique().tolist(): 
             num = np.count_nonzero(labels == c)
-            class_weights.append(num)
+            class_weights.append(float(num))
         max_weight = np.max(class_weights)
-        class_weights =  max_weight * np.reciprocal(np.array(class_weights))
-        print('class weights ', class_weights)
+        class_weights =  max_weight * np.reciprocal(class_weights)
         weights = torch.Tensor(class_weights).cuda()
         ################################################
 
