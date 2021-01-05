@@ -70,10 +70,11 @@ for i in range(5):
         class_weights = []
         labels = label_dict["train"].cpu().numpy()
         print('num of unique labels', len(label_dict["train"].unique().tolist()))
+        print(label_dict["train"].unique().tolist())
         for c in label_dict["train"].unique().tolist(): 
             num = np.count_nonzero(labels == c)
             class_weights.append(1 - (num/total_train_labels))
-
+        print('length of class_weights', len(class_weights))
         #writer = SummaryWriter()
         if not binary:
             act = partial(F.log_softmax, dim=1)
