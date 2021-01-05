@@ -67,13 +67,10 @@ for i in range(5):
 
     total_train_labels = len(label_dict["train"])
     class_weights = []
-    ones = torch.ones(total_train_labels).cuda()
-    zeros = torch.zeros(total_train_labels).cuda()
+    labels = label_dict["train"].numpy()
 
     for c in label_dict["train"].unique().tolist(): 
-        match = torch.where(label_dict["train"]==c, ones, zeros)
-        match = torch.nonzero(match, as_tuple=True)
-        num = len(match)
+        num = len(np.count_nonzero(labels == c))
         class_weights.append(num/total_train_labels)
     print('class weights: ', class_weights)
 
