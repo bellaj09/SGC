@@ -72,7 +72,7 @@ for i in range(5):
 
         for c in label_dict["train"].unique().tolist(): 
             num = np.count_nonzero(labels == c)
-            class_weights.append(num/total_train_labels)
+            class_weights.append(1 - (num/total_train_labels))
 
         #writer = SummaryWriter()
         if not binary:
@@ -118,7 +118,7 @@ for i in range(5):
 
         for c in label.unique().tolist(): 
             num = np.count_nonzero(labels == c)
-            class_weights.append(num/total_train_labels)
+            class_weights.append(1 - (num/total_train_labels))
         ################################################
 
         if not binary:
