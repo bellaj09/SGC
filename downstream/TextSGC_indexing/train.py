@@ -55,12 +55,14 @@ def train_linear(model, feat_dict, weight_decay, binary=False,i=0):
     ######### For weighted cross entropy #######
     
     total_train_labels = len(label_dict["train"])
-    class_weights = []
-    labels = label_dict["train"].cpu().numpy()
-
-    for c in label_dict["train"].unique().tolist(): 
-        num = np.count_nonzero(labels == c)
-        class_weights.append(num/total_train_labels)
+        class_weights = []
+        labels = label_dict["train"].cpu().numpy()
+        for c in label_dict["train"].unique().tolist(): 
+            num = np.count_nonzero(labels == c)
+            class_weights.append(float(num))
+        max_weight = np.max(class_weights)
+        class_weights =  max_weight * np.reciprocal(class_weights)
+        weights = torch.Tensor(class_weights).cuda()
     ################################################
 
     features = torch.arange(sp_adj.shape[0]).to(args.device)
@@ -83,7 +85,10 @@ def train_linear(model, feat_dict, weight_decay, binary=False,i=0):
             output = model(feat_dict["train"].cuda()).squeeze()
             l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
             # loss = criterion(act(output), label_dict["train"].cuda())+l2_reg # Reference
-            loss = criterion(act(output), label_dict["train"].cuda(), weight=torch.FloatTensor(class_weights).cuda())+l2_reg # Weighted cross entropy
+            if i == 4: 
+                    loss = criterion(act(output), label_dict["train"].cuda())+l2_reg
+            else: 
+                loss = criterion(act(output), label_dict["train"].cuda(), weight=weights)+l2_reg
             loss.backward()
             return loss
 
@@ -96,16 +101,17 @@ def train_linear(model, feat_dict, weight_decay, binary=False,i=0):
 
 def eval_linear(model, features, label, binary=False):
     ######### For weighted cross entropy #######
-    
     total_train_labels = len(label)
-    class_weights = []
-    labels = label.cpu().numpy()
-
-    for c in label.unique().tolist(): 
-        num = np.count_nonzero(labels == c)
-        class_weights.append(num/total_train_labels)
+        class_weights = []
+        labels = label.cpu().numpy()
+        for c in label.unique().tolist(): 
+            num = np.count_nonzero(labels == c)
+            class_weights.append(float(num))
+        max_weight = np.max(class_weights)
+        class_weights =  max_weight * np.reciprocal(class_weights)
+        weights = torch.Tensor(class_weights).cuda()
     ################################################
-    
+
     model.eval()
     if not binary:
         act = partial(F.log_softmax, dim=1)
@@ -116,7 +122,11 @@ def eval_linear(model, features, label, binary=False):
 
     with torch.no_grad():
         output = model(features).squeeze()
-        loss = criterion(act(output), label, weight=torch.FloatTensor(class_weights).cuda())
+        #loss = criterion(act(output), label, weight=torch.FloatTensor(class_weights).cuda())
+        if i == 4: 
+            loss = criterion(act(output), label)
+        else: 
+            loss = criterion(act(output), label, weight=weights)
         if not binary: predict_class = output.max(1)[1]
         else: predict_class = act(output).gt(0.5).float()
         correct = torch.eq(predict_class, label).long().sum().item()
