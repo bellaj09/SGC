@@ -96,10 +96,10 @@ def train_linear(model, feat_dict, weight_decay, binary=False,i=0):
 
     train_time = time.perf_counter()-start
     val_res = eval_linear(model, feat_dict["val"].cuda(),
-                          label_dict["val"].cuda(), binary)
+                          label_dict["val"].cuda(), binary,i)
     return val_res['accuracy'], model, train_time
 
-def eval_linear(model, features, label, binary=False):
+def eval_linear(model, features, label, binary=False, i=0):
     ######### For weighted cross entropy #######
     total_train_labels = len(label)
     class_weights = []
