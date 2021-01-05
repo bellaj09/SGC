@@ -69,7 +69,7 @@ for i in range(5):
         total_train_labels = len(label_dict["train"])
         class_weights = []
         labels = label_dict["train"].cpu().numpy()
-
+        print('num of unique labels', len(label_dict["train"].unique().tolist()))
         for c in label_dict["train"].unique().tolist(): 
             num = np.count_nonzero(labels == c)
             class_weights.append(1 - (num/total_train_labels))
