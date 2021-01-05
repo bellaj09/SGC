@@ -55,14 +55,14 @@ def train_linear(model, feat_dict, weight_decay, binary=False,i=0):
     ######### For weighted cross entropy #######
     
     total_train_labels = len(label_dict["train"])
-        class_weights = []
-        labels = label_dict["train"].cpu().numpy()
-        for c in label_dict["train"].unique().tolist(): 
-            num = np.count_nonzero(labels == c)
-            class_weights.append(float(num))
-        max_weight = np.max(class_weights)
-        class_weights =  max_weight * np.reciprocal(class_weights)
-        weights = torch.Tensor(class_weights).cuda()
+    class_weights = []
+    labels = label_dict["train"].cpu().numpy()
+    for c in label_dict["train"].unique().tolist(): 
+        num = np.count_nonzero(labels == c)
+        class_weights.append(float(num))
+    max_weight = np.max(class_weights)
+    class_weights =  max_weight * np.reciprocal(class_weights)
+    weights = torch.Tensor(class_weights).cuda()
     ################################################
 
     features = torch.arange(sp_adj.shape[0]).to(args.device)
@@ -102,14 +102,14 @@ def train_linear(model, feat_dict, weight_decay, binary=False,i=0):
 def eval_linear(model, features, label, binary=False):
     ######### For weighted cross entropy #######
     total_train_labels = len(label)
-        class_weights = []
-        labels = label.cpu().numpy()
-        for c in label.unique().tolist(): 
-            num = np.count_nonzero(labels == c)
-            class_weights.append(float(num))
-        max_weight = np.max(class_weights)
-        class_weights =  max_weight * np.reciprocal(class_weights)
-        weights = torch.Tensor(class_weights).cuda()
+    class_weights = []
+    labels = label.cpu().numpy()
+    for c in label.unique().tolist(): 
+        num = np.count_nonzero(labels == c)
+        class_weights.append(float(num))
+    max_weight = np.max(class_weights)
+    class_weights =  max_weight * np.reciprocal(class_weights)
+    weights = torch.Tensor(class_weights).cuda()
     ################################################
 
     model.eval()
