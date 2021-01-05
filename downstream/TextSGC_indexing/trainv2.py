@@ -119,7 +119,7 @@ for i in range(5):
 
         with torch.no_grad():
             output = model(features).squeeze()
-            loss = criterion(act(output), label)
+            loss = criterion(act(output), label , weight=torch.FloatTensor(class_weights).cuda())
             if not binary: predict_class = output.max(1)[1]
             else: predict_class = act(output).gt(0.5).float()
             correct = torch.eq(predict_class, label).long().sum().item()
