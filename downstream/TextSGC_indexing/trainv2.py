@@ -66,7 +66,7 @@ for i in range(5):
     adj = sparse_to_torch_sparse(sp_adj, device=args.device)
 
     print('length of label dict', len(label_dict["train"]))
-    print('unique values: ', label_dict["train"].unique.tolist())
+    print('unique values: ', label_dict["train"].unique().tolist())
 
     def train_linear(model, feat_dict, weight_decay, binary=False):
         #writer = SummaryWriter()
