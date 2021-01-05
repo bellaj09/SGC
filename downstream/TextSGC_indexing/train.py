@@ -95,6 +95,17 @@ def train_linear(model, feat_dict, weight_decay, binary=False,i=0):
     return val_res['accuracy'], model, train_time
 
 def eval_linear(model, features, label, binary=False):
+    ######### For weighted cross entropy #######
+    
+    total_train_labels = len(label)
+    class_weights = []
+    labels = label.cpu().numpy()
+
+    for c in label.unique().tolist(): 
+        num = np.count_nonzero(labels == c)
+        class_weights.append(num/total_train_labels)
+    ################################################
+    
     model.eval()
     if not binary:
         act = partial(F.log_softmax, dim=1)

@@ -64,16 +64,16 @@ for i in range(5):
     features = torch.arange(sp_adj.shape[0]).to(args.device)
 
     adj = sparse_to_torch_sparse(sp_adj, device=args.device)
-
-    total_train_labels = len(label_dict["train"])
-    class_weights = []
-    labels = label_dict["train"].cpu().numpy()
-
-    for c in label_dict["train"].unique().tolist(): 
-        num = np.count_nonzero(labels == c)
-        class_weights.append(num/total_train_labels)
     
     def train_linear(model, feat_dict, weight_decay, binary=False):
+        total_train_labels = len(label_dict["train"])
+        class_weights = []
+        labels = label_dict["train"].cpu().numpy()
+
+        for c in label_dict["train"].unique().tolist(): 
+            num = np.count_nonzero(labels == c)
+            class_weights.append(num/total_train_labels)
+
         #writer = SummaryWriter()
         if not binary:
             act = partial(F.log_softmax, dim=1)
@@ -110,6 +110,17 @@ for i in range(5):
 
     def eval_linear(model, features, label, binary=False):
         model.eval()
+
+        ######### For weighted cross entropy #######
+        total_train_labels = len(label)
+        class_weights = []
+        labels = label.cpu().numpy()
+
+        for c in label.unique().tolist(): 
+            num = np.count_nonzero(labels == c)
+            class_weights.append(num/total_train_labels)
+        ################################################
+
         if not binary:
             act = partial(F.log_softmax, dim=1)
             criterion = F.nll_loss
