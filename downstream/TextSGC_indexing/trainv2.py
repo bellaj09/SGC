@@ -75,7 +75,7 @@ for i in range(5):
         max_weight = np.max(class_weights)
         class_weights =  max_weight * np.reciprocal(class_weights)
         weights = torch.Tensor(class_weights).cuda()
-        writer = SummaryWriter()
+        # writer = SummaryWriter()
         if not binary:
             act = partial(F.log_softmax, dim=1)
             criterion = F.nll_loss
@@ -102,15 +102,15 @@ for i in range(5):
                     loss = criterion(act(output), label_dict["train"].cuda())+l2_reg
                 else: 
                     loss = criterion(act(output), label_dict["train"].cuda(), weight=weights)+l2_reg # sigmoid activation function with the weighted cross entropy
-                writer.add_scalar("Loss/train", loss, epoch)
+                # writer.add_scalar("Loss/train", loss, epoch)
                 loss.backward()
                 return loss
             optimizer.step(closure)
         train_time = time.perf_counter()-start
         val_res, val_matrix = eval_linear(model, feat_dict["val"].cuda(),
                             label_dict["val"].cuda(), binary)     
-        writer.flush()
-        writer.close()
+        # writer.flush()
+        # writer.close()
         return val_res['accuracy'], model, train_time
 
     def eval_linear(model, features, label, binary=False):
