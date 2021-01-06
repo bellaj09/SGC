@@ -1,31 +1,31 @@
-Radiology Nuclear Medicine and Imaging
-Health Policy
-Neurology
-Immunology
-Oncology
-Physics and Society
-Machine Learning
-Anesthesiology and Pain Medicine
-Pulmonary and Respiratory Medicine
-Neurology clinical
-Hematology
-Biochemistry
-Infectious Diseases
-Populations and Evolution
 Cardiology and Cardiovascular Medicine
-Psychiatry and Mental Health
-Health Informatics
-Microbiology
-Pediatrics Perinatology and Child Health
-Endocrinology Diabetes and Metabolism
-Multidisciplinary
-Veterinary all
-Public Health Environmental and Occupational Health
-Otorhinolaryngology
-Pollution
+Hematology
 Education
-Surgery
-Pharmacology
 Biochemistry Genetics and Molecular Biology all
-Applied Mathematics
 Geography Planning and Development
+Oncology
+Endocrinology Diabetes and Metabolism
+Machine Learning
+Populations and Evolution
+Multidisciplinary
+Applied Mathematics
+Biochemistry
+Surgery
+Infectious Diseases
+Health Policy
+Pollution
+Pulmonary and Respiratory Medicine
+Health Informatics
+Physics and Society
+Radiology Nuclear Medicine and Imaging
+Pharmacology
+Psychiatry and Mental Health
+Pediatrics Perinatology and Child Health
+Neurology
+Microbiology
+Neurology clinical
+Otorhinolaryngology
+Veterinary all
+Immunology
+Public Health Environmental and Occupational Health
+Anesthesiology and Pain Medicine

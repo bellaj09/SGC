@@ -1,5 +1,5 @@
-Deep Learning
-Human Connectome
 Virtual Reality
+Human Connectome
 Brain Machine Interfaces
+Deep Learning
 Covid19
