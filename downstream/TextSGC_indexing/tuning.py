@@ -13,7 +13,7 @@ from models import get_model
 from math import log
 
 #torch.cuda.set_device(1)
-writer = SummaryWriter()
+
 parser = argparse.ArgumentParser(description="Hyperparameter Tuning")
 parser.add_argument('--dataset', type=str, default='20ng',
                     choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr','covid_19_production','pubmed'],
@@ -30,6 +30,7 @@ tokeniser = args.tokeniser
 best_weight_decays = []
 
 for i in range(5):
+    writer = SummaryWriter()
 
     sp_adj, index_dict, label_dict = load_corpus_crossval(args.dataset,i, args.tokeniser)
     adj = sparse_to_torch_sparse(sp_adj, device=args.device)
