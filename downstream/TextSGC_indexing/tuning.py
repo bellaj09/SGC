@@ -13,7 +13,7 @@ from models import get_model
 from math import log
 
 #torch.cuda.set_device(1)
-#writer = SummaryWriter()
+writer = SummaryWriter()
 parser = argparse.ArgumentParser(description="Hyperparameter Tuning")
 parser.add_argument('--dataset', type=str, default='20ng',
                     choices=['20ng', 'R8', 'R52', 'ohsumed', 'mr','covid_19_production','pubmed'],
@@ -46,17 +46,17 @@ for i in range(5):
         val_acc, _, _ = train_linear(model, feat_dict, space['weight_decay'], args.dataset=="mr",i)
         #print( 'weight decay ' + str(space['weight_decay']) + '\n' + \
             #'overall accuracy: ' + str(val_acc))
-        # writer.add_scalar("Weight decay/tuning", space['weight_decay'])
-        # writer.add_scalar("Accuracy/tuning", val_acc)
+        writer.add_scalar("Weight decay/tuning", space['weight_decay'])
+        writer.add_scalar("Accuracy/tuning", val_acc)
         return {'loss': -val_acc, 'status': STATUS_OK}
 
     # Hyperparameter optimization
     space = {'weight_decay' : hp.loguniform('weight_decay', log(1e-6), log(1e-0))}
 
-    best = fmin(linear_objective, space=space, algo=tpe.suggest, max_evals=80)
+    best = fmin(linear_objective, space=space, algo=tpe.suggest, max_evals=60)
     print(best)
-    # writer.flush()
-    # writer.close()
+    writer.flush()
+    writer.close()
 
     # add best weight decay to an array
     np.append(best_weight_decays, best['weight_decay'])
