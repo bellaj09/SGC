@@ -30,7 +30,7 @@ tokeniser = args.tokeniser
 best_weight_decays = []
 
 for i in range(5):
-    # writer = SummaryWriter()
+    writer = SummaryWriter()
 
     sp_adj, index_dict, label_dict = load_corpus_crossval(args.dataset,i, args.tokeniser)
     adj = sparse_to_torch_sparse(sp_adj, device=args.device)
@@ -48,16 +48,16 @@ for i in range(5):
         #print( 'weight decay ' + str(space['weight_decay']) + '\n' + \
             #'overall accuracy: ' + str(val_acc))
         # writer.add_scalar("Weight decay/tuning", space['weight_decay'])
-        # writer.add_scalar("Accuracy/tuning", val_acc)
+        writer.add_scalar("Accuracy/tuning", val_acc)
         return {'loss': -val_acc, 'status': STATUS_OK}
 
     # Hyperparameter optimization
     space = {'weight_decay' : hp.loguniform('weight_decay', log(1e-6), log(1e-0))}
 
-    best = fmin(linear_objective, space=space, algo=tpe.suggest, max_evals=60)
+    best = fmin(linear_objective, space=space, algo=tpe.suggest, max_evals=80)
     print(best)
-    # writer.flush()
-    # writer.close()
+    writer.flush()
+    writer.close()
 
     # add best weight decay to an array
     np.append(best_weight_decays, best['weight_decay'])
