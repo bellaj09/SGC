@@ -54,7 +54,7 @@ for i in range(5):
     # Hyperparameter optimization
     space = {'weight_decay' : hp.loguniform('weight_decay', log(1e-6), log(1e-0))}
 
-    best = fmin(linear_objective, space=space, algo=tpe.suggest, max_evals=100)
+    best = fmin(linear_objective, space=space, algo=tpe.suggest, max_evals=60)
     print(best)
     writer.flush()
     writer.close()
