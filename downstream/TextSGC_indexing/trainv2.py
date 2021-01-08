@@ -88,6 +88,7 @@ for i in range(5):
         best_val_loss = float('inf')
         best_val_acc = 0
         plateau = 0
+        start = time.perf_counter()
         
         # for epoch in range(args.epochs):
         # ### REFERENCE. 
