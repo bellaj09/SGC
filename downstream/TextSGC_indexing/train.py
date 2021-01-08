@@ -123,7 +123,7 @@ def eval_linear(model, features, label, binary=False, i=0):
 
     with torch.no_grad():
         output = model(features).squeeze()
-        loss = criterion(act(output), label, weight=torch.FloatTensor(class_weights).cuda())
+        loss = criterion(act(output), label)
         # if i == 4: 
         #     loss = criterion(act(output), label)
         # else: 
