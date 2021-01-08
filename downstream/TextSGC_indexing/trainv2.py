@@ -83,7 +83,7 @@ for i in range(5):
             act = torch.sigmoid
             criterion = F.binary_cross_entropy
         # optimizer = optim.LBFGS(model.parameters())
-        optimizer = optim.SGD(model.parameters(), lr = 0.01)
+        optimizer = optim.AdamW(model.parameters())
         best_val_loss = float('inf')
         best_val_acc = 0
         plateau = 0
@@ -99,10 +99,11 @@ for i in range(5):
                 optimizer.zero_grad()
                 output = model(feat_dict["train"].cuda()).squeeze()
                 l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
-                if i == 4: 
-                    loss = criterion(act(output), label_dict["train"].cuda())+l2_reg
-                else: 
-                    loss = criterion(act(output), label_dict["train"].cuda(), weight=weights)+l2_reg # sigmoid activation function with the weighted cross entropy
+                loss = criterion(act(output), label_dict["train"].cuda())+l2_reg
+                # if i == 4: 
+                #     loss = criterion(act(output), label_dict["train"].cuda())+l2_reg
+                # else: 
+                #     loss = criterion(act(output), label_dict["train"].cuda(), weight=weights)+l2_reg # sigmoid activation function with the weighted cross entropy
                 # writer.add_scalar("Loss/train", loss, epoch)
                 loss.backward()
                 return loss
@@ -138,10 +139,11 @@ for i in range(5):
 
         with torch.no_grad():
             output = model(features).squeeze()
-            if i == 4: 
-                loss = criterion(act(output), label)
-            else: 
-                loss = criterion(act(output), label, weight=weights)
+            loss = criterion(act(output), label)
+            # if i == 4: 
+            #     loss = criterion(act(output), label)
+            # else: 
+            #     loss = criterion(act(output), label, weight=weights)
             if not binary: predict_class = output.max(1)[1]
             else: predict_class = act(output).gt(0.5).float()
             correct = torch.eq(predict_class, label).long().sum().item()

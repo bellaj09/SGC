@@ -75,7 +75,7 @@ def train_linear(model, feat_dict, weight_decay, binary=False,i=0):
         act = torch.sigmoid
         criterion = F.binary_cross_entropy
     # optimizer = optim.LBFGS(model.parameters())
-    optimizer = optim.SGD(model.parameters(), lr = 0.01)
+    optimizer = optim.AdamW(model.parameters())
     best_val_loss = float('inf')
     best_val_acc = 0
     plateau = 0
@@ -85,11 +85,11 @@ def train_linear(model, feat_dict, weight_decay, binary=False,i=0):
             optimizer.zero_grad()
             output = model(feat_dict["train"].cuda()).squeeze()
             l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
-            # loss = criterion(act(output), label_dict["train"].cuda())+l2_reg # Reference
-            if i == 4: 
-                    loss = criterion(act(output), label_dict["train"].cuda())+l2_reg
-            else: 
-                loss = criterion(act(output), label_dict["train"].cuda(), weight=weights)+l2_reg
+            loss = criterion(act(output), label_dict["train"].cuda())+l2_reg # Reference
+            # if i == 4: 
+            #         loss = criterion(act(output), label_dict["train"].cuda())+l2_reg
+            # else: 
+            #     loss = criterion(act(output), label_dict["train"].cuda(), weight=weights)+l2_reg
             loss.backward()
             return loss
 
@@ -123,11 +123,11 @@ def eval_linear(model, features, label, binary=False, i=0):
 
     with torch.no_grad():
         output = model(features).squeeze()
-        #loss = criterion(act(output), label, weight=torch.FloatTensor(class_weights).cuda())
-        if i == 4: 
-            loss = criterion(act(output), label)
-        else: 
-            loss = criterion(act(output), label, weight=weights)
+        loss = criterion(act(output), label, weight=torch.FloatTensor(class_weights).cuda())
+        # if i == 4: 
+        #     loss = criterion(act(output), label)
+        # else: 
+        #     loss = criterion(act(output), label, weight=weights)
         if not binary: predict_class = output.max(1)[1]
         else: predict_class = act(output).gt(0.5).float()
         correct = torch.eq(predict_class, label).long().sum().item()
