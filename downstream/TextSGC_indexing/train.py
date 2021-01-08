@@ -74,12 +74,14 @@ def train_linear(model, feat_dict, weight_decay, binary=False,i=0):
     else:
         act = torch.sigmoid
         criterion = F.binary_cross_entropy
-    # optimizer = optim.LBFGS(model.parameters())
-    optimizer = optim.Adamax(model.parameters())
+    optimizer = optim.LBFGS(model.parameters())
+    #optimizer = optim.Adamax(model.parameters())
     best_val_loss = float('inf')
     best_val_acc = 0
     plateau = 0
     start = time.perf_counter()
+
+    ####### REFERENCE
     for epoch in range(args.epochs):
         def closure():
             optimizer.zero_grad()
@@ -94,6 +96,23 @@ def train_linear(model, feat_dict, weight_decay, binary=False,i=0):
             return loss
 
         optimizer.step(closure)
+
+    ## BATCHING
+
+    # for epoch in range(args.epochs):
+    #     ### DataLoader - split feat_dict into batches. 
+    #     train_data = data_utils.TensorDataset(feat_dict["train"].cuda(), label_dict["train"].cuda())
+    #     train_loader = data_utils.DataLoader(train_data, batch_size=args.batch_size, shuffle=True)
+    #     for n, (batch_feat, batch_label) in enumerate(train_loader): # make predictions in batches
+    #         def closure():
+    #             optimizer.zero_grad()
+    #             output = model(batch_feat.cuda()).squeeze()
+    #             l2_reg = 0.5*weight_decay*(model.W.weight**2).sum()
+    #             loss = criterion(act(output), batch_label.cuda())+l2_reg
+    #             writer.add_scalar("Loss/train", loss, epoch)
+    #             loss.backward()
+    #             return loss
+    #         optimizer.step(closure)
 
     train_time = time.perf_counter()-start
     val_res = eval_linear(model, feat_dict["val"].cuda(),
