@@ -83,7 +83,7 @@ for i in range(5):
             act = torch.sigmoid
             criterion = F.binary_cross_entropy
         # optimizer = optim.LBFGS(model.parameters())
-        optimizer = optim.SGD(model.parameters(), lr = 0.001)
+        optimizer = optim.Adamax(model.parameters())
         best_val_loss = float('inf')
         best_val_acc = 0
         plateau = 0
