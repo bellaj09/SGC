@@ -16,6 +16,7 @@ from models import SGC
 from sklearn import preprocessing
 from sklearn.metrics import f1_score
 from sklearn.metrics import confusion_matrix
+import torch.utils.data as data_utils
 
 torch.cuda.set_device(1) # When GPU 0 is out of memory
 
