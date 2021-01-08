@@ -17,7 +17,7 @@ parser.add_argument('--dataset', type=str, default='20ng', help='Dataset string.
 parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=3,
+parser.add_argument('--epochs', type=int, default=120,
                     help='Number of epochs to train.')
 parser.add_argument('--batch_size', type=int, default=128,
                     help='training batch size.')
