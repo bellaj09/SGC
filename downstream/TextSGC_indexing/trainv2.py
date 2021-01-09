@@ -39,6 +39,8 @@ parser.add_argument('--preprocessed', action='store_true',
 parser.add_argument('--tokeniser', type=str, action='store',default='treebank',
                     choices=['manual', 'scispacy','ref','nltk','treebank'],
                     help='tokeniser to use')
+parser.add_argument('--dropout', type=float, action='store',default=0,
+                    help='probability of dropping out a node')
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 args.device = 'cuda' if args.cuda else 'cpu'
@@ -197,7 +199,7 @@ for i in range(5):
             precompute_time = 0
 
         model = SGC(nfeat=feat_dict["train"].size(1),
-                    nclass=nclass)
+                    nclass=nclass, dropout=args.dropout)
         if args.cuda: model.cuda()
         val_acc, best_model, train_time = train_linear(model, feat_dict, args.weight_decay, args.dataset=="mr")
         test_res, test_matrix = eval_linear(best_model, feat_dict["test"].cuda(),
