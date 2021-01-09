@@ -49,6 +49,8 @@ torch.backends.cudnn.benchmark = True
 set_seed(args.seed, args.cuda)
 torch.cuda.set_device(1)
 
+train_arr = np.zeros(5)
+val_arr = np.zeros(5)
 test_acc = np.zeros(5)
 time_arr = np.zeros(5)
 
@@ -207,6 +209,8 @@ for i in range(5):
         train_res, train_matrix = eval_linear(best_model, feat_dict["train"].cuda(),
                                 label_dict["train"].cuda(), args.dataset=="mr")
         print("Total Time: {:2f}s, Train acc: {:.4f}, Val acc: {:.4f}, Test acc: {:.4f}".format(precompute_time+train_time, train_res["accuracy"], val_acc, test_res["accuracy"]))
+        train_arr[i] = train_res["accuracy"]
+        val_arr[i] = val_acc
         test_acc[i] = test_res["accuracy"]
         time_arr[i] = precompute_time+train_time
         test_res_file = open("results/{}.{}.SGC_ref.results.txt".format(args.dataset,i), 'w')
@@ -232,7 +236,9 @@ for i in range(5):
         torch.cuda.empty_cache()
 
 if __name__ == '__main__':
-    print("Mean test accuracy: {:4f}, std dev: {:4f}".format(np.mean(test_acc)*100,np.std(test_acc)*100))
+    print("Mean TRAIN accuracy: {:4f}, std dev: {:4f}".format(np.mean(train_arr)*100,np.std(train_arr)*100))
+    print("Mean VAL accuracy: {:4f}, std dev: {:4f}".format(np.mean(val_arr)*100,np.std(val_arr)*100))
+    print("Mean TEST accuracy: {:4f}, std dev: {:4f}".format(np.mean(test_acc)*100,np.std(test_acc)*100))
     macrof1 = np.empty(5)
     weightedf1 = np.empty(5)
     op_scores = np.empty(5)
